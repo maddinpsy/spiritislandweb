@@ -1,21 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.bf87c17a.chunk.css",
-    "main.js": "/static/js/main.25ce2824.chunk.js",
-    "main.js.map": "/static/js/main.25ce2824.chunk.js.map",
+    "main.css": "/static/css/main.8eaec32f.chunk.css",
+    "main.js": "/static/js/main.7a63cb32.chunk.js",
+    "main.js.map": "/static/js/main.7a63cb32.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.5ab8e273.js",
     "runtime-main.js.map": "/static/js/runtime-main.5ab8e273.js.map",
-    "static/js/2.93ef6665.chunk.js": "/static/js/2.93ef6665.chunk.js",
-    "static/js/2.93ef6665.chunk.js.map": "/static/js/2.93ef6665.chunk.js.map",
+    "static/js/2.5da72f7a.chunk.js": "/static/js/2.5da72f7a.chunk.js",
+    "static/js/2.5da72f7a.chunk.js.map": "/static/js/2.5da72f7a.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.bf87c17a.chunk.css.map": "/static/css/main.bf87c17a.chunk.css.map",
-    "static/js/2.93ef6665.chunk.js.LICENSE.txt": "/static/js/2.93ef6665.chunk.js.LICENSE.txt",
-    "static/media/SpiritIslandLogo.49f6bb3e.png": "/static/media/SpiritIslandLogo.49f6bb3e.png"
+    "static/css/main.8eaec32f.chunk.css.map": "/static/css/main.8eaec32f.chunk.css.map",
+    "static/js/2.5da72f7a.chunk.js.LICENSE.txt": "/static/js/2.5da72f7a.chunk.js.LICENSE.txt",
+    "static/media/SpiritIslandLogo.49f6bb3e.png": "/static/media/SpiritIslandLogo.49f6bb3e.png",
+    "static/media/boards.737e0d2b.png": "/static/media/boards.737e0d2b.png",
+    "static/media/router.39afada7.svg": "/static/media/router.39afada7.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.5ab8e273.js",
-    "static/js/2.93ef6665.chunk.js",
-    "static/css/main.bf87c17a.chunk.css",
-    "static/js/main.25ce2824.chunk.js"
+    "static/js/2.5da72f7a.chunk.js",
+    "static/css/main.8eaec32f.chunk.css",
+    "static/js/main.7a63cb32.chunk.js"
   ]
 }

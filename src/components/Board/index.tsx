@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { BoardProps } from "boardgame.io/react";
 import { SpiritIslandState } from "Game";
+import { IslandArea } from "./IslandArea";
 
 export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandState>, any> {
     render() {
@@ -10,7 +11,7 @@ export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandSt
         }
         //mapping from id to name comes from this.props.matchData  
         return (
-            <div>Hello World</div>
+            <IslandArea />
         );
     }
 }
