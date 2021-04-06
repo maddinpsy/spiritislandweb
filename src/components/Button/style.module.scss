@@ -1,0 +1,57 @@
+@import "~styles/shared";
+
+@mixin buttonTheme($color) {
+  background: $color;
+  @include shadow($color: $color);
+
+  &:active:not([disabled]) {
+    @include shadow($inset: true, $color: $color);
+  }
+}
+
+.button {
+  border-radius: 10px;
+  display: flex;
+  text-decoration: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: none;
+  padding: 12px 42px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: $c-white;
+  margin: 10px;
+  cursor: pointer;
+
+  &--orange {
+    @include buttonTheme($c-orange);
+  }
+
+  &--yellow {
+    @include buttonTheme($c-light-yellow);
+  }
+
+  &--blue {
+    @include buttonTheme($c-ocean-blue);
+  }
+
+  &--green {
+    @include buttonTheme($c-green);
+  }
+
+  &--size-small {
+    padding: 8px 24px;
+    font-size: 16px;
+  }
+
+  &:not([disabled]):active {
+    transform: translate(2px, 2px);
+  }
+
+  &[disabled] {
+    opacity: 0.3;
+    cursor: initial;
+  }
+}

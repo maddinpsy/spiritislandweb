@@ -1,0 +1,21 @@
+@import "~styles/shared";
+
+.Logo {
+  color: $c-orange;
+
+  &--large {
+    width: 600px;
+  }
+
+  &--medium {
+    width: 320px;
+  }
+
+  &--small {
+    width: 135px;
+  }
+
+  &--tiny {
+    width: 100px;
+  }
+}

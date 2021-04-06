@@ -6,7 +6,7 @@ To learn more about Spirit Island look at [Board Game Geeks](https://boardgamege
 
 [Screen shots and videos of game play]
 
-[Link to online version]
+See the current state of development in the [Online Version](https://spiritislandweb.herokuapp.com/).
 
 This is an early version of the game, and it is still under development. The raodmap is shown below. The items are implemented in order, and checked when finished. After each heading there will be a new release.
 
@@ -16,14 +16,14 @@ This is an early version of the game, and it is still under development. The rao
 
 ### Server and multi player
 
-- [ ] Set Nickname dialog
-- [ ] create a new game
-- [ ] display lobby
-  - [ ] with link to share 
-  - [ ] current joined players
-  - [ ] start button
-- [ ] join a game by URL
-- [ ] game play: Display one board for all, no actions
+- [x] Set Nickname dialog
+- [x] create a new game
+- [x] display lobby
+  - [x]] with link to share 
+  - [x] current joined players
+  - [x] start button
+- [x] join a game by URL
+- [x] game play: Display one board for all, no actions (Hello World)
 
 ### Design board layout
 

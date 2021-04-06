@@ -1,0 +1,23 @@
+@import "~styles/shared";
+
+.SetupNickname {
+  &__input {
+    width: 80%;
+    margin: 36px 0;
+  }
+
+  &__form {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__title {
+    font-size: 50px;
+    color: $c-white;
+    margin: 0;
+  }
+}

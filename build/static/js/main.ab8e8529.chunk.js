@@ -1,2 +1,0 @@
-(this.webpackJsonpspiritislandweb=this.webpackJsonpspiritislandweb||[]).push([[0],{4:function(e,t,i){"use strict";i.r(t);var n=i(0),s=i.n(n),r=i(2),o=i.n(r),c=i(3);o.a.render(Object(c.jsx)(s.a.StrictMode,{children:"Hello World"}),document.getElementById("root"))}},[[4,1,2]]]);
-//# sourceMappingURL=main.ab8e8529.chunk.js.map
