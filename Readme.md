@@ -19,7 +19,7 @@ This is an early version of the game, and it is still under development. The rao
 - [x] Set Nickname dialog
 - [x] create a new game
 - [x] display lobby
-  - [x]] with link to share 
+  - [x] with link to share 
   - [x] current joined players
   - [x] start button
 - [x] join a game by URL
