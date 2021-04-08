@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { SpiritIslandState } from "Game";
+import { SpiritIslandState } from "game/Game";
 import style from "./style.module.scss";
 import createPanZoom, { PanZoom } from "panzoom";
 import { Button } from "components/Button";

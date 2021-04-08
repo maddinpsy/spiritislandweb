@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { BoardProps } from "boardgame.io/react";
-import { SpiritIslandState } from "Game";
+import { SpiritIslandState } from "game/Game";
 import { IslandArea } from "./IslandArea";
 
 export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandState>, any> {

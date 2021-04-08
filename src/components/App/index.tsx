@@ -12,7 +12,7 @@ import { Server } from "boardgame.io";
 import { Client } from "boardgame.io/react";
 
 import { isProduction, SERVER_URL } from "config";
-import { SpiritIsland } from 'Game';
+import { SpiritIsland } from 'game/Game';
 import { SpiritIslandBoard } from 'components/Board';
 
 import { CreateGame } from 'components/CreateGame';

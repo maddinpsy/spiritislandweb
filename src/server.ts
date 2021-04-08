@@ -1,7 +1,9 @@
 import path from "path";
 import serve from "koa-static";
 import { Server } from "boardgame.io/server";
-import { SpiritIsland } from "./Game";
+
+//relative path is important, because we dont use webpack
+import { SpiritIsland } from "./game/Game";
 
 
 const PORT = Number(process.env.PORT || 8000);

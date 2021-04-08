@@ -7,7 +7,7 @@ import { ButtonLang } from "components/ButtonLang";
 import { LobbyLink } from "./LobbyLink";
 
 import { Server } from "boardgame.io";
-import { SpiritIsland } from 'Game';
+import { SpiritIsland } from 'game/Game';
 import { LobbyClient } from "boardgame.io/client";
 import { StoredPlayerData } from "components/App";
 import { Button } from "components/Button";
