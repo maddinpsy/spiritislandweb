@@ -1,13 +1,19 @@
+import { Ctx, Game } from 'boardgame.io';
+import { ActivePlayers } from 'boardgame.io/core';
 
-import { Ctx, Game} from 'boardgame.io';
+//relative include path is neccesry, because we use esm for the server backend
+import { SetupPhase, SetupPhaseState } from './SetupPhase';
 
-export interface SpiritIslandState
-{
-}
+
+export type SpiritIslandState = SetupPhaseState & {};
 
 export const SpiritIsland: Game<SpiritIslandState, Ctx> = {
     name: "SpiritIsland",
     minPlayers: 1,
-    maxPlayers: 99,
+    //maxPlayers: 99,
+    turn: {
+        activePlayers: ActivePlayers.ALL
+    },
+    ...SetupPhase
 };
 

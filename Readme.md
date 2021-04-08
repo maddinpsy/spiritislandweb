@@ -28,16 +28,16 @@ This is an early version of the game, and it is still under development. The rao
 ### Design board layout
 
 - [ ] 4 base game boards (no thematic)
-- [ ] zoom and pan the boards, don't sync zoom and pan between clients
-- [ ] button to center the view (show all boards)
-- [ ] display list with available boards on the left
+- [ ] ~~zoom and pan the boards, don't sync zoom and pan between clients~~ (not in design phase, breaking dragdrop)
+- [ ] ~~button to center the view (show all boards)~~ (not in design phase, breaking dragdrop)
+- [x] display list with available boards on the left
 - [ ] drag drop boards and highlight drop spots
 - [ ] rotate boards with two buttons
 - [ ] snap to correct position, after rotation
 - [ ] animate rotation
-- [ ] synchronize board layout with other players
+- [x] synchronize board layout with other players
 - [ ] animate board move/rotation when updating
-- [ ] delete board by dropping back into the list (drop spot is highlighted (recycle bin))
+- [x] delete board by dropping back into the list ~~(drop spot is highlighted (recycle bin))~~
 
 ### Publication
 

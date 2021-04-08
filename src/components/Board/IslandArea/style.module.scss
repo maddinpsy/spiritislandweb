@@ -3,11 +3,37 @@
 .IslandArea {
   &__container {
     background-color: #725c4d;
-    height: 100%;
-    overflow: hidden;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    overflow: auto;
   }
 
-  &__panandzoom {
+  &__availArea {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    height: 100%;
+  }
+  
+  &__availBoard {
+    margin-top:10%;
+    margin-bottom:10%;
+  }
+
+
+  &__boardArea {
+    grid-column: 2;
+    height: 100%;
+  }
+
+  &__usedBoard {
+    position: fixed;
+  }
+
+  &__availSpirits {
+    grid-column: 3;
     height: 100%;
   }
 
