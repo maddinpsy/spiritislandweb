@@ -12,7 +12,10 @@ This is an early version of the game, and it is still under development. The rao
 
 [Link to Subscription List]
 
-## Road Map version 0.1
+
+<details>
+
+<summary>## Road Map version 0.1</summary>
 
 ### Server and multi player
 
@@ -196,3 +199,39 @@ This is an early version of the game, and it is still under development. The rao
 - [ ] show random deck, face down
 - [ ] flip top card on click
 - [ ] show discard deck
+</details>  
+
+
+## Development
+1. Install Node Version 14.x from [https://nodejs.org/de/download/](https://nodejs.org/de/download/)
+2. Checkout the code:
+``` bash
+git clone https://github.com/maddinpsy/spiritislandweb.git
+```
+3. Update dependencies:
+``` bash
+npm install
+```
+or
+``` bash
+yarn
+```
+4. Start the development server
+``` bash
+npm run start-dev
+```
+or
+``` bash
+yarn start-dev
+```
+5. edit the code
+6. build and deploy
+``` bash
+yarn build
+yarn start
+```
+with [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed:
+``` bash
+yarn build
+heroku local
+```
