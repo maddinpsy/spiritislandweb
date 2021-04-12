@@ -12,10 +12,18 @@ This is an early version of the game, and it is still under development. The rao
 
 [Link to Subscription List]
 
+## Licensing
+
+(Eric: I agree to the terms for creating Spirit Island game elements [set forth in the FAQ](https://querki.net/u/darker/spirit-island-faq/#!.9v5ka4u))
+
+All game assets and texts are owned by Greater Than Games. Other code is licensed under the MIT. This code base is intended for personal and educational use only. I do not intend to use this code commercially - nor do I intend for others to use it commercially - due to the copyrighted elements and the [position of the publisher](https://querki.net/u/darker/spirit-island-faq/#!.9v5ka4u).
+
+
+## Road Map version 0.1
 
 <details>
 
-<summary>## Road Map version 0.1</summary>
+<summary>Click to expand...</summary>
 
 ### Server and multi player
 
@@ -235,3 +243,4 @@ with [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed:
 yarn build
 heroku local
 ```
+
