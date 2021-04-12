@@ -29,7 +29,14 @@
   }
 
   &__usedBoard {
-    position: fixed;
+    //width: 250px;
+    position: absolute;
+  }
+  
+  &__image {
+    //max-height: 100%;
+    //max-width: 100%;
+    object-fit: scale-down;
   }
 
   &__availSpirits {

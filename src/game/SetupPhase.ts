@@ -2,8 +2,8 @@ import { Ctx, Game } from "boardgame.io";
 import { INVALID_MOVE } from 'boardgame.io/core';
 import { SpiritIslandState } from "./Game";
 
-type Point = { x: number, y: number }
-type Line = { start: Point, end: Point }
+export type Point = { x: number, y: number }
+export type Line = { start: Point, end: Point }
 
 export type Board = {
     name: string
@@ -22,10 +22,10 @@ export type SetupPhaseState =
 function gameSetup(): SpiritIslandState {
     return {
         availBoards:[
-            {name:"A",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:550,y:8},end:{x:385,y:290}},{start:{x:550,y:8},end:{x:197,y:5}}]},
-            {name:"B",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:550,y:8},end:{x:385,y:290}},{start:{x:550,y:8},end:{x:197,y:5}}]},
-            {name:"C",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:550,y:8},end:{x:385,y:290}},{start:{x:550,y:8},end:{x:197,y:5}}]},
-            {name:"D",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:550,y:8},end:{x:385,y:290}},{start:{x:550,y:8},end:{x:197,y:5}}]}
+            {name:"A",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:385,y:290},end:{x:550,y:8}},{start:{x:550,y:8},end:{x:197,y:5}}]},
+            {name:"B",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:385,y:290},end:{x:550,y:8}},{start:{x:550,y:8},end:{x:197,y:5}}]},
+            {name:"C",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:385,y:290},end:{x:550,y:8}},{start:{x:550,y:8},end:{x:197,y:5}}]},
+            {name:"D",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:385,y:290},end:{x:550,y:8}},{start:{x:550,y:8},end:{x:197,y:5}}]}
         ],
         usedBoards:[]
     };
