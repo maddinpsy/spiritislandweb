@@ -151,8 +151,13 @@ All game assets and texts are owned by Greater Than Games. Other code is license
 
 - [ ] Display Blight count
 - [ ] Small Plus/Minus sign to increase/decrease number
+</details>  
 
 ## Road Map version 0.2
+
+<details>
+
+<summary>Click to expand...</summary>
 
 ### Server and multi player
 
