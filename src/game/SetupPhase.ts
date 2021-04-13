@@ -20,12 +20,18 @@ export type SetupPhaseState =
     }
 
 function gameSetup(): SpiritIslandState {
+    //TopLeft 525	116
+    //TopRight 1441	122
+    //BottomRight 980	914
+    //BottomLeft 64	908
     return {
         availBoards:[
-            {name:"A",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:385,y:290},end:{x:550,y:8}},{start:{x:550,y:8},end:{x:197,y:5}}]},
-            {name:"B",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:385,y:290},end:{x:550,y:8}},{start:{x:550,y:8},end:{x:197,y:5}}]},
-            {name:"C",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:385,y:290},end:{x:550,y:8}},{start:{x:550,y:8},end:{x:197,y:5}}]},
-            {name:"D",anchors:[{start:{x:15,y:290},end:{x:385,y:290}},{start:{x:385,y:290},end:{x:550,y:8}},{start:{x:550,y:8},end:{x:197,y:5}}]}
+            {name:"A",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
+            {name:"B",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
+            {name:"C",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
+            {name:"D",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
+            {name:"E",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
+            {name:"F",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]}
         ],
         usedBoards:[]
     };

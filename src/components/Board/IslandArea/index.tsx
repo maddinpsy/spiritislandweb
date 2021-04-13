@@ -1,15 +1,18 @@
 import * as React from "react";
 
 import { SpiritIslandState } from "game/Game";
-import { Board, BoardPlacement, Line } from "game/SetupPhase";
+import { Board, BoardPlacement, Line, Point } from "game/SetupPhase";
 
 import style from "./style.module.scss";
-import boardA from "assets/boardA.png"
-import boardB from "assets/boardB.png"
-import boardC from "assets/boardC.png"
-import boardD from "assets/boardD.png"
+import boardA from "assets/Board A.png"
+import boardB from "assets/Board B.png"
+import boardC from "assets/Board C.png"
+import boardD from "assets/Board D.png"
+import boardE from "assets/Board E.png"
+import boardF from "assets/Board F.png"
 
-const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD }
+
+const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
 
 class AvailableBoards extends React.Component<{ availBoards: Board[], removeBoard: (boardName: string) => void }>
 {
@@ -85,7 +88,7 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         }
         if (otherBoards.length === 0) {
             //allow drag anywere, when no other board is present
-            this.props.doPlaceBoard(boardName, { position: { x: left, y: top }, rotation: 0});
+            this.props.doPlaceBoard(boardName, { position: { x: left, y: top }, rotation: draggedBoard.rotation });
             return;
         }
         let { closestAnchor, closestBoard } = this.getClosestBoardAndAnchor(otherBoards, left, top);
@@ -146,8 +149,9 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         }
         // show marker at found anchor
         if (marker1) {
-            marker1.style.left = (closestAnchor.start.x + closestAnchor.end.x) / 2 + closestBoard.position.x + "px";
-            marker1.style.top = (closestAnchor.start.y + closestAnchor.end.y) / 2 + closestBoard.position.y + "px"
+            const pos = this.rotateBy(this.middle(closestAnchor), closestBoard.rotation);
+            marker1.style.left = pos.x + closestBoard.position.x + "px";
+            marker1.style.top = pos.y + closestBoard.position.y + "px"
             marker1.style.display = "block"
         }
 
@@ -160,10 +164,23 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         if (!min_anchor) return;
         // show marker at found anchor
         if (marker2) {
-            marker2.style.left = (min_anchor.start.x + min_anchor.end.x) / 2 + draggedBoard.position.x + "px";
-            marker2.style.top = (min_anchor.start.y + min_anchor.end.y) / 2 + draggedBoard.position.y + "px"
+            const pos = this.rotateBy(this.middle(min_anchor), draggedBoard.rotation);
+            marker2.style.left = pos.x + draggedBoard.position.x + "px";
+            marker2.style.top = pos.y + draggedBoard.position.y + "px"
             marker2.style.display = "block"
         }
+    }
+    private middle(line: Line): Point {
+        const cx = (line.start.x + line.end.x) / 2
+        const cy = (line.start.y + line.end.y) / 2;
+        return { x: cx, y: cy }
+    }
+    private rotateBy(p: Point, degree: number): Point {
+        const sinPhiDragged = Math.sin(degree / 180 * Math.PI);
+        const cosPhiDragged = Math.cos(degree / 180 * Math.PI);
+        const newx = p.x * cosPhiDragged - p.y * sinPhiDragged;
+        const newy = p.x * sinPhiDragged + p.y * cosPhiDragged;
+        return { x: newx, y: newy }
     }
 
     private getSnapPosition(min_anchor: Line, closestBoard: Board & BoardPlacement, closestAnchor: Line): BoardPlacement {
@@ -204,7 +221,7 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
                 min_anchor = anc;
             }
         };
-        if (!min_anchor || Math.abs(min_rot_diff) > 30) {
+        if (!min_anchor || Math.abs(min_rot_diff) > 60) {
             //no anchor was closest
             console.log("min_rot_diff:" + min_rot_diff);
             return undefined;
@@ -218,13 +235,10 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         let closestAnchor;
         let closestBoard;
         for (let board of otherBoards) {
-            const sinPhi = Math.sin(board.rotation / 180 * Math.PI);
-            const cosPhi = Math.cos(board.rotation / 180 * Math.PI);
             for (let anc of board.anchors) {
-                const x = (anc.start.x + anc.end.x) / 2;
-                const y = (anc.start.y + anc.end.y) / 2;
-                const x_abs = x * cosPhi - y * sinPhi + board.position.x;
-                const y_abs = x * sinPhi + y * cosPhi + board.position.y;
+                const rel = this.rotateBy(this.middle(anc), board.rotation)
+                const x_abs = rel.x + board.position.x;
+                const y_abs = rel.y + board.position.y;
                 const sqDist = (x_abs - left) ** 2 + (y_abs - top) ** 2;
                 if (sqDist < minSqDist) {
                     minSqDist = sqDist;
@@ -234,6 +248,52 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
             }
         }
         return { closestAnchor, closestBoard };
+    }
+
+    private rotateBoard(boardName: string, clockwise: boolean) {
+        const otherBoards = this.props.usedBoards.filter(b => b.name !== boardName);
+        const draggedBoard = this.props.usedBoards.find(b => b.name === boardName);
+        if (!draggedBoard) {
+            console.log("Internal Error: DragBoard not found in availBoards");
+            return;
+        }
+        const uniqePoints = draggedBoard.anchors
+            .reduce((uniqePoints: Point[], line) => {
+                uniqePoints.push(line.start);
+                return uniqePoints;
+            }, []);
+        const center = uniqePoints.reduce(({ x, y }, point) => {
+            return { x: y + point.x / uniqePoints.length, y: x + point.y / uniqePoints.length };
+        }, { x: 0, y: 0 })
+        const offsetCenterOld = this.rotateBy({ x: center.x, y: center.y }, draggedBoard.rotation)
+        if (otherBoards.length === 0) {
+            //allow any rotate, when no other board is present
+            if (clockwise) {
+                draggedBoard.rotation += 60;
+            } else {
+                draggedBoard.rotation -= 60;
+            }
+            const offsetCenterNew = this.rotateBy({ x: -center.x , y: -center.y }, draggedBoard.rotation);
+            const abs = {
+                x: draggedBoard.position.x + offsetCenterOld.x + offsetCenterNew.x,
+                y: draggedBoard.position.y + offsetCenterOld.y + offsetCenterNew.y
+            }
+            this.props.doPlaceBoard(boardName, { position: { x: abs.x, y: abs.y }, rotation: draggedBoard.rotation });
+            return;
+        }
+        let { closestAnchor, closestBoard } = this.getClosestBoardAndAnchor(otherBoards, center.x, center.y);
+        if (!closestAnchor || !closestBoard) {
+            //to far from next ancher
+            return;
+        }
+        let min_anchor = this.getAnchorOfDraggedBoard(draggedBoard, closestBoard, closestAnchor);
+        if (!min_anchor) {
+            // no snap position found, don't move
+            return;
+        }
+        const placement = this.getSnapPosition(min_anchor, closestBoard, closestAnchor);
+        this.props.doPlaceBoard(boardName, placement);
+
     }
 
     render() {
@@ -250,6 +310,8 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
                         console.log(ev.clientX - ev.currentTarget.getBoundingClientRect().x);
                     }}
                 >
+                    <div className={style.IslandArea__onBoardButton} style={{ right: "60px" }} onClick={() => this.rotateBoard(b.name, false)}>&#x2b6f;</div>
+                    <div className={style.IslandArea__onBoardButton} style={{ right: "100px" }} onClick={() => this.rotateBoard(b.name, true)}>&#x2b6e;</div>
                     <img src={boardImages[b.name]} className={style.IslandArea__image} draggable="false" />
                 </div>
             )
