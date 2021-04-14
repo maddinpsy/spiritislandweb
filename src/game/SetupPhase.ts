@@ -20,6 +20,12 @@ export type SetupPhaseState =
     }
 
 function gameSetup(): SpiritIslandState {
+    //Requirements on anchors:
+    //Center of Anchors is Center of Image
+    //Anchers create perfect parallelogram
+    //All Anchors have the same length
+    //Anchor in CountClockwise Direction
+
     //TopLeft 525	116
     //TopRight 1441	122
     //BottomRight 980	914

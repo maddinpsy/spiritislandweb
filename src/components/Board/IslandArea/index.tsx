@@ -159,7 +159,6 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         //get anchor with smallest diff rotation 
         //take rotation of both boards into account
         //avoid overlapping with same board by start/end mixup, because anchors are all counter clock wise
-
         let min_anchor = this.getAnchorOfDraggedBoard(draggedBoard, closestBoard, closestAnchor);
         if (!min_anchor) return;
         // show marker at found anchor
@@ -266,6 +265,8 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
             return { x: y + point.x / uniqePoints.length, y: x + point.y / uniqePoints.length };
         }, { x: 0, y: 0 })
         const offsetCenterOld = this.rotateBy({ x: center.x, y: center.y }, draggedBoard.rotation)
+        const centerabs = { x: offsetCenterOld.x + draggedBoard.position.x, y: offsetCenterOld.y + draggedBoard.position.y };
+        const oldRotation = draggedBoard.rotation;
         if (otherBoards.length === 0) {
             //allow any rotate, when no other board is present
             if (clockwise) {
@@ -273,7 +274,7 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
             } else {
                 draggedBoard.rotation -= 60;
             }
-            const offsetCenterNew = this.rotateBy({ x: -center.x , y: -center.y }, draggedBoard.rotation);
+            const offsetCenterNew = this.rotateBy({ x: -center.x, y: -center.y }, draggedBoard.rotation);
             const abs = {
                 x: draggedBoard.position.x + offsetCenterOld.x + offsetCenterNew.x,
                 y: draggedBoard.position.y + offsetCenterOld.y + offsetCenterNew.y
@@ -281,21 +282,53 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
             this.props.doPlaceBoard(boardName, { position: { x: abs.x, y: abs.y }, rotation: draggedBoard.rotation });
             return;
         }
-        let { closestAnchor, closestBoard } = this.getClosestBoardAndAnchor(otherBoards, center.x, center.y);
+        let { closestAnchor, closestBoard } = this.getClosestBoardAndAnchor(otherBoards, centerabs.x, centerabs.y);
         if (!closestAnchor || !closestBoard) {
             //to far from next ancher
             return;
         }
-        let min_anchor = this.getAnchorOfDraggedBoard(draggedBoard, closestBoard, closestAnchor);
-        if (!min_anchor) {
-            // no snap position found, don't move
-            return;
-        }
-        const placement = this.getSnapPosition(min_anchor, closestBoard, closestAnchor);
-        this.props.doPlaceBoard(boardName, placement);
+        let newPlacement = { position: { x: 0, y: 0 }, rotation: oldRotation };
+        let deltaRot = 0;
+        do {
+            if (clockwise) {
+                deltaRot += 30;
+            } else {
+                deltaRot -= 30;
+            }
+            draggedBoard.rotation = oldRotation + deltaRot;
+            let min_anchor = this.getAnchorOfDraggedBoard(draggedBoard, closestBoard, closestAnchor);
+            draggedBoard.rotation = oldRotation;
+            if (!min_anchor) {
+                // no snap position found, keep rotationg
+                if (Math.abs(oldRotation - draggedBoard.rotation) >= 360) {
+                    //no snap found after full rotation
+                    return;
+                }
+                continue;
+            }
+            newPlacement = this.getSnapPosition(min_anchor, closestBoard, closestAnchor);
+        } while (this.deltaRot(newPlacement.rotation, draggedBoard.rotation) < 30)
+        this.props.doPlaceBoard(boardName, newPlacement);
 
     }
-
+    /**
+     * returns the smalles angle between two rotations. 
+     * this functions accaptes all rotation values negative and greater than 360
+     * @param rot1 first rotation in degrees
+     * @param rot2 seconds rotation in degrees
+     * @returns 0..180
+     */
+    deltaRot(rot1: number, rot2: number): number {
+        let a = rot2 - rot1;
+        //make sure it is between 0 and 360
+        a = (a % 360 + 360) % 360
+        //make sure its between -180 and 180
+        if (a > 180) {
+            a -= 360;
+        }
+        //make it 0..180
+        return Math.abs(a)
+    }
     render() {
         const usedBoards = this.props.usedBoards.map(b => {
             let customStyle: React.CSSProperties = {};
@@ -307,7 +340,6 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
                     draggable="true"
                     onDragStart={(ev) => {
                         ev.dataTransfer.setData("text", b.name)
-                        console.log(ev.clientX - ev.currentTarget.getBoundingClientRect().x);
                     }}
                 >
                     <div className={style.IslandArea__onBoardButton} style={{ right: "60px" }} onClick={() => this.rotateBoard(b.name, false)}>&#x2b6f;</div>
