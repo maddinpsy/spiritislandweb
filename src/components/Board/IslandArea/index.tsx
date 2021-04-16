@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import inside from "point-in-polygon"
 import { SpiritIslandState } from "game/Game";
 import { Board, BoardPlacement, Line, Point } from "game/SetupPhase";
 
@@ -54,13 +55,14 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
 {
     ref: React.RefObject<HTMLDivElement>
     markerRef1: React.RefObject<HTMLDivElement>
-    markerRef2: React.RefObject<HTMLDivElement>
+    boardRefs: { [boardName: string]: React.RefObject<HTMLDivElement> };
 
     constructor(props: any) {
         super(props);
         this.ref = React.createRef();
         this.markerRef1 = React.createRef();
-        this.markerRef2 = React.createRef();
+        this.boardRefs = {};
+        Object.keys(boardImages).forEach((key) => { this.boardRefs[key] = React.createRef() });
         this.onMoveOrAddBoard = this.onMoveOrAddBoard.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
     }
@@ -112,10 +114,6 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         if (marker1) {
             marker1.style.display = "none"
         }
-        let marker2 = this.markerRef2.current;
-        if (marker2) {
-            marker2.style.display = "none"
-        }
         const rect = this.ref.current?.getBoundingClientRect();
         if (!rect) {
             console.log("cant drop on unknown element");
@@ -147,13 +145,6 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
             //to far from next ancher
             return;
         }
-        // show marker at found anchor
-        if (marker1) {
-            const pos = this.rotateBy(this.middle(closestAnchor), closestBoard.rotation);
-            marker1.style.left = pos.x + closestBoard.position.x + "px";
-            marker1.style.top = pos.y + closestBoard.position.y + "px"
-            marker1.style.display = "block"
-        }
 
         //find matching anchor in dragged board: 
         //get anchor with smallest diff rotation 
@@ -162,11 +153,14 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         let min_anchor = this.getAnchorOfDraggedBoard(draggedBoard, closestBoard, closestAnchor);
         if (!min_anchor) return;
         // show marker at found anchor
-        if (marker2) {
-            const pos = this.rotateBy(this.middle(min_anchor), draggedBoard.rotation);
-            marker2.style.left = pos.x + draggedBoard.position.x + "px";
-            marker2.style.top = pos.y + draggedBoard.position.y + "px"
-            marker2.style.display = "block"
+        if (marker1) {
+            const pos = this.rotateBy(this.middle(closestAnchor), closestBoard.rotation);
+            const otherAncRot = Math.atan2(closestAnchor.start.y - closestAnchor.end.y, closestAnchor.start.x - closestAnchor.end.x) / Math.PI * 180;
+            const otherAncRot_abs = (otherAncRot + closestBoard.rotation + 360) % 360;
+            marker1.style.left = pos.x + closestBoard.position.x + "px";
+            marker1.style.top = pos.y + closestBoard.position.y + "px"
+            marker1.style.transform="rotate("+otherAncRot_abs+"deg)";
+            marker1.style.display = "block"
         }
     }
     private middle(line: Line): Point {
@@ -220,7 +214,7 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
                 min_anchor = anc;
             }
         };
-        if (!min_anchor || Math.abs(min_rot_diff) > 60) {
+        if (!min_anchor || Math.abs(min_rot_diff) > 90) {
             //no anchor was closest
             console.log("min_rot_diff:" + min_rot_diff);
             return undefined;
@@ -329,6 +323,37 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         //make it 0..180
         return Math.abs(a)
     }
+    /**
+     * moves board at curser position in top layer. takes board anchors into account.
+     * @param x clientX of mouseDown event
+     * @param y clientY of mouseDown event
+     */
+    correctZIndex(x: number, y: number) {
+        this.props.usedBoards.forEach(board => {
+            //get html ref of board
+            const ref = this.boardRefs[board.name]?.current;
+            if (!ref) return
+
+            //get absolute corners of board
+            let conrners: number[][] = [];
+            const bottomLeft = this.rotateBy(board.anchors[0].start, board.rotation);
+            const bottomRight = this.rotateBy(board.anchors[1].start, board.rotation);
+            const topRight = this.rotateBy(board.anchors[2].start, board.rotation);
+            const topLeft = this.rotateBy(board.anchors[2].end, board.rotation);
+            conrners.push([bottomLeft.x + board.position.x, bottomLeft.y + board.position.y])
+            conrners.push([bottomRight.x + board.position.x, bottomRight.y + board.position.y])
+            conrners.push([topRight.x + board.position.x, topRight.y + board.position.y])
+            conrners.push([topLeft.x + board.position.x, topLeft.y + board.position.y])
+
+            //check absolut point is insied board
+            if (inside([x, y], conrners)) {
+                ref.style.zIndex = "100";
+            } else {
+                ref.style.zIndex = "0";
+            }
+        });
+    }
+
     render() {
         const usedBoards = this.props.usedBoards.map(b => {
             let customStyle: React.CSSProperties = {};
@@ -341,6 +366,13 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
                     onDragStart={(ev) => {
                         ev.dataTransfer.setData("text", b.name)
                     }}
+                    onDragEnd={(ev) => {
+                        const marker1 = this.markerRef1.current;
+                        if (marker1) {
+                            marker1.style.display = "none"
+                        }
+                    }}
+                    ref={this.boardRefs[b.name]}
                 >
                     <div className={style.IslandArea__onBoardButton} style={{ right: "60px" }} onClick={() => this.rotateBoard(b.name, false)}>&#x2b6f;</div>
                     <div className={style.IslandArea__onBoardButton} style={{ right: "100px" }} onClick={() => this.rotateBoard(b.name, true)}>&#x2b6e;</div>
@@ -353,11 +385,11 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         return (
             <div ref={this.ref} className={style.IslandArea__boardArea}
                 onDrop={this.onMoveOrAddBoard}
+                onMouseDown={(ev) => this.correctZIndex(ev.clientX, ev.clientY)}
                 onDragOver={this.onDragOver}
             >
                 {usedBoards}
-                <div ref={this.markerRef1} style={{ position: "absolute" }}>[x]</div>
-                <div ref={this.markerRef2} style={{ position: "absolute" }}>[+]</div>
+                <div ref={this.markerRef1} className={style.IslandArea__marker}>[x]</div>
             </div>
         );
     }
