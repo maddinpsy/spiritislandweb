@@ -69,6 +69,11 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
 
     onMoveOrAddBoard(event: React.DragEvent<HTMLDivElement>) {
         event.preventDefault();
+        //Always hide marker
+        const marker1 = this.markerRef1.current;
+        if (marker1) {
+            marker1.style.display = "none"
+        }
         const rect = this.ref.current?.getBoundingClientRect();
         if (!rect) {
             console.log("cant drop on unknown element");
