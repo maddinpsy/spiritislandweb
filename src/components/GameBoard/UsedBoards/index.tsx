@@ -15,43 +15,13 @@ import boardF from "assets/Board F.png"
 
 const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
 
-class AvailableBoards extends React.Component<{ availBoards: Board[], removeBoard: (boardName: string) => void }>
-{
-    constructor(props: any) {
-        super(props);
-        this.onRemoveBoard = this.onRemoveBoard.bind(this);
-    }
-
-    onRemoveBoard(event: React.DragEvent<HTMLDivElement>) {
-        event.preventDefault();
-        const boardName = event.dataTransfer.getData("text");
-        this.props.removeBoard(boardName);
-    }
-
-    render() {
-        const boards = this.props.availBoards.map(b => {
-            return (
-                <div key={b.name}
-                    className={style.IslandArea__availBoard}
-                    draggable="true"
-                    onDragStart={(ev) => {
-                        ev.dataTransfer.setData("text", b.name)
-                    }}
-                >
-                    <img src={boardImages[b.name]} className={style.IslandArea__image} draggable="false" width="200px" />
-                </div>)
-        });
-        return (
-            <div className={style.IslandArea__availArea}
-                onDrop={this.onRemoveBoard}
-                onDragOver={(event) => event.preventDefault()}>
-                {boards}
-            </div>
-        )
-    }
+interface UsedBoardsProps {
+    availBoards: Board[]
+    usedBoards: (Board & BoardPlacement)[]
+    doPlaceBoard: (boardName: string, place: BoardPlacement) => void
 }
 
-class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Board & BoardPlacement)[], doPlaceBoard: (boardName: string, place: BoardPlacement) => void }>
+export class UsedBoards extends React.Component<UsedBoardsProps>
 {
     ref: React.RefObject<HTMLDivElement>
     markerRef1: React.RefObject<HTMLDivElement>
@@ -164,7 +134,7 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
             const otherAncRot_abs = (otherAncRot + closestBoard.rotation + 360) % 360;
             marker1.style.left = pos.x + closestBoard.position.x + "px";
             marker1.style.top = pos.y + closestBoard.position.y + "px"
-            marker1.style.transform="rotate("+otherAncRot_abs+"deg)";
+            marker1.style.transform = "rotate(" + otherAncRot_abs + "deg)";
             marker1.style.display = "block"
         }
     }
@@ -399,25 +369,3 @@ class UsedBoards extends React.Component<{ availBoards: Board[], usedBoards: (Bo
         );
     }
 }
-
-export interface IslandAreaProps {
-    G: SpiritIslandState
-    placeBoard: (boardName: string, place: BoardPlacement) => void
-    removeBoard: (boardName: string) => void
-}
-
-export class IslandArea extends React.Component<IslandAreaProps> {
-    constructor(props: IslandAreaProps) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className={style.IslandArea__container}>
-                <AvailableBoards availBoards={this.props.G.availBoards} removeBoard={this.props.removeBoard} />
-                <UsedBoards availBoards={this.props.G.availBoards} usedBoards={this.props.G.usedBoards} doPlaceBoard={this.props.placeBoard} />
-            </div>
-        );
-    }
-}
-

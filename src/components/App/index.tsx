@@ -8,12 +8,11 @@ import {
 
 import { LobbyClient } from 'boardgame.io/client';
 import { SocketIO } from "boardgame.io/multiplayer";
-import { Server } from "boardgame.io";
 import { Client } from "boardgame.io/react";
 
 import { isProduction, SERVER_URL } from "config";
 import { SpiritIsland } from 'game/Game';
-import { SpiritIslandBoard } from 'components/Board';
+import { SpiritIslandBoard } from 'components/GameBoard';
 
 import { CreateGame } from 'components/CreateGame';
 import { NicknameProps } from 'components/NicknameOverlay';
