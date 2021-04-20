@@ -30,13 +30,13 @@ export class AvailableBoards extends React.Component<{ availBoards: Board[], rem
         const boards = this.props.availBoards.map(b => {
             return (
                 <div key={b.name}
-                    className={style.AvailableBoards__board}
+                    className={style.AvailableBoards__imageWrap}
                     draggable="true"
                     onDragStart={(ev) => {
                         ev.dataTransfer.setData("text", b.name)
                     }}
                 >
-                    <img src={boardImages[b.name]} className={style.AvailableBoards__image} draggable="false" width="200px" />
+                    <img src={boardImages[b.name]} className={style.AvailableBoards__image} draggable="false" />
                 </div>)
         });
         return (
