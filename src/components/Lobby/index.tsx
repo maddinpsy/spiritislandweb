@@ -167,7 +167,7 @@ class GameLobbySetupRaw extends React.Component<GameLobbySetupProps & RoomMetaDa
       });
       if (this.gameStarted) {
         if (alreadyJoined) {
-          this.delayedStart();
+          this.props.startGame();
         } else {
           alert(
             "This game started without you."
@@ -232,17 +232,6 @@ class GameLobbySetupRaw extends React.Component<GameLobbySetupProps & RoomMetaDa
     }
   }
 
-  delayedStart() {
-    window.setTimeout(() => {
-      if (this.props.roomMetadata) {
-        this.props.startGame();
-      } else {
-        alert("There was an internal problem. Please try again.");
-        this.props.history.push("/");
-        return;
-      }
-    }, 2000);
-  }
 
   render() {
     let arPlayerData: Server.PlayerMetadata[] = [];
