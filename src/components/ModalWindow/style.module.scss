@@ -1,0 +1,61 @@
+@import "~styles/shared";
+
+.ModalWindow {
+  
+  &__container {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__fadeOutBack {
+    background-color: black;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 1;
+    opacity: 0.6;
+  }
+  
+  &__window {
+    border: 1px solid black;
+    background-color: $c-brown;
+    min-width: 400px;
+    min-height: 300px;
+    z-index: 2;
+    border-radius: 10px;
+  }
+
+  &__titleBar {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: $c-orange;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 10px 5px 5px 10px;
+  }
+
+  &__closeButton {
+    display: block;
+    float:right;
+    background-color: $c-brown;
+    width: 24px;
+    height: 24px;
+    padding-left: 4px;
+    padding-top: 4px;
+    border-radius: 5px;
+    margin-top: -5px;
+  }
+
+  &__bodyContainer {
+    margin: 1em;
+  }
+}
