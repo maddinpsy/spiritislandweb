@@ -3,6 +3,7 @@ import * as React from "react";
 import { BoardProps } from "boardgame.io/react";
 import { SpiritIslandState } from "game/Game";
 import { IslandArea } from "./IslandArea";
+import { Loading } from "components/Loading";
 
 export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandState>, { loading: boolean }> {
     constructor(props: any) {
@@ -16,7 +17,7 @@ export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandSt
     render() {
         if (this.state.loading) {
             //show loading compontne to avoid startup flicker
-            return (<div>connecting..</div>)
+            return <Loading/>
         }
         //mapping from id to name comes from this.props.matchData  
         return (

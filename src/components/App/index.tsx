@@ -20,6 +20,7 @@ import { NicknameProps } from 'components/NicknameOverlay';
 import { GameLobbySetup } from "components/Lobby";
 import { Welcome } from "components/Welcome";
 import "./App.css";
+import { Loading } from 'components/Loading';
 
 
 export interface StoredPlayerData {
@@ -93,6 +94,7 @@ export class App extends React.Component<NicknameProps, AppState>
         game: SpiritIsland,
         board: SpiritIslandBoard,
         multiplayer: SocketIO({ server: SERVER_URL }),
+        loading:Loading
       });
 
       roomPage = <GameClient
