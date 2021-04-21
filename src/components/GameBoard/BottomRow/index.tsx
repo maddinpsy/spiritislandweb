@@ -12,8 +12,8 @@ export class StartButton extends React.Component<{}, { popupVisible: boolean }> 
     render() {
         return (
             <div>
-                {this.state.popupVisible ?
-                    <SubscribeWindow onClose={() => this.setState({ popupVisible: false })} /> : ""
+                {this.state.popupVisible &&
+                    <SubscribeWindow onClose={() => this.setState({ popupVisible: false })} onSuccess={()=>{}} />
                 }
                 <Button onClick={() => this.setState({ popupVisible: true })} className={style.BottomRow__startButton}>
                     Start <br /> Game

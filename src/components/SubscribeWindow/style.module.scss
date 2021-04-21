@@ -1,15 +1,39 @@
 @import "~styles/shared";
 
 .SubscribeWindow {
-  &__container {
-    background-color: lighten($c-brown, 10%);
-    border-top: solid darken($c-brown, 10%);
-    grid-row: 2;
-    grid-column: 1/4;
-    overflow: hidden;
+  &__formContainer{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+    "email email" 
+    "button loading";
   }
-  &__startButton {
-    float: right;
+  &__emailinput {
+    border: 3px solid darken($c-orange, 10%);
+    background: darken($c-orange, 5%);
+    font-size: 18px;
+    color: $c-white;
+    padding: 12px 20px;
+    font-weight: 400;
+    border-radius: 10px;
+    outline: none;
+    grid-area: email;
+  }
+  &__emailinput:focus {
+    background: darker($c-orange, 10%);
+    border: 1px solid darker($c-orange, 30%);
+  }
+  &__subscribeButton{
+    grid-area: button;
+  }
+  &__loading{
+    grid-area: loading;
+    margin: auto 5px;
+    animation: loading 500ms ease-out infinite alternate;
+  }
+  @keyframes loading {
+    0%   {margin-left: 0px;}
+    100% {margin-left: 20px;}
   }
 }
-

@@ -10,13 +10,25 @@ See the current state of development in the [Online Version](https://spiritislan
 
 This is an early version of the game, and it is still under development. The raodmap is shown below. The items are implemented in order, and checked when finished. After each heading there will be a new release.
 
-[Link to Subscription List]
+[Link to Subscription List](https://spiritislandweb.hosted.phplist.com/lists/?p=subscribe&id=1)
 
 ## Licensing
 
 (Eric: I agree to the terms for creating Spirit Island game elements [set forth in the FAQ](https://querki.net/u/darker/spirit-island-faq/#!.9v5ka4u))
 
 All game assets and texts are owned by Greater Than Games. Other code is licensed under the MIT. This code base is intended for personal and educational use only. I do not intend to use this code commercially - nor do I intend for others to use it commercially - due to the copyrighted elements and the [position of the publisher](https://querki.net/u/darker/spirit-island-faq/#!.9v5ka4u).
+
+## Contributing
+
+This project is huge. I never can build this game alone. So every help is most welcome.
+
+If you have an idea, [tell me](mailto:maddinpsycho@gmail.com?subject=Idea%20for%20SpiritIslandWeb)!
+
+If you see a bug, [report it](https://github.com/maddinpsy/spiritislandweb/issues/new)!
+
+If you want to change something, [change it](https://github.com/maddinpsy/spiritislandweb#development)!
+
+If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/lists/?p=subscribe&id=1)!
 
 
 ## Road Map version 0.1
@@ -52,9 +64,9 @@ All game assets and texts are owned by Greater Than Games. Other code is license
 
 ### Publication
 
-- [ ] Bring the game to the cloud as fast as possible. After each improvement there will be an update of the online version.
-- [ ] Add options to subscribe to updates, users get an email when a new version is available.
-- [ ] Ask other to help, help is most welcome.
+- [x] Bring the game to the cloud as fast as possible. After each improvement there will be an update of the online version.
+- [x] Add options to subscribe to updates, users get an email when a new version is available.
+- [x] Ask other to help, help is most welcome.
 
 ### Add Spirits
 
@@ -217,35 +229,22 @@ All game assets and texts are owned by Greater Than Games. Other code is license
 
 ## Development
 1. Install Node Version 14.x from [https://nodejs.org/de/download/](https://nodejs.org/de/download/)
-2. Checkout the code:
+2. Install Yarn [https://classic.yarnpkg.com/en/docs/install](https://classic.yarnpkg.com/en/docs/install)
+3. Checkout the code:
 ``` bash
 git clone https://github.com/maddinpsy/spiritislandweb.git
 ```
-3. Update dependencies:
-``` bash
-npm install
-```
-or
+4. Update dependencies:
 ``` bash
 yarn
 ```
-4. Start the development server
-``` bash
-npm run start-dev
-```
-or
+5. Start the development server
 ``` bash
 yarn start-dev
 ```
-5. edit the code
-6. build and deploy
+6. edit the code
+7. build and deploy
 ``` bash
 yarn build
 yarn start
 ```
-with [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed:
-``` bash
-yarn build
-heroku local
-```
-
