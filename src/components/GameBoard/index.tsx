@@ -7,6 +7,7 @@ import { UsedBoards } from "./UsedBoards";
 import { BottomRow } from "./BottomRow";
 import { Loading } from "components/Loading";
 import style from "./style.module.scss";
+import { allSpirits, AvailableSpirits } from "./AlailableSpirits";
 
 export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandState>, { loading: boolean }> {
     constructor(props: any) {
@@ -34,6 +35,7 @@ export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandSt
             <div className={style.GameBoard__container}>
                 <AvailableBoards availBoards={this.props.G.availBoards} removeBoard={this.props.moves.removeBoard} />
                 <UsedBoards availBoards={this.props.G.availBoards} usedBoards={this.props.G.usedBoards} doPlaceBoard={this.props.moves.placeBoard} />
+                <AvailableSpirits availSpirits={allSpirits}/>
                 <BottomRow />
             </div>
         );

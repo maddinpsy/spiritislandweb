@@ -1,0 +1,25 @@
+@import "~styles/shared";
+
+.AvailableSpirits {
+  &__area {
+    grid-column: 3;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    overflow-y: scroll;
+    scrollbar-color: #b98557 #9c6c41;
+    scrollbar-width: thin;
+  }
+
+  &__imageWrap {
+    max-width: 100%;
+  }
+
+  &__image {
+    //max-height: 100%;
+    //max-width: 100%;
+    object-fit: scale-down;
+    max-width: 100%;
+  }
+}
