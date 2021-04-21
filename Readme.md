@@ -38,16 +38,16 @@ All game assets and texts are owned by Greater Than Games. Other code is license
 
 ### Design board layout
 
-- [ ] 4 base game boards (no thematic)
-- [ ] ~~zoom and pan the boards, don't sync zoom and pan between clients~~ (not in design phase, breaking dragdrop)
-- [ ] ~~button to center the view (show all boards)~~ (not in design phase, breaking dragdrop)
+- [x] 6 base game boards (no thematic)
+- [x] ~~zoom and pan the boards, don't sync zoom and pan between clients~~ (not in design phase, breaking dragdrop)
+- [x] ~~button to center the view (show all boards)~~ (not in design phase, breaking dragdrop)
 - [x] display list with available boards on the left
-- [ ] drag drop boards and highlight drop spots
-- [ ] rotate boards with two buttons
-- [ ] snap to correct position, after rotation
-- [ ] animate rotation
+- [x] drag drop boards and highlight drop spots
+- [x] rotate boards with two buttons
+- [x] snap to correct position, after rotation
+- [x] animate rotation
 - [x] synchronize board layout with other players
-- [ ] animate board move/rotation when updating
+- [x] animate board move/rotation when updating
 - [x] delete board by dropping back into the list ~~(drop spot is highlighted (recycle bin))~~
 
 ### Publication
