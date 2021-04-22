@@ -4,6 +4,9 @@ import inside from "point-in-polygon"
 import { SpiritIslandState } from "game/Game";
 import { Board, BoardPlacement, Line, Point } from "game/SetupPhase";
 
+import { AvailBoardDragData } from "../AvailableBoards";
+import { SpiritDragData } from "../AlailableSpirits";
+
 import style from "./style.module.scss";
 import boardA from "assets/Board A.png"
 import boardB from "assets/Board B.png"
@@ -14,6 +17,14 @@ import boardF from "assets/Board F.png"
 
 
 const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
+
+export interface UsedBoardDragData
+{
+    type:"usedBoard"
+    boardName:string
+}
+
+export type GeneralDragData = UsedBoardDragData | AvailBoardDragData | SpiritDragData
 
 interface UsedBoardsProps {
     availBoards: Board[]
@@ -49,7 +60,10 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
             console.log("cant drop on unknown element");
             return;
         }
-        const boardName = event.dataTransfer.getData("text");
+        const jsonData = event.dataTransfer.getData("text");
+        const transferData = JSON.parse(jsonData) as GeneralDragData;
+        if(transferData.type==="spirit") return;
+        const boardName = transferData.boardName;
         const otherBoards = this.props.usedBoards.filter(b => b.name !== boardName);
         let draggedBoard = this.props.usedBoards.find(b => b.name === boardName);
         const left = event.clientX;
@@ -94,7 +108,11 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
             console.log("cant drop on unknown element");
             return;
         }
-        const boardName = event.dataTransfer.getData("text");
+
+        const jsonData = event.dataTransfer.getData("text");
+        const transferData = JSON.parse(jsonData) as GeneralDragData;
+        if(transferData.type==="spirit") return;
+        const boardName = transferData.boardName;
         const left = event.clientX;
         const top = event.clientY;
         //find ancher closest to mouse pointer
@@ -339,7 +357,11 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
                 <div className={style.IslandArea__usedBoard} style={customStyle} key={b.name}
                     draggable="true"
                     onDragStart={(ev) => {
-                        ev.dataTransfer.setData("text", b.name)
+                        const data:UsedBoardDragData = {
+                            type:"usedBoard",
+                            boardName:b.name
+                        }
+                        ev.dataTransfer.setData("text", JSON.stringify(data))
                     }}
                     onDragEnd={(ev) => {
                         const marker1 = this.markerRef1.current;

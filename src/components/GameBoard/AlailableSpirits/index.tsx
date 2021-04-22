@@ -25,6 +25,12 @@ export const allSpirits: Spirit[] = [
     { name: "River??", image: spirit8 },
 ]
 
+export interface SpiritDragData
+{
+    type:"spirit"
+    spiritName:string
+}
+
 export class AvailableSpirits extends React.Component<{ availSpirits: Spirit[]}>
 {
     constructor(props: any) {
@@ -44,7 +50,12 @@ export class AvailableSpirits extends React.Component<{ availSpirits: Spirit[]}>
                     className={style.AvailableSpirits__imageWrap}
                     draggable="true"
                     onDragStart={(ev) => {
-                        ev.dataTransfer.setData("text", spirit.name)
+                        let data:SpiritDragData =
+                        {
+                            type:"spirit",
+                            spiritName:spirit.name
+                        }
+                        ev.dataTransfer.setData("text", JSON.stringify(data))
                     }}
                 >
                     <img src={spirit.image} className={style.AvailableSpirits__image} draggable="false" />
