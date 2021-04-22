@@ -316,36 +316,6 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
         //make it 0..180
         return Math.abs(a)
     }
-    /**
-     * moves board at curser position in top layer. takes board anchors into account.
-     * @param x clientX of mouseDown event
-     * @param y clientY of mouseDown event
-     */
-    correctZIndex(x: number, y: number) {
-        this.props.usedBoards.forEach(board => {
-            //get html ref of board
-            const ref = this.boardRefs[board.name]?.current;
-            if (!ref) return
-
-            //get absolute corners of board
-            let conrners: number[][] = [];
-            const bottomLeft = this.rotateBy(board.anchors[0].start, board.rotation);
-            const bottomRight = this.rotateBy(board.anchors[1].start, board.rotation);
-            const topRight = this.rotateBy(board.anchors[2].start, board.rotation);
-            const topLeft = this.rotateBy(board.anchors[2].end, board.rotation);
-            conrners.push([bottomLeft.x + board.position.x, bottomLeft.y + board.position.y])
-            conrners.push([bottomRight.x + board.position.x, bottomRight.y + board.position.y])
-            conrners.push([topRight.x + board.position.x, topRight.y + board.position.y])
-            conrners.push([topLeft.x + board.position.x, topLeft.y + board.position.y])
-
-            //check absolut point is insied board
-            if (inside([x, y], conrners)) {
-                ref.style.zIndex = "100";
-            } else {
-                ref.style.zIndex = "0";
-            }
-        });
-    }
 
     render() {
         const usedBoards = this.props.usedBoards.map(b => {
@@ -382,7 +352,6 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
         return (
             <div ref={this.ref} className={style.IslandArea__boardArea}
                 onDrop={this.onMoveOrAddBoard}
-                onMouseDown={(ev) => this.correctZIndex(ev.clientX, ev.clientY)}
                 onDragOver={this.onDragOver}
             >
                 {usedBoards}
