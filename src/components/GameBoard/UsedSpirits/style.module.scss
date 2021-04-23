@@ -1,0 +1,20 @@
+@import "~styles/shared";
+
+.UsedSpirit {
+  &__boardArea {
+    
+  }
+
+  &__imageContainer {
+    width: 150px;
+    position: absolute;
+    transition: all 800ms ease;
+  }
+
+  &__image {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: scale-down;
+  }
+
+}

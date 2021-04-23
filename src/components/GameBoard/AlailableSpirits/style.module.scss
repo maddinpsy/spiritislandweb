@@ -22,4 +22,10 @@
     object-fit: scale-down;
     max-width: 100%;
   }
+  &__name {
+    background-color: $c-orange;
+    border-radius: 5px;
+    padding: 3px;
+    margin-bottom: 30px;
+  }
 }

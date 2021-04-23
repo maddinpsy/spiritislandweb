@@ -5,6 +5,17 @@ import { SpiritIslandState } from "./Game";
 export type Point = { x: number, y: number }
 export type Line = { start: Point, end: Point }
 
+export type SetupSpirit = {
+    name: string
+    //logo_url:string
+    //frontside_url:string
+    //backside_url:string
+    /** Ether the name of the board, where the spirit is placed. Or undefined if spirit is still available. */
+    curretBoard?: String;
+    /** Name of the board, where the spirit was placed befor. Or undefined if spirit was available before. */
+    lastBoard?: String;
+}
+
 export type Board = {
     name: string
     anchors: Line[];
@@ -17,6 +28,7 @@ export type SetupPhaseState =
     {
         availBoards: Board[]
         usedBoards: (Board & BoardPlacement)[]
+        setupSpirits: SetupSpirit[]
     }
 
 function gameSetup(): SpiritIslandState {
@@ -31,15 +43,25 @@ function gameSetup(): SpiritIslandState {
     //BottomRight 980	914
     //BottomLeft 64	908
     return {
-        availBoards:[
-            {name:"A",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
-            {name:"B",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
-            {name:"C",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
-            {name:"D",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
-            {name:"E",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]},
-            {name:"F",anchors:[{start:{x:22,y:303},end:{x:327,y:305}},{start:{x:327,y:305},end:{x:480,y:41}},{start:{x:480,y:40},end:{x:175,y:38}}]}
+        availBoards: [
+            { name: "A", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
+            { name: "B", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
+            { name: "C", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
+            { name: "D", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
+            { name: "E", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
+            { name: "F", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] }
         ],
-        usedBoards:[]
+        usedBoards: [],
+        setupSpirits: [
+            { name: "Lightning's Swift Strike", curretBoard:"A" },
+            { name: "River Surges in Sunlight", curretBoard:"B" },
+            { name: "Vital Strength of the Earth" },
+            { name: "Shadows Flicker Like Flame" },
+            { name: "A Spread of Rampant Green" },
+            { name: "Thunderspeaker" },
+            { name: "Ocean's Hungry Grasp" },
+            { name: "Bringer of Dreams and Nightmares" },
+        ]
     };
 }
 
@@ -57,7 +79,7 @@ function checkBoardPlacement(usedBoards: (Board & BoardPlacement)[], newBoard: (
 
 export const SetupMoves = {
     placeBoard: function (G: SpiritIslandState, ctx: Ctx, boardName: string, place: BoardPlacement) {
-        if(!place) return INVALID_MOVE;
+        if (!place) return INVALID_MOVE;
         //add new board
         const availBoardIdx = G.availBoards.findIndex(b => b.name === boardName);
         const usedBoardIdx = G.usedBoards.findIndex(b => b.name === boardName);
@@ -73,7 +95,7 @@ export const SetupMoves = {
                 //add to used boards
                 G.usedBoards.push(newBoardWithPlace);
                 //remove from avail boards
-                G.availBoards.splice(availBoardIdx,1);
+                G.availBoards.splice(availBoardIdx, 1);
             } else {
                 return INVALID_MOVE
             }
@@ -97,7 +119,7 @@ export const SetupMoves = {
         //add to available board
         G.availBoards.push(G.usedBoards[boardIdx]);
         //remove from used boards
-        G.usedBoards.splice(boardIdx,1);
+        G.usedBoards.splice(boardIdx, 1);
     }
 }
 
