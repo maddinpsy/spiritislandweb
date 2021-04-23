@@ -4,7 +4,9 @@ This is a multiplayer implementation of the board game Spirit Island for the web
 
 To learn more about Spirit Island look at [Board Game Geeks](https://boardgamegeek.com/boardgame/162886/spirit-island).
 
-[Screen shots and videos of game play]
+
+![Video of Board Setup](screenshots/BoardSetup1.gif)
+[More Screenshots and videos of game play]
 
 See the current state of development in the [Online Version](https://spiritislandweb.herokuapp.com/).
 
