@@ -51,8 +51,8 @@ function gameSetup(): SpiritIslandState {
         ],
         usedBoards: [],
         setupSpirits: [
-            { name: "Lightning's Swift Strike", curretBoard: "A" },
-            { name: "River Surges in Sunlight", curretBoard: "B" },
+            { name: "Lightning's Swift Strike"},
+            { name: "River Surges in Sunlight"},
             { name: "Vital Strength of the Earth" },
             { name: "Shadows Flicker Like Flame" },
             { name: "A Spread of Rampant Green" },
@@ -118,6 +118,13 @@ export const SetupMoves = {
         G.availBoards.push(G.usedBoards[boardIdx]);
         //remove from used boards
         G.usedBoards.splice(boardIdx, 1);
+        //remove spirit if any
+        const placedSpirit=G.setupSpirits.filter(s=>s.curretBoard===boardName)
+        if(placedSpirit){
+            placedSpirit.forEach(s=>{
+                s.curretBoard=undefined;
+            })
+        }
     },
     placeSpirit: function (G: SpiritIslandState, ctx: Ctx, spiritIdx: number, boardName: string) {
         const board = G.usedBoards.find(b => b.name === boardName);

@@ -70,13 +70,13 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 
 ### Add Spirits
 
-- [ ] show spirit list on the right, 8 base game spirits
-- [ ] spirits show as a circular image with fade out border, there name below
-- [ ] initially no spirits on the boards
-- [ ] drag drop spirits onto boards
-- [ ] spirits images are shown in center of the board
-- [ ] drag drop spirit, when spirit is clicked; drag drop board, when board is clicked
-- [ ] swap spirits, when drag drop to a board which has already a spirit
+- [x] show spirit list on the right, 8 base game spirits
+- [x] spirits show as a circular image with fade out border, there name below
+- [x] initially no spirits on the boards
+- [x] drag drop spirits onto boards
+- [x] spirits images are shown in center of the board
+- [x] drag drop spirit, when spirit is clicked; drag drop board, when board is clicked
+- [x] swap spirits, when drag drop to a board which has already a spirit
 - [ ] start game button active, when all boards have a spirits
 
 ### Display tokens on board
