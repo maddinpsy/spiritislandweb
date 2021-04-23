@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import inside from "point-in-polygon"
-import { SpiritIslandState } from "game/Game";
 import { Board, BoardPlacement, Line, Point } from "game/SetupPhase";
 
 import { AvailBoardDragData } from "../AvailableBoards";
@@ -60,7 +58,7 @@ export namespace BoardDragDrop {
             // no snap position found, don't move
             return;
         }
-        const placement = getSnapPosition(min_anchor, closestBoard, closestAnchor);
+        const placement = getSnapPosition(draggedBoard, min_anchor, closestBoard, closestAnchor);
         return placement;
     }
 
@@ -122,8 +120,9 @@ export namespace BoardDragDrop {
                 }
                 continue;
             }
-            newPlacement = getSnapPosition(min_anchor, closestBoard, closestAnchor);
+            newPlacement = getSnapPosition(draggedBoard, min_anchor, closestBoard, closestAnchor, clockwise);
         } while (deltaRotAbs(newPlacement.rotation, draggedBoard.rotation) < 30)
+
 
         return newPlacement;
     }
@@ -178,8 +177,15 @@ export namespace BoardDragDrop {
      * @returns 0..180
      */
     function deltaRotAbs(rot1: number, rot2: number): number {
-        return Math.abs(deltaRot(rot1,rot2))
+        return Math.abs(deltaRot(rot1, rot2))
     }
+    /**
+     * returns the smalles angle between two rotations. 
+     * this functions accaptes all rotation values negative and greater than 360
+     * @param rot1 first rotation in degrees
+     * @param rot2 seconds rotation in degrees
+     * @returns -180..180
+     */
     function deltaRot(rot1: number, rot2: number): number {
         let a = rot2 - rot1;
         //make sure it is between 0 and 360
@@ -205,12 +211,29 @@ export namespace BoardDragDrop {
         return { x: newx, y: newy }
     }
 
-    function getSnapPosition(min_anchor: Line, closestBoard: Board & BoardPlacement, closestAnchor: Line): BoardPlacement {
+    function getSnapPosition(
+        draggedBoard: Board & BoardPlacement,
+        min_anchor: Line,
+        closestBoard: Board & BoardPlacement,
+        closestAnchor: Line,
+        clockwise?: boolean
+    ): BoardPlacement {
         //first: rotate drag Board correctly
         const otherAncRot = Math.atan2(closestAnchor.start.y - closestAnchor.end.y, closestAnchor.start.x - closestAnchor.end.x) / Math.PI * 180;
         const otherAncRot_abs = (otherAncRot + closestBoard.rotation + 360) % 360;
         const dragAncRot = Math.atan2(min_anchor.end.y - min_anchor.start.y, min_anchor.end.x - min_anchor.start.x) / Math.PI * 180;
-        const newrot = (otherAncRot_abs - dragAncRot + 360) % 360;
+        let newrot = otherAncRot_abs - dragAncRot;
+        //correct rotation
+        newrot = deltaRot(draggedBoard.rotation, newrot) + draggedBoard.rotation;
+        if (newrot > 0 && clockwise === false) {
+            newrot -= 360;
+        }
+        if (newrot < 0 && clockwise === true) {
+            newrot += 360;
+        }
+
+        //newrot = (otherAncRot_abs - dragAncRot + 360) % 360;
+
         //second: align dragEnd with otherStart in rotated space
         const sinPhiDragged = Math.sin(newrot / 180 * Math.PI);
         const cosPhiDragged = Math.cos(newrot / 180 * Math.PI);
@@ -365,7 +388,7 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
                 >
                     <div className={style.IslandArea__onBoardButton} style={{ right: "60px" }} onClick={() => this.rotateBoard(b.name, false)}>&#x2b6f;</div>
                     <div className={style.IslandArea__onBoardButton} style={{ right: "100px" }} onClick={() => this.rotateBoard(b.name, true)}>&#x2b6e;</div>
-                    <img src={boardImages[b.name]} className={style.IslandArea__image} draggable="false" />
+                    <img src={boardImages[b.name]} alt={b.name} className={style.IslandArea__image} draggable="false" />
                 </div>
             )
         });
