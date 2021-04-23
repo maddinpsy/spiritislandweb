@@ -12,7 +12,7 @@ import { Client } from "boardgame.io/react";
 
 import { isProduction, SERVER_URL } from "config";
 import { SpiritIsland } from 'game/Game';
-import { SpiritIslandBoard } from 'components/GameBoard';
+import { PhaseSetup } from 'components/PhaseSetup';
 
 import { CreateGame } from 'components/CreateGame';
 import { NicknameProps } from 'components/NicknameOverlay';
@@ -20,6 +20,7 @@ import { GameLobbySetup } from "components/Lobby";
 import { Welcome } from "components/Welcome";
 import "./App.css";
 import { Loading } from 'components/Loading';
+import { SpiritIslandBoard } from 'components/SpiritIslandBoard';
 
 
 export interface StoredPlayerData {
