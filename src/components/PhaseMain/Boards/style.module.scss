@@ -8,7 +8,7 @@
     height: 0px;
     overflow: visible;
   }
-  
+
   &__container {
     grid-column: 2;
     grid-row: 1;
@@ -17,6 +17,20 @@
     overflow: hidden;
   }
 
+  &__token {
+    background: $c-orange;
+    position: absolute;
+  }
+  &__tokensNormal {
+    font-size: x-large;
+  }
+  &__tokensSmall{
+    font-size: x-small;
+  }
+  &__tokensTiny{
+    font-size: xx-small;
+  }
+  
   &__usedBoard {
     //width: 250px;
     position: absolute;
@@ -42,7 +56,7 @@
        16.50,306.00 20.50,223.00 20.50,223.00 Z"
     );
   }
-  
+
   &__centerViewButton {
     position: fixed;
     top: 10px;

@@ -1,5 +1,5 @@
-export const LandOutlineBoardA = {
-    Land1: [
+const LandOutlineBoardA = {
+    8: [
         [325.09, 112.00],
         [337.64, 90.73],
         [343.09, 42.91],
@@ -19,7 +19,7 @@ export const LandOutlineBoardA = {
         [390.36, 133.09],
         [373.82, 132.91],
     ],
-    Land2: [
+    7: [
         [300.91, 258.18],
         [287.82, 292.91],
         [287.82, 310.55],
@@ -38,7 +38,7 @@ export const LandOutlineBoardA = {
         [327.45, 185.09],
         [324.36, 221.09],
     ],
-    Land3: [
+    6: [
         [266.73, 62.36],
         [250.55, 58.36],
         [250.73, 71.64],
@@ -55,7 +55,7 @@ export const LandOutlineBoardA = {
         [291.82, 47.09],
         [285.37, 60.26],
     ],
-    Land4: [
+    5: [
         [250.73, 285.82],
         [275.09, 297.82],
         [279.45, 309.82],
@@ -73,7 +73,7 @@ export const LandOutlineBoardA = {
         [264.91, 232.36],
         [253.82, 254.36],
     ],
-    Land5: [
+    4: [
         [159.45, 303.27],
         [170.55, 281.27],
         [170.18, 264.55],
@@ -91,7 +91,7 @@ export const LandOutlineBoardA = {
         [221.64, 282.55],
         [205.27, 300.91],
     ],
-    Land6: [
+    3: [
         [21.45, 250.55],
         [20.55, 301.27],
         [68.73, 295.64],
@@ -107,7 +107,7 @@ export const LandOutlineBoardA = {
         [76.55, 244.73],
         [66.73, 249.64],
     ],
-    Land7: [
+    2: [
         [76.36, 244.73],
         [107.45, 251.45],
         [145.09, 249.45],
@@ -125,7 +125,7 @@ export const LandOutlineBoardA = {
         [74.91, 223.64],
         [83.09, 236.91],
     ],
-    Land8: [
+    1: [
         [176.73, 161.45],
         [174.00, 190.00],
         [204.55, 195.09],
@@ -147,3 +147,5 @@ export const LandOutlineBoardA = {
         [169.82, 136.00],
     ]
 }
+
+export const LandOutline: { [boardName: string]: { [landNumber: number]: number[][] } } = { "A": LandOutlineBoardA }

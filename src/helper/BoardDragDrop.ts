@@ -195,7 +195,7 @@ export namespace BoardDragDrop {
         const cy = (line.start.y + line.end.y) / 2;
         return { x: cx, y: cy }
     }
-    function rotateBy(p: Point, degree: number): Point {
+    export function rotateBy(p: Point, degree: number): Point {
         const sinPhiDragged = Math.sin(degree / 180 * Math.PI);
         const cosPhiDragged = Math.cos(degree / 180 * Math.PI);
         const newx = p.x * cosPhiDragged - p.y * sinPhiDragged;

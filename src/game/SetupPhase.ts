@@ -76,6 +76,64 @@ export function gameSetup(): SpiritIslandState {
                         { tokenType: "Explorer", count: 3 },
                         { tokenType: "Presence1", count: 1 },
                     ]
+                }, {
+                    landNumber: 3,
+                    tokens: [
+                        { tokenType: "Town", count: 1 },
+                        { tokenType: "Explorer", count: 3 },
+                        { tokenType: "Presence1", count: 1 },
+                        { tokenType: "Presence3", count: 1 },
+                    ]
+                }, {
+                    landNumber: 4,
+                    tokens: [
+                        { tokenType: "Explorer", count: 1 },
+                        { tokenType: "Disease", count: 3 },
+                        { tokenType: "Wild", count: 1 },
+                    ]
+                },
+                {
+                    landNumber: 5,
+                    tokens: [
+                        { tokenType: "Presence2", count: 1 },
+                        { tokenType: "Blight", count: 3 },
+                        { tokenType: "Presence1", count: 1 },
+                    ]
+                },
+                {
+                    landNumber: 7,
+                    tokens: [
+                        { tokenType: "Badlands", count: 1 },
+                        { tokenType: "Wild", count: 4 },
+                        { tokenType: "Dahan", count: 10 },
+                        { tokenType: "Blight", count: 1 },
+                        { tokenType: "Disease", count: 1 },
+                        { tokenType: "City", count: 1 },
+                        { tokenType: "Town", count: 5 },
+                        { tokenType: "Explorer", count: 13 },
+                        { tokenType: "Presence1", count: 1 },
+                        { tokenType: "Presence2", count: 1 },
+                        { tokenType: "Presence3", count: 1 },
+                        { tokenType: "Presence4", count: 1 },
+                        { tokenType: "Presence5", count: 3 },
+                        { tokenType: "Presence6", count: 2 },
+                    ]
+                },
+                {
+                    landNumber: 6,
+                    tokens: [
+                        { tokenType: "Beast", count: 1 },
+                        { tokenType: "Badlands", count: 3 },
+                        { tokenType: "Presence4", count: 1 },
+                    ]
+                },
+                {
+                    landNumber: 8,
+                    tokens: [
+                        { tokenType: "Town", count: 1 },
+                        { tokenType: "Presence6", count: 3 },
+                        { tokenType: "Presence5", count: 1 },
+                    ]
                 }
                 ]
             }

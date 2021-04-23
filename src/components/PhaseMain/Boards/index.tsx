@@ -14,7 +14,10 @@ import boardE from "assets/Board E.png"
 import boardF from "assets/Board F.png"
 import createPanZoom, { PanZoom } from "panzoom";
 import { BoardToken, placedToken } from "game/MainPhase";
-
+import inside from "point-in-polygon";
+import { LandOutline } from "./LandOutline";
+import { BoardDragDrop } from "helper/BoardDragDrop";
+import classnames from "classnames"
 
 const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
 
@@ -28,19 +31,19 @@ interface TokenSize {
 }
 const tokenContainerSizes: TokenSize[] = [
     { //normal
-        classname: "tokens_normal",
+        classname: style.Boards__tokensNormal,
         height: 30, //px
         baseSize: 30, //px
         extraDigi: 10 //px
     },
     { //small
-        classname: "tokens_small",
+        classname: style.Boards__tokensSmall,
         height: 20, //px
         baseSize: 20, //px
         extraDigi: 7 //px
     },
     { //tiny
-        classname: "tokens_tiny",
+        classname: style.Boards__tokensTiny,
         height: 10, //px
         baseSize: 10, //px
         extraDigi: 3 //px
@@ -109,8 +112,46 @@ export class Boards extends React.Component<BoardsProps>
         }
     }
 
-    getTokenPosition(tokens: placedToken[], polygon: number[][])
-        : { tokensize: TokenSize, positions: { top: number, left: number }[] } {
+    getLeftMostIntersection(currentTop: number, polygon: number[][]): number {
+        let intersectionX = polygon
+            //get lines
+            .map((point, idx) => [point, polygon[(idx + 1) % polygon.length]])
+            //get point at given y-value
+            .map(line => {
+                //special case- horizontal line
+                if (line[0][1] === line[1][1]) {
+                    //line at current top
+                    if (line[0][1] === currentTop) {
+                        return Math.min(line[0][0], line[1][0]);
+                    } else {
+                        return Infinity;
+                    }
+                } else {
+                    //currentTop = start + lambda*(end-start)
+                    const lambda = (currentTop - line[0][1]) / (line[1][1] - line[0][1]);
+                    //is point between start and end
+                    if (lambda <= 1 && lambda >= 0) {
+                        return line[0][0] + lambda * (line[1][0] - line[0][0]);
+                    } else {
+                        return Infinity
+                    }
+                }
+            })
+            .reduce((mostLeft, intersectionXValue) => {
+                return Math.min(mostLeft, intersectionXValue);
+            }, Infinity)
+        return intersectionX;
+    }
+
+    /**
+     * Calculates the position of the given tokens inside the poligon.
+     * @param tokens the tokens: defined by type and count.
+     * @param polygon the poligon given as array of points, each point is [x,y].
+     * @param tokensize the size of the tokens. It is assumed, all tokens have the same size.
+     * @returns array the same size as tokens parameter. 
+     */
+    getTokenPosition(tokens: placedToken[], polygon: number[][], tokeSize: TokenSize)
+        : { top: number, left: number }[] | undefined {
         //Basic Idea:
         //0. start from top of poligon
         //1. set current top
@@ -121,11 +162,47 @@ export class Boards extends React.Component<BoardsProps>
         //if 2. dosn't find an intersection from the left: 
         //   decreese token size and start again.
 
-        const padding = 10//px;
-        const polyTop = polygon.reduce((miny, point) => Math.min(miny, point[1]), Infinity);
-        
+        const padding = 10;//px;
 
-        return { tokensize: tokenContainerSizes[0], positions: [] }
+        let sizeIdx = 0;
+        let currentToken = 0;
+        let claculatedPositions = tokens.map(_ => { return { left: 0, top: 0 } });
+        //find top of polygon (0)
+        let currentTop = polygon.reduce((miny, point) => Math.min(miny, point[1]), Infinity);
+        currentTop += padding;
+        while (currentToken < tokens.length) {
+            //find intersection from the left (2)
+            let intersectionX = this.getLeftMostIntersection(currentTop, polygon);
+            //check intersection found
+            if (intersectionX === Infinity) {
+                //couldn't find next line
+                //tokens did not fit into polygon
+                return undefined
+            }
+            intersectionX += padding;
+
+            //place tokens in this line
+            while (currentToken < tokens.length) {
+                let tokenWidth = tokeSize.baseSize;
+                tokenWidth += tokeSize.extraDigi;
+                //check token in polygon
+                if ( // top right
+                    inside([intersectionX + tokenWidth + padding, currentTop], polygon) &&
+                    //top left
+                    inside([intersectionX + tokenWidth + padding, currentTop + tokeSize.height], polygon)) {
+                    claculatedPositions[currentToken].left = intersectionX;
+                    claculatedPositions[currentToken].top = currentTop;
+                    intersectionX += tokenWidth
+                    currentToken++;
+                } else {
+                    //token dosn't fit into this line
+                    currentTop += tokeSize.height;
+                    //break out of inner loop
+                    break;
+                }
+            }
+        }
+        return claculatedPositions;
     }
 
     render() {
@@ -151,15 +228,40 @@ export class Boards extends React.Component<BoardsProps>
             boardTokens = this.props.boardTokens
                 .filter(bt => bt.boardName === "A")
                 .map(bt => {
+                    const boardPos = this.props.usedBoards.find(b => b.name === bt.boardName);
+                    if (!boardPos) {
+                        console.log("Could not find board: " + bt.boardName);
+                        return (<div>ERROR</div>);
+                    }
                     const lands = bt.lands.map(l => {
-                        const tokens = l.tokens.map(t => {
+                        //get token position
+                        const polyAbs = LandOutline[bt.boardName][l.landNumber].map(point => {
+                            const { x, y } = BoardDragDrop.rotateBy({ x: point[0], y: point[1] }, boardPos.rotation);
+                            return [x + boardPos.position.x, y + boardPos.position.y];
+                        })
+                        let tokenSizes = tokenContainerSizes[0];
+                        let tokenPos = this.getTokenPosition(l.tokens, polyAbs, tokenSizes);
+                        for (let i = 1; i < tokenContainerSizes.length; i++) {
+                            if (tokenPos) {
+                                break;
+                            }
+                            tokenSizes = tokenContainerSizes[i];
+                            tokenPos = this.getTokenPosition(l.tokens, polyAbs, tokenSizes);
+                        }
+                        if (!tokenPos) {
+                            console.log("Could not fit tokens (" + l.tokens.map(t => t.count + " " + t.tokenType) + ") into land: " + bt.boardName + l.landNumber);
+                            return (<div style={{ left: polyAbs[0][0], top: polyAbs[0][1], position: "absolute" }}>ERROR</div>);
+                        }
+                        const cTokenPos = tokenPos;
+                        //generate token elements
+                        const tokens = l.tokens.map((t, idx) => {
                             let customStyle: React.CSSProperties = {};
-                            customStyle.left = 0;
-                            customStyle.top = 0;
+                            customStyle.left = cTokenPos[idx].left;
+                            customStyle.top = cTokenPos[idx].top;
                             return <div
                                 id={bt.boardName + l.landNumber + t.tokenType}
                                 key={bt.boardName + l.landNumber + t.tokenType}
-                                className={style.Boards__token}
+                                className={classnames(style.Boards__token,tokenSizes.classname)}
                                 style={customStyle}
                             >
                                 {t.count}x{t.tokenType}
