@@ -1,11 +1,11 @@
 @import "~styles/shared";
 
-.GameBoard {
+.PhaseMain {
   &__container {
     background-color: $c-brown;
     height: 100vh;
     display: grid;
-    grid-template-columns: 1fr 10fr 1fr;
+    grid-template-columns: 1fr 4fr ;
     grid-template-rows: 1fr 100px;
     overflow: auto;
   }

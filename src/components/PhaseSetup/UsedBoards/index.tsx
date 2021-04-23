@@ -112,7 +112,7 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
             customStyle.top = b.position.y;
             customStyle.transform = "rotate(" + b.rotation + "deg)";
             return (
-                <div className={style.IslandArea__usedBoard} style={customStyle} key={b.name}
+                <div className={style.UsedBoards__usedBoard} style={customStyle} key={b.name}
                     draggable="true"
                     onDragStart={(ev) => {
                         const data: UsedBoardDragData = {
@@ -129,21 +129,21 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
                     }}
                     ref={this.boardRefs[b.name]}
                 >
-                    <div className={style.IslandArea__onBoardButton} style={{ right: "60px" }} onClick={() => this.rotateBoard(b.name, false)}>&#x2b6f;</div>
-                    <div className={style.IslandArea__onBoardButton} style={{ right: "100px" }} onClick={() => this.rotateBoard(b.name, true)}>&#x2b6e;</div>
-                    <img src={boardImages[b.name]} alt={b.name} className={style.IslandArea__image} draggable="false" />
+                    <div className={style.UsedBoards__onBoardButton} style={{ right: "60px" }} onClick={() => this.rotateBoard(b.name, false)}>&#x2b6f;</div>
+                    <div className={style.UsedBoards__onBoardButton} style={{ right: "100px" }} onClick={() => this.rotateBoard(b.name, true)}>&#x2b6e;</div>
+                    <img src={boardImages[b.name]} alt={b.name} className={style.UsedBoards__image} draggable="false" />
                 </div>
             )
         });
 
 
         return (
-            <div ref={this.divContainerRef} className={style.IslandArea__boardArea}
+            <div ref={this.divContainerRef} className={style.UsedBoards__boardArea}
                 onDrop={this.onDrop}
                 onDragOver={this.onDragOver}
             >
                 {usedBoards}
-                <div ref={this.markerRef1} className={style.IslandArea__marker}>[x]</div>
+                <div ref={this.markerRef1} className={style.UsedBoards__marker}>[x]</div>
             </div>
         );
     }

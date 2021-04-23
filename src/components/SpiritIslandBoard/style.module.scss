@@ -1,13 +1,10 @@
 @import "~styles/shared";
 
-.GameBoard {
-  &__container {
-    background-color: $c-brown;
-    height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 10fr 1fr;
-    grid-template-rows: 1fr 100px;
-    overflow: auto;
+.SpiritIslandBoard {
+  &__hidden {
+    position: "absolute";
+    width: 0;
+    height: 0;
+    overflow: "hidden";
   }
-
 }

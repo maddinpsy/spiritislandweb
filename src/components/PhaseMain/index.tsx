@@ -3,6 +3,7 @@ import * as React from "react";
 import { BoardProps } from "boardgame.io/react";
 import { SpiritIslandState } from "game/Game";
 import style from "./style.module.scss";
+import { Boards } from "./Boards";
 
 export interface PhaseMainProps {
     G: SpiritIslandState
@@ -13,14 +14,10 @@ export class PhaseMain extends React.Component<PhaseMainProps> {
     constructor(props: any) {
         super(props)
     }
-    componentDidMount() {
-        //avoid startup flicker, for one second
-        window.setTimeout(() => this.setState({ loading: false }), 1000);
-    }
     render() {
         return (
-            <div className={style.GameBoard__container}>
-               <div>Main Area</div>
+            <div className={style.PhaseMain__container}>
+               <Boards usedBoards={this.props.G.usedBoards}/>
             </div>
         );
     }

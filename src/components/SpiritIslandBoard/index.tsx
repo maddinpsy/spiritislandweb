@@ -24,7 +24,7 @@ export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandSt
                     {/* LoadingScreen overleays everything */}
                     <Loading />
                     {/* show board images in the background, so they get loaded */}
-                    <div style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}>
+                    <div className={style.SpiritIslandBoard__hidden}>
                         <PhaseSetup G={this.props.G} moves={this.props.moves}/>
                     </div>
                 </div>

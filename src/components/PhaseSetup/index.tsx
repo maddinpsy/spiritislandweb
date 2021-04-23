@@ -20,7 +20,7 @@ export class PhaseSetup extends React.Component<PhaseSetupProps> {
     }
     render() {
         return (
-            <div className={style.GameBoard__container}>
+            <div className={style.PhaseSetup__container}>
                 <AvailableBoards availBoards={this.props.G.availBoards} removeBoard={this.props.moves.removeBoard} />
                 <UsedBoards
                     availBoards={this.props.G.availBoards}
