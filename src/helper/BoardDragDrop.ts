@@ -142,6 +142,11 @@ export namespace BoardDragDrop {
     }
 
     export function insidBoard(x: number, y: number, board: Board & BoardPlacement) {
+        //check absolut point is insied board
+        return inside([x, y], absolutCorners(board));
+    }
+
+    export function absolutCorners(board: Board & BoardPlacement) {
         //get absolute corners of board
         let conrners: number[][] = [];
         const bottomLeft = rotateBy(board.anchors[0].start, board.rotation);
@@ -153,8 +158,7 @@ export namespace BoardDragDrop {
         conrners.push([topRight.x + board.position.x, topRight.y + board.position.y])
         conrners.push([topLeft.x + board.position.x, topLeft.y + board.position.y])
 
-        //check absolut point is insied board
-        return inside([x, y], conrners)
+        return conrners
     }
 
     /**
