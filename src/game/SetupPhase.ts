@@ -59,6 +59,26 @@ export function gameSetup(): SpiritIslandState {
             { name: "Thunderspeaker" },
             { name: "Ocean's Hungry Grasp" },
             { name: "Bringer of Dreams and Nightmares" },
+        ],
+        boardTokens: [
+            {
+                boardName: "A",
+                lands: [{
+                    landNumber: 1,
+                    tokens: [
+                        { tokenType: "City", count: 1 },
+                        { tokenType: "Dahan", count: 2 },
+                    ]
+                }, {
+                    landNumber: 2,
+                    tokens: [
+                        { tokenType: "Town", count: 1 },
+                        { tokenType: "Explorer", count: 3 },
+                        { tokenType: "Presence1", count: 1 },
+                    ]
+                }
+                ]
+            }
         ]
     };
 }

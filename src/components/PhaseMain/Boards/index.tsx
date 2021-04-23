@@ -13,13 +13,43 @@ import boardD from "assets/Board D.png"
 import boardE from "assets/Board E.png"
 import boardF from "assets/Board F.png"
 import createPanZoom, { PanZoom } from "panzoom";
-import { BoardDragDrop } from "helper/BoardDragDrop";
+import { BoardToken, placedToken } from "game/MainPhase";
 
 
 const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
 
+/** Defines the hardcoded sizes for the token containers. These are used to fit the tokens into the land polygons. */
+
+interface TokenSize {
+    classname: string
+    height: number
+    baseSize: number
+    extraDigi: number
+}
+const tokenContainerSizes: TokenSize[] = [
+    { //normal
+        classname: "tokens_normal",
+        height: 30, //px
+        baseSize: 30, //px
+        extraDigi: 10 //px
+    },
+    { //small
+        classname: "tokens_small",
+        height: 20, //px
+        baseSize: 20, //px
+        extraDigi: 7 //px
+    },
+    { //tiny
+        classname: "tokens_tiny",
+        height: 10, //px
+        baseSize: 10, //px
+        extraDigi: 3 //px
+    }
+]
+
 interface BoardsProps {
     usedBoards: (Board & BoardPlacement)[]
+    boardTokens?: BoardToken[]
 }
 
 export class Boards extends React.Component<BoardsProps>
@@ -75,8 +105,27 @@ export class Boards extends React.Component<BoardsProps>
             this.panZoomObject.moveTo(containerCenter[0] - boardCenter[0], containerCenter[1] - boardCenter[1]);
             */
             this.panZoomObject.zoomAbs(0, 0, 1);
-            this.panZoomObject.moveTo(-300,0);
+            this.panZoomObject.moveTo(-300, 0);
         }
+    }
+
+    getTokenPosition(tokens: placedToken[], polygon: number[][])
+        : { tokensize: TokenSize, positions: { top: number, left: number }[] } {
+        //Basic Idea:
+        //0. start from top of poligon
+        //1. set current top
+        //2. find first intersection from left
+        //3. place tokens until one gose outside of polygon
+        //4. increase current top
+        //repeat 1..4 until all tokens placed
+        //if 2. dosn't find an intersection from the left: 
+        //   decreese token size and start again.
+
+        const padding = 10//px;
+        const polyTop = polygon.reduce((miny, point) => Math.min(miny, point[1]), Infinity);
+        
+
+        return { tokensize: tokenContainerSizes[0], positions: [] }
     }
 
     render() {
@@ -97,11 +146,39 @@ export class Boards extends React.Component<BoardsProps>
             )
         });
 
+        let boardTokens = undefined;
+        if (this.props.boardTokens)
+            boardTokens = this.props.boardTokens
+                .filter(bt => bt.boardName === "A")
+                .map(bt => {
+                    const lands = bt.lands.map(l => {
+                        const tokens = l.tokens.map(t => {
+                            let customStyle: React.CSSProperties = {};
+                            customStyle.left = 0;
+                            customStyle.top = 0;
+                            return <div
+                                id={bt.boardName + l.landNumber + t.tokenType}
+                                key={bt.boardName + l.landNumber + t.tokenType}
+                                className={style.Boards__token}
+                                style={customStyle}
+                            >
+                                {t.count}x{t.tokenType}
+                            </div>
+                        })
+                        return (
+                            <div id={"LandTokens_" + bt.boardName + l.landNumber} key={bt.boardName + l.landNumber}>
+                                {tokens}
+                            </div>
+                        )
+                    })
+                    return <div id={"BoardTokens_" + bt.boardName} key={bt.boardName}>{lands}</div>
+                });
 
         return (
             <div className={style.Boards__container}>
                 <div ref={this.boardAreaRef} className={style.Boards__boardArea}>
                     {usedBoards}
+                    {boardTokens}
                 </div>
                 <img className={style.Boards__centerViewButton} src={alignCenterImg} alt="center" onClick={() => this.resetPanZoom()} />
             </div>

@@ -17,7 +17,7 @@ export class PhaseMain extends React.Component<PhaseMainProps> {
     render() {
         return (
             <div className={style.PhaseMain__container}>
-               <Boards usedBoards={this.props.G.usedBoards}/>
+               <Boards usedBoards={this.props.G.usedBoards} boardTokens = {this.props.G.boardTokens}/>
             </div>
         );
     }
