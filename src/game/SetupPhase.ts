@@ -1,4 +1,4 @@
-import { Ctx, Game } from "boardgame.io";
+import { Ctx } from "boardgame.io";
 import { INVALID_MOVE } from 'boardgame.io/core';
 import { SpiritIslandState } from "./Game";
 
@@ -29,7 +29,7 @@ export type SetupPhaseState =
         setupSpirits: SetupSpirit[]
     }
 
-function gameSetup(): SpiritIslandState {
+export function gameSetup(): SpiritIslandState {
     //Requirements on anchors:
     //Center of Anchors is Center of Image
     //Anchers create perfect parallelogram
@@ -51,8 +51,8 @@ function gameSetup(): SpiritIslandState {
         ],
         usedBoards: [],
         setupSpirits: [
-            { name: "Lightning's Swift Strike"},
-            { name: "River Surges in Sunlight"},
+            { name: "Lightning's Swift Strike" },
+            { name: "River Surges in Sunlight" },
             { name: "Vital Strength of the Earth" },
             { name: "Shadows Flicker Like Flame" },
             { name: "A Spread of Rampant Green" },
@@ -119,10 +119,10 @@ export const SetupMoves = {
         //remove from used boards
         G.usedBoards.splice(boardIdx, 1);
         //remove spirit if any
-        const placedSpirit=G.setupSpirits.filter(s=>s.curretBoard===boardName)
-        if(placedSpirit){
-            placedSpirit.forEach(s=>{
-                s.curretBoard=undefined;
+        const placedSpirit = G.setupSpirits.filter(s => s.curretBoard === boardName)
+        if (placedSpirit) {
+            placedSpirit.forEach(s => {
+                s.curretBoard = undefined;
             })
         }
     },
@@ -141,16 +141,20 @@ export const SetupMoves = {
     },
     removeSpirit: function (G: SpiritIslandState, ctx: Ctx, spiritIdx: number) {
         G.setupSpirits[spiritIdx].curretBoard = undefined;
-    }
-}
+    },
 
-export const SetupPhase: Game<SpiritIslandState, Ctx> =
-{
-    setup: gameSetup,
-    phases: {
-        setup: {
-            moves: SetupMoves,
-            start: true,
+    startGame: function (G: SpiritIslandState, ctx: Ctx) {
+        //we need at least one board
+        if (G.usedBoards.length === 0) {
+            return INVALID_MOVE;
         }
+        //each board needs a spirit
+        if (G.usedBoards.some(b => G.setupSpirits.every(s => s.curretBoard !== b.name))) {
+            return INVALID_MOVE;
+        }
+        //Boards may not overlap
+        //no gaps beetween boards alowed
+        if (ctx.events && ctx.events.endPhase)
+            ctx.events?.endPhase();
     }
 }

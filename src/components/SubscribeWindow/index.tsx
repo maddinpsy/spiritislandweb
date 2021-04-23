@@ -115,7 +115,7 @@ export class SubscribeWindow extends React.Component<SubscribeWindowProps> {
                 <p>
                     You can use the development version on your own risk.
                     </p>
-                {/*<Button size="small" onClick={() => this.props.onSuccess()}>Start anyway</Button>*/}
+                <Button size="small" onClick={() => this.props.onSuccess()}>Start anyway</Button>
             </ModalWindow>
         );
 
