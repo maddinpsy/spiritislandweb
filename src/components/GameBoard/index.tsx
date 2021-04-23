@@ -24,10 +24,13 @@ export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandSt
             //show loading compontne to avoid startup flicker
             return (
                 <div>
-                     {/* LoadingScreen overleays everything */}
+                    {/* LoadingScreen overleays everything */}
                     <Loading />
                     {/* show board images in the background, so they get loaded */}
-                    <AvailableBoards availBoards={this.props.G.availBoards} removeBoard={this.props.moves.removeBoard} />
+                    <div style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}>
+                        <AvailableSpirits availSpirits={this.props.G.setupSpirits} doRemoveSpirit={()=>{}} />
+                        <AvailableBoards availBoards={this.props.G.availBoards} removeBoard={()=>{}} />
+                    </div>
                 </div>
             )
         }
@@ -35,16 +38,16 @@ export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandSt
         return (
             <div className={style.GameBoard__container}>
                 <AvailableBoards availBoards={this.props.G.availBoards} removeBoard={this.props.moves.removeBoard} />
-                <UsedBoards 
-                availBoards={this.props.G.availBoards} 
-                usedBoards={this.props.G.usedBoards} 
-                doPlaceBoard={this.props.moves.placeBoard} 
-                doPlaceSpirit={this.props.moves.placeSpirit}/>
-                <UsedSpirits 
-                setupSpirits={this.props.G.setupSpirits} 
-                usedBoards={this.props.G.usedBoards} 
-                doPlaceSpirit={this.props.moves.placeSpirit}/>
-                <AvailableSpirits availSpirits={this.props.G.setupSpirits} doRemoveSpirit={this.props.moves.removeSpirit}/>
+                <UsedBoards
+                    availBoards={this.props.G.availBoards}
+                    usedBoards={this.props.G.usedBoards}
+                    doPlaceBoard={this.props.moves.placeBoard}
+                    doPlaceSpirit={this.props.moves.placeSpirit} />
+                <UsedSpirits
+                    setupSpirits={this.props.G.setupSpirits}
+                    usedBoards={this.props.G.usedBoards}
+                    doPlaceSpirit={this.props.moves.placeSpirit} />
+                <AvailableSpirits availSpirits={this.props.G.setupSpirits} doRemoveSpirit={this.props.moves.removeSpirit} />
                 <BottomRow />
             </div>
         );
