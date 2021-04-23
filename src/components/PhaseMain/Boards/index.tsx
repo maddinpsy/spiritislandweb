@@ -12,8 +12,19 @@ import boardC from "assets/Board C.png"
 import boardD from "assets/Board D.png"
 import boardE from "assets/Board E.png"
 import boardF from "assets/Board F.png"
+import Badlands from "assets/icons/Badlands.png"
+import City from "assets/icons/Citiyicon.png"
+import Explorer from "assets/icons/Explorericon.png"
+import Town from "assets/icons/Townicon.png"
+import Beast from "assets/icons/Beasticon.png"
+import Dahan from "assets/icons/Dahanicon.png"
+import Presence from "assets/icons/Presenceicon.png"
+import Wild from "assets/icons/Wildicon.png"
+import Blight from "assets/icons/Blighticon.png"
+import Disease from "assets/icons/Diseaseicon.png"
+
 import createPanZoom, { PanZoom } from "panzoom";
-import { BoardToken, placedToken } from "game/MainPhase";
+import { BoardToken, placedToken as PlacedToken } from "game/MainPhase";
 import inside from "point-in-polygon";
 import { LandOutline } from "./LandOutline";
 import { BoardDragDrop } from "helper/BoardDragDrop";
@@ -33,19 +44,19 @@ const tokenContainerSizes: TokenSize[] = [
     { //normal
         classname: style.Boards__tokensNormal,
         height: 30, //px
-        baseSize: 30, //px
+        baseSize: 50, //px
         extraDigi: 10 //px
     },
     { //small
         classname: style.Boards__tokensSmall,
         height: 20, //px
-        baseSize: 20, //px
+        baseSize: 30, //px
         extraDigi: 7 //px
     },
     { //tiny
         classname: style.Boards__tokensTiny,
         height: 10, //px
-        baseSize: 10, //px
+        baseSize: 20, //px
         extraDigi: 3 //px
     }
 ]
@@ -53,6 +64,63 @@ const tokenContainerSizes: TokenSize[] = [
 interface BoardsProps {
     usedBoards: (Board & BoardPlacement)[]
     boardTokens?: BoardToken[]
+}
+
+function Token(props: React.HTMLAttributes<HTMLDivElement> & { token: PlacedToken }) {
+    let image;
+    switch(props.token.tokenType){
+            case "Explorer":
+                image=Explorer;
+                break;
+            case "Town":
+                image=Town;
+                break;
+            case "City":
+                image=City;
+                break;
+            case "Dahan":
+                image=Dahan;
+                break;
+            case "Blight":
+                image=Blight;
+                break;
+            case "Presence1":
+                image=Presence;
+                break;
+            case "Presence2":
+                image=Presence;
+                break;
+            case "Presence3":
+                image=Presence;
+                break;
+            case "Presence4":
+                image=Presence;
+                break;
+            case "Presence5":
+                image=Presence;
+                break;
+            case "Presence6":
+                image=Presence;
+                break;
+            case "Wild":
+                image=Wild;
+                break;
+            case "Beast":
+                image=Beast;
+                break;
+            case "Disease":
+                image=Disease;
+                break;
+            case "Badlands":
+                image=Badlands;
+                break;
+    }
+    const tokenImgae = <img src={image} alt={props.token.tokenType} className={style.Boards__tokensImage}/>
+    return (
+        <div {...props}>
+            {props.token.count}x{tokenImgae}
+        </div>
+    );
 }
 
 export class Boards extends React.Component<BoardsProps>
@@ -150,7 +218,7 @@ export class Boards extends React.Component<BoardsProps>
      * @param tokensize the size of the tokens. It is assumed, all tokens have the same size.
      * @returns array the same size as tokens parameter. 
      */
-    getTokenPosition(tokens: placedToken[], polygon: number[][], tokeSize: TokenSize)
+    getTokenPosition(tokens: PlacedToken[], polygon: number[][], tokeSize: TokenSize)
         : { top: number, left: number }[] | undefined {
         //Basic Idea:
         //0. start from top of poligon
@@ -162,7 +230,7 @@ export class Boards extends React.Component<BoardsProps>
         //if 2. dosn't find an intersection from the left: 
         //   decreese token size and start again.
 
-        const padding = 10;//px;
+        const padding = 5;//px;
 
         let sizeIdx = 0;
         let currentToken = 0;
@@ -258,14 +326,12 @@ export class Boards extends React.Component<BoardsProps>
                             let customStyle: React.CSSProperties = {};
                             customStyle.left = cTokenPos[idx].left;
                             customStyle.top = cTokenPos[idx].top;
-                            return <div
+                            return <Token token={t}
                                 id={bt.boardName + l.landNumber + t.tokenType}
                                 key={bt.boardName + l.landNumber + t.tokenType}
-                                className={classnames(style.Boards__token,tokenSizes.classname)}
+                                className={classnames(style.Boards__token, tokenSizes.classname)}
                                 style={customStyle}
-                            >
-                                {t.count}x{t.tokenType}
-                            </div>
+                            />
                         })
                         return (
                             <div id={"LandTokens_" + bt.boardName + l.landNumber} key={bt.boardName + l.landNumber}>
