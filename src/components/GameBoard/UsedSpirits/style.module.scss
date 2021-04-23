@@ -2,13 +2,20 @@
 
 .UsedSpirit {
   &__boardArea {
-    
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    pointer-events: none;
   }
 
   &__imageContainer {
     width: 150px;
     position: absolute;
     transition: all 800ms ease;
+    pointer-events: all;
   }
 
   &__image {

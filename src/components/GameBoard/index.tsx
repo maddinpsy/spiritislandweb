@@ -35,9 +35,16 @@ export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandSt
         return (
             <div className={style.GameBoard__container}>
                 <AvailableBoards availBoards={this.props.G.availBoards} removeBoard={this.props.moves.removeBoard} />
-                <UsedBoards availBoards={this.props.G.availBoards} usedBoards={this.props.G.usedBoards} doPlaceBoard={this.props.moves.placeBoard} />
-                <UsedSpirits setupSpirits={this.props.G.setupSpirits} usedBoards={this.props.G.usedBoards}/>
-                <AvailableSpirits availSpirits={this.props.G.setupSpirits}/>
+                <UsedBoards 
+                availBoards={this.props.G.availBoards} 
+                usedBoards={this.props.G.usedBoards} 
+                doPlaceBoard={this.props.moves.placeBoard} 
+                doPlaceSpirit={this.props.moves.placeSpirit}/>
+                <UsedSpirits 
+                setupSpirits={this.props.G.setupSpirits} 
+                usedBoards={this.props.G.usedBoards} 
+                doPlaceSpirit={this.props.moves.placeSpirit}/>
+                <AvailableSpirits availSpirits={this.props.G.setupSpirits} doRemoveSpirit={this.props.moves.removeSpirit}/>
                 <BottomRow />
             </div>
         );

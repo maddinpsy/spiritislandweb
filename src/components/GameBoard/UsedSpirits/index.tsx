@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Board, BoardPlacement, Point, SetupSpirit } from "game/SetupPhase";
 
-import { spiritImages } from "../AlailableSpirits";
+import { SpiritDragData, spiritImages } from "../AlailableSpirits";
 
 import style from "./style.module.scss";
 import boardA from "assets/Board A.png"
@@ -11,6 +11,8 @@ import boardC from "assets/Board C.png"
 import boardD from "assets/Board D.png"
 import boardE from "assets/Board E.png"
 import boardF from "assets/Board F.png"
+import { GeneralDragData } from "../UsedBoards";
+import { BoardDragDrop } from "helper/BoardDragDrop";
 
 
 const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
@@ -18,6 +20,7 @@ const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": 
 interface UsedSpiritsProps {
     setupSpirits: SetupSpirit[]
     usedBoards: (Board & BoardPlacement)[]
+    doPlaceSpirit: (spiritIdx: number, boardName: string) => void
 }
 
 
@@ -26,6 +29,8 @@ export class UsedSpirits extends React.Component<UsedSpiritsProps>
 
     constructor(props: any) {
         super(props);
+        this.onDragOver = this.onDragOver.bind(this);
+        this.onDrop = this.onDrop.bind(this);
     }
 
     /** returns the absolut center of the rotated board.*/
@@ -39,20 +44,55 @@ export class UsedSpirits extends React.Component<UsedSpiritsProps>
         return { x: rotx + board.position.x, y: roty + board.position.y }
     }
 
+    onDrop(event: React.DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+
+        const jsonData = event.dataTransfer.getData("text");
+        const transferData = JSON.parse(jsonData) as GeneralDragData;
+        if (transferData.type === "spirit") {
+            //excahnge spirits when dropped on each other.
+            const onBoard = this.props.usedBoards.find(b => BoardDragDrop.insidBoard(event.clientX, event.clientY, b));
+            if (onBoard) {
+                this.props.doPlaceSpirit(transferData.spiritId, onBoard.name);
+            }
+        }
+    }
+    onDragOver(event: React.DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+    }
     render() {
         const usedSpirits = this.props.setupSpirits.map((s, idx) => {
             let customStyle: React.CSSProperties = {};
             const board = this.props.usedBoards.find(b => b.name == s.curretBoard);
-            if (!board) return;
-            const center_abs = this.getBoardCenterAbs(board);
+            if (!board) {
+                //spirit not on a board, move to the right
+                //this is a hack, to make the remove and add spirit animation
+                //it only works with css of UsedSpirit__imageContainer 
+                customStyle.left = "110%";
+                customStyle.top = "30%";
+            } else {
+                //spirit is on a board
+                const center_abs = this.getBoardCenterAbs(board);
 
-            //image size is hardcoded to 150px in css
-            //subtract 75 to center it.
-            customStyle.left = center_abs.x - 75;
-            customStyle.top = center_abs.y - 75;
-
+                //image size is hardcoded to 150px in css
+                //subtract 75 to center it.
+                customStyle.left = center_abs.x - 75;
+                customStyle.top = center_abs.y - 75;
+            }
             return (
-                <div className={style.UsedSpirit__imageContainer} style={customStyle} key={s.name}>
+                <div className={style.UsedSpirit__imageContainer} style={customStyle} key={s.name}
+                    draggable="true"
+                    onDragStart={(ev) => {
+                        let data: SpiritDragData =
+                        {
+                            type: "spirit",
+                            spiritId: idx
+                        }
+                        ev.dataTransfer.setData("text", JSON.stringify(data))
+                    }}
+                    onDrop={this.onDrop}
+                    onDragOver={this.onDragOver}
+                >
                     <img src={spiritImages[idx]} alt={s.name} className={style.UsedSpirit__image} draggable="false" />
                 </div>
             )

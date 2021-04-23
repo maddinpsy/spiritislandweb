@@ -12,8 +12,6 @@ export type SetupSpirit = {
     //backside_url:string
     /** Ether the name of the board, where the spirit is placed. Or undefined if spirit is still available. */
     curretBoard?: String;
-    /** Name of the board, where the spirit was placed befor. Or undefined if spirit was available before. */
-    lastBoard?: String;
 }
 
 export type Board = {
@@ -53,8 +51,8 @@ function gameSetup(): SpiritIslandState {
         ],
         usedBoards: [],
         setupSpirits: [
-            { name: "Lightning's Swift Strike", curretBoard:"A" },
-            { name: "River Surges in Sunlight", curretBoard:"B" },
+            { name: "Lightning's Swift Strike", curretBoard: "A" },
+            { name: "River Surges in Sunlight", curretBoard: "B" },
             { name: "Vital Strength of the Earth" },
             { name: "Shadows Flicker Like Flame" },
             { name: "A Spread of Rampant Green" },
@@ -120,6 +118,22 @@ export const SetupMoves = {
         G.availBoards.push(G.usedBoards[boardIdx]);
         //remove from used boards
         G.usedBoards.splice(boardIdx, 1);
+    },
+    placeSpirit: function (G: SpiritIslandState, ctx: Ctx, spiritIdx: number, boardName: string) {
+        const board = G.usedBoards.find(b => b.name === boardName);
+        if (!board) return INVALID_MOVE
+        const newSpirit = G.setupSpirits[spiritIdx];
+        //if another spirit is on the board, remove it first
+        const oldSpirit = G.setupSpirits.find(s => s.curretBoard === board.name);
+        if (oldSpirit) {
+            //swap boards or remove, if newSpirit.currentBoard was undefined
+            oldSpirit.curretBoard = newSpirit.curretBoard;
+        }
+        //place the new spirit on the board
+        newSpirit.curretBoard = board.name;
+    },
+    removeSpirit: function (G: SpiritIslandState, ctx: Ctx, spiritIdx: number) {
+        G.setupSpirits[spiritIdx].curretBoard = undefined;
     }
 }
 

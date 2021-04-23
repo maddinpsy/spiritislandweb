@@ -12,6 +12,7 @@ import spirit6 from "assets/spirits/Thunderspeaker_Logo_big.png"
 import spirit7 from "assets/spirits/Ocean_Logo_big.png"
 import spirit8 from "assets/spirits/Bodan_Logo_big.png"
 import { SetupSpirit } from "game/SetupPhase";
+import { GeneralDragData } from "../UsedBoards";
 
 export const spiritImages: string[] = [
     spirit1,
@@ -28,23 +29,31 @@ export interface SpiritDragData {
     type: "spirit"
     spiritId: number
 }
+export interface AvailableSpiritsProps {
+    availSpirits: SetupSpirit[]
+    doRemoveSpirit: (spiritIdx: number) => void
+}
 
-export class AvailableSpirits extends React.Component<{ availSpirits: SetupSpirit[] }>
+export class AvailableSpirits extends React.Component<AvailableSpiritsProps>
 {
     constructor(props: any) {
         super(props);
-        this.onRemoveBoard = this.onRemoveBoard.bind(this);
+        this.onDrop = this.onDrop.bind(this);
     }
 
-    onRemoveBoard(event: React.DragEvent<HTMLDivElement>) {
+    onDrop(event: React.DragEvent<HTMLDivElement>) {
         event.preventDefault();
-        const boardName = event.dataTransfer.getData("text");
+        const jsonData = event.dataTransfer.getData("text");
+        const transferData = JSON.parse(jsonData) as GeneralDragData;
+        if (transferData.type === "spirit") {
+            this.props.doRemoveSpirit(transferData.spiritId);
+        }
     }
 
     render() {
         const boards = this.props.availSpirits.map((spirit, idx) => {
             //spirits with board, are not available
-            if(spirit.curretBoard){
+            if (spirit.curretBoard) {
                 return;
             }
             return (
@@ -66,7 +75,7 @@ export class AvailableSpirits extends React.Component<{ availSpirits: SetupSpiri
         });
         return (
             <div className={style.AvailableSpirits__area}
-                onDrop={this.onRemoveBoard}
+                onDrop={this.onDrop}
                 onDragOver={(event) => event.preventDefault()}>
                 {boards}
             </div>
