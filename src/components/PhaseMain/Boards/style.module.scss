@@ -18,25 +18,26 @@
   }
 
   &__token {
-    background: $c-orange;
     position: absolute;
-    width: 30px;
-    height: 15px;
+    display: flex;
   }
   &__tokensNormal {
-    font-size: x-large;
+    font-size: 30px;
+    height: 30px;
   }
   &__tokensSmall{
-    font-size: x-small;
+    font-size: 20px;
+    height: 20px;
   }
   &__tokensTiny{
-    font-size: xx-small;
+    font-size: 10px;
+    height: 10px;
   }
 
   &__tokensImage{
     object-fit: scale-down;
-    max-width: 100%;
     max-height: 100%;
+    //margin-bottom: -4px;
   }
   
   &__usedBoard {

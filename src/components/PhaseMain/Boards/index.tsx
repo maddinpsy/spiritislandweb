@@ -43,21 +43,21 @@ interface TokenSize {
 const tokenContainerSizes: TokenSize[] = [
     { //normal
         classname: style.Boards__tokensNormal,
-        height: 30, //px
-        baseSize: 50, //px
-        extraDigi: 10 //px
+        height: 34, //px
+        baseSize: 34, //px
+        extraDigi: 20 //px
     },
     { //small
         classname: style.Boards__tokensSmall,
-        height: 20, //px
-        baseSize: 30, //px
-        extraDigi: 7 //px
+        height: 22, //px
+        baseSize: 22, //px
+        extraDigi: 14 //px
     },
     { //tiny
         classname: style.Boards__tokensTiny,
-        height: 10, //px
-        baseSize: 20, //px
-        extraDigi: 3 //px
+        height: 11, //px
+        baseSize: 11, //px
+        extraDigi: 7 //px
     }
 ]
 
@@ -68,57 +68,59 @@ interface BoardsProps {
 
 function Token(props: React.HTMLAttributes<HTMLDivElement> & { token: PlacedToken }) {
     let image;
-    switch(props.token.tokenType){
-            case "Explorer":
-                image=Explorer;
-                break;
-            case "Town":
-                image=Town;
-                break;
-            case "City":
-                image=City;
-                break;
-            case "Dahan":
-                image=Dahan;
-                break;
-            case "Blight":
-                image=Blight;
-                break;
-            case "Presence1":
-                image=Presence;
-                break;
-            case "Presence2":
-                image=Presence;
-                break;
-            case "Presence3":
-                image=Presence;
-                break;
-            case "Presence4":
-                image=Presence;
-                break;
-            case "Presence5":
-                image=Presence;
-                break;
-            case "Presence6":
-                image=Presence;
-                break;
-            case "Wild":
-                image=Wild;
-                break;
-            case "Beast":
-                image=Beast;
-                break;
-            case "Disease":
-                image=Disease;
-                break;
-            case "Badlands":
-                image=Badlands;
-                break;
+    switch (props.token.tokenType) {
+        case "Explorer":
+            image = Explorer;
+            break;
+        case "Town":
+            image = Town;
+            break;
+        case "City":
+            image = City;
+            break;
+        case "Dahan":
+            image = Dahan;
+            break;
+        case "Blight":
+            image = Blight;
+            break;
+        case "Presence1":
+            image = Presence;
+            break;
+        case "Presence2":
+            image = Presence;
+            break;
+        case "Presence3":
+            image = Presence;
+            break;
+        case "Presence4":
+            image = Presence;
+            break;
+        case "Presence5":
+            image = Presence;
+            break;
+        case "Presence6":
+            image = Presence;
+            break;
+        case "Wild":
+            image = Wild;
+            break;
+        case "Beast":
+            image = Beast;
+            break;
+        case "Disease":
+            image = Disease;
+            break;
+        case "Badlands":
+            image = Badlands;
+            break;
     }
-    const tokenImgae = <img src={image} alt={props.token.tokenType} className={style.Boards__tokensImage}/>
+    const tokenImgae = props.token.count > 0 && <img src={image} alt={props.token.tokenType} className={style.Boards__tokensImage} />
+    const count = props.token.count > 1 && props.token.count;
+
     return (
         <div {...props}>
-            {props.token.count}x{tokenImgae}
+            {count}{tokenImgae}
         </div>
     );
 }
@@ -251,12 +253,29 @@ export class Boards extends React.Component<BoardsProps>
 
             //place tokens in this line
             while (currentToken < tokens.length) {
-                let tokenWidth = tokeSize.baseSize;
-                tokenWidth += tokeSize.extraDigi;
+                let tokenWidth = 0;
+                if (tokens[currentToken].count > 0) {
+                    tokenWidth += tokeSize.baseSize;
+                }
+                if (tokens[currentToken].count > 1) {
+                    tokenWidth += tokeSize.extraDigi;
+                }
+                if (tokens[currentToken].count > 10) {
+                    tokenWidth += tokeSize.extraDigi;
+                }
                 //check token in polygon
+                while (//bottom left is not insied
+                    !inside([intersectionX - padding, currentTop + tokeSize.height], polygon) &&
+                    //bottom right is insied
+                    inside([intersectionX + tokenWidth + padding, currentTop + tokeSize.height], polygon)
+                ) {
+                    //move to the left
+                    intersectionX += padding;
+
+                }
                 if ( // top right
                     inside([intersectionX + tokenWidth + padding, currentTop], polygon) &&
-                    //top left
+                    //bottom right
                     inside([intersectionX + tokenWidth + padding, currentTop + tokeSize.height], polygon)) {
                     claculatedPositions[currentToken].left = intersectionX;
                     claculatedPositions[currentToken].top = currentTop;
