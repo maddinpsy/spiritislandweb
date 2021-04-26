@@ -24,11 +24,12 @@ import Blight from "assets/icons/Blighticon.png"
 import Disease from "assets/icons/Diseaseicon.png"
 
 import createPanZoom, { PanZoom } from "panzoom";
-import { BoardToken, placedToken as PlacedToken } from "game/MainPhase";
+import { BoardToken, placedToken as PlacedToken, TokenType } from "game/MainPhase";
 import inside from "point-in-polygon";
 import { LandOutline } from "./LandOutline";
 import { BoardDragDrop } from "helper/BoardDragDrop";
 import classnames from "classnames"
+import { IncreaseDecreaseButton } from "../IncreaseDecreaseButton";
 
 const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
 
@@ -38,6 +39,7 @@ interface TokenSize {
     classname: string
     height: number
     baseSize: number
+    buttonWidth: number
     extraDigi: number
 }
 const tokenContainerSizes: TokenSize[] = [
@@ -45,18 +47,21 @@ const tokenContainerSizes: TokenSize[] = [
         classname: style.Boards__tokensNormal,
         height: 34, //px
         baseSize: 34, //px
+        buttonWidth: 8, //px
         extraDigi: 20 //px
     },
     { //small
         classname: style.Boards__tokensSmall,
         height: 22, //px
         baseSize: 22, //px
+        buttonWidth: 6, //px
         extraDigi: 14 //px
     },
     { //tiny
         classname: style.Boards__tokensTiny,
         height: 11, //px
         baseSize: 11, //px
+        buttonWidth: 4, //px
         extraDigi: 7 //px
     }
 ]
@@ -66,7 +71,7 @@ interface BoardsProps {
     boardTokens?: BoardToken[]
 }
 
-function Token(props: React.HTMLAttributes<HTMLDivElement> & { token: PlacedToken }) {
+function Token(props: React.HTMLAttributes<HTMLDivElement> & { token: PlacedToken, buttonWidth: number, selected: boolean }) {
     let image;
     switch (props.token.tokenType) {
         case "Explorer":
@@ -116,16 +121,25 @@ function Token(props: React.HTMLAttributes<HTMLDivElement> & { token: PlacedToke
             break;
     }
     const tokenImgae = props.token.count > 0 && <img src={image} alt={props.token.tokenType} className={style.Boards__tokensImage} />
-    const count = props.token.count > 1 && props.token.count;
+    const count = props.token.count > 0 && props.token.count;
 
     return (
         <div {...props}>
             {count}{tokenImgae}
+            {props.selected && <IncreaseDecreaseButton onIncrease={() => { }} onDecrease={() => { }} width={props.buttonWidth} />}
         </div>
     );
 }
 
-export class Boards extends React.Component<BoardsProps>
+interface TokenState {
+    selectedToken?: {
+        board: string,
+        land: number,
+        token: TokenType
+    }
+}
+
+export class Boards extends React.Component<BoardsProps, TokenState>
 {
     boardAreaRef: React.RefObject<HTMLDivElement>
     panZoomObject: PanZoom | undefined
@@ -135,6 +149,7 @@ export class Boards extends React.Component<BoardsProps>
         super(props);
         this.boardAreaRef = React.createRef();
         this.boardRefs = {};
+        this.state = {}
         Object.keys(boardImages).forEach((key) => { this.boardRefs[key] = React.createRef() });
     }
 
@@ -256,9 +271,8 @@ export class Boards extends React.Component<BoardsProps>
                 let tokenWidth = 0;
                 if (tokens[currentToken].count > 0) {
                     tokenWidth += tokeSize.baseSize;
-                }
-                if (tokens[currentToken].count > 1) {
                     tokenWidth += tokeSize.extraDigi;
+                    tokenWidth += tokeSize.buttonWidth;
                 }
                 if (tokens[currentToken].count > 10) {
                     tokenWidth += tokeSize.extraDigi;
@@ -345,11 +359,16 @@ export class Boards extends React.Component<BoardsProps>
                             let customStyle: React.CSSProperties = {};
                             customStyle.left = cTokenPos[idx].left;
                             customStyle.top = cTokenPos[idx].top;
-                            return <Token token={t}
+                            const isSelected = this.state.selectedToken?.board === bt.boardName &&
+                                this.state.selectedToken?.land === l.landNumber &&
+                                this.state.selectedToken?.token === t.tokenType;
+                            return <Token token={t} selected={isSelected}
                                 id={bt.boardName + l.landNumber + t.tokenType}
                                 key={bt.boardName + l.landNumber + t.tokenType}
                                 className={classnames(style.Boards__token, tokenSizes.classname)}
+                                buttonWidth={tokenSizes.buttonWidth}
                                 style={customStyle}
+                                onClick={()=>this.setState({selectedToken:{board:bt.boardName,land:l.landNumber,token:t.tokenType}})}
                             />
                         })
                         return (

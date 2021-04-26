@@ -1,0 +1,33 @@
+@import "~styles/shared";
+
+.IncreaseDecreaseButton {
+  
+  &__container {
+    border: solid thin black;
+    background: transparentize($c-orange,0.5);
+    border-radius: 5px;
+  }
+
+  &__container img{
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: scale-down;
+    margin: auto;
+  }
+
+  &__increaseButton {
+    height: 50%;
+    padding-left: 1px;
+    padding-right: 1px;
+    display: flex;
+  }
+
+  &__decreaseButton {
+    height: 50%;
+    padding-left: 1px;
+    padding-right: 1px;
+    display: flex;
+  }
+
+}

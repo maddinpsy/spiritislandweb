@@ -123,8 +123,6 @@ export function gameSetup(): SpiritIslandState {
                     landNumber: 6,
                     tokens: [
                         { tokenType: "Beast", count: 1 },
-                        { tokenType: "Badlands", count: 3 },
-                        { tokenType: "Presence4", count: 1 },
                     ]
                 },
                 {
