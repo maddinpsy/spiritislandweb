@@ -1,3 +1,4 @@
+import { S3_PREFIX } from "../serverConfig";
 import { Board } from "./SetupPhase";
 
 export const BoardInfo: Board[] = [
@@ -8,8 +9,8 @@ export const BoardInfo: Board[] = [
             { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } },
             { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }
         ],
-        smallBoardUrl: "/boards/BoardA_small.png",
-        largeBoardUrl: "/boards/BoardA_big.png",
+        smallBoardUrl: S3_PREFIX + "/boards/BoardA_small.png",
+        largeBoardUrl: S3_PREFIX + "/boards/BoardA_big.png",
         startTokens: [
             {
                 landNumber: 1,
@@ -58,8 +59,8 @@ export const BoardInfo: Board[] = [
             { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } },
             { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }
         ],
-        smallBoardUrl: "/boards/BoardB_small.png",
-        largeBoardUrl: "/boards/BoardB_big.png",
+        smallBoardUrl: S3_PREFIX + "/boards/BoardB_small.png",
+        largeBoardUrl: S3_PREFIX + "/boards/BoardB_big.png",
         startTokens: [
             {
                 landNumber: 1,
@@ -109,8 +110,8 @@ export const BoardInfo: Board[] = [
             { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } },
             { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }
         ],
-        smallBoardUrl: "/boards/BoardC_small.png",
-        largeBoardUrl: "/boards/BoardC_big.png",
+        smallBoardUrl: S3_PREFIX + "/boards/BoardC_small.png",
+        largeBoardUrl: S3_PREFIX + "/boards/BoardC_big.png",
         startTokens: [
             {
                 landNumber: 1,
@@ -158,8 +159,8 @@ export const BoardInfo: Board[] = [
             { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } },
             { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }
         ],
-        smallBoardUrl: "/boards/BoardD_small.png",
-        largeBoardUrl: "/boards/BoardD_big.png",
+        smallBoardUrl: S3_PREFIX + "/boards/BoardD_small.png",
+        largeBoardUrl: S3_PREFIX + "/boards/BoardD_big.png",
         startTokens: [
             {
                 landNumber: 1,
@@ -206,8 +207,8 @@ export const BoardInfo: Board[] = [
             { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } },
             { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }
         ],
-        smallBoardUrl: "/boards/BoardE_small.png",
-        largeBoardUrl: "/boards/BoardE_big.png",
+        smallBoardUrl: S3_PREFIX + "/boards/BoardE_small.png",
+        largeBoardUrl: S3_PREFIX + "/boards/BoardE_big.png",
         startTokens: [
             {
                 landNumber: 1,
@@ -257,8 +258,8 @@ export const BoardInfo: Board[] = [
             { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } },
             { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }
         ],
-        smallBoardUrl: "/boards/BoardF_small.png",
-        largeBoardUrl: "/boards/BoardF_big.png",
+        smallBoardUrl: S3_PREFIX + "/boards/BoardF_small.png",
+        largeBoardUrl: S3_PREFIX + "/boards/BoardF_big.png",
         startTokens: [
             {
                 landNumber: 1,

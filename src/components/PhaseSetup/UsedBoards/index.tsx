@@ -7,7 +7,6 @@ import { SpiritDragData } from "../AlailableSpirits";
 
 import style from "./style.module.scss";
 import { BoardDragDrop } from "helper/BoardDragDrop";
-import { S3_PREFIX } from "config";
 
 
 export interface UsedBoardDragData {
@@ -125,7 +124,7 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
                 >
                     <div className={style.UsedBoards__onBoardButton} style={{ right: "60px" }} onClick={() => this.rotateBoard(b.name, false)}>&#x2b6f;</div>
                     <div className={style.UsedBoards__onBoardButton} style={{ right: "100px" }} onClick={() => this.rotateBoard(b.name, true)}>&#x2b6e;</div>
-                    <img src={S3_PREFIX+b.smallBoardUrl} alt={b.name} className={style.UsedBoards__image} draggable="false" />
+                    <img src={b.smallBoardUrl} alt={b.name} className={style.UsedBoards__image} draggable="false" />
                 </div>
             )
         });

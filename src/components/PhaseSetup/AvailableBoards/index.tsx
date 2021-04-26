@@ -3,7 +3,6 @@ import * as React from "react";
 import { Board } from "game/SetupPhase";
 
 import style from "./style.module.scss";
-import { S3_PREFIX } from "config";
 
 export interface AvailBoardDragData {
     type: "availBoard"
@@ -44,7 +43,7 @@ export class AvailableBoards extends React.Component<AvailableBoardsProps>
                         ev.dataTransfer.setData("text", JSON.stringify(data))
                     }}
                 >
-                    <img src={S3_PREFIX+b.smallBoardUrl} className={style.AvailableBoards__image} draggable="false" />
+                    <img src={b.smallBoardUrl} className={style.AvailableBoards__image} draggable="false" />
                 </div>)
         });
         return (

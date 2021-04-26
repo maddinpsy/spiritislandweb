@@ -10,7 +10,6 @@ import alignCenterImg from "assets/router.svg"
 import createPanZoom, { PanZoom } from "panzoom";
 import { BoardToken, TokenType } from "game/MainPhase";
 import { Tokens } from "../Tokens";
-import { S3_PREFIX } from "config";
 
 
 /** Defines the hardcoded sizes for the token containers. These are used to fit the tokens into the land polygons. */
@@ -96,7 +95,7 @@ export class Boards extends React.Component<BoardsProps>
                     className={style.Boards__usedBoard}
                     style={customStyle}
                 >
-                    <img src={S3_PREFIX + b.largeBoardUrl} alt={b.name} className={style.Boards__image} draggable="false" />
+                    <img src={b.largeBoardUrl} alt={b.name} className={style.Boards__image} draggable="false" />
                 </div>
             )
         });
