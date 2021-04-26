@@ -55,8 +55,16 @@ const tokenContainerSizes: TokenSize[] = [
         extraDigi: 7 //px
     }
 ]
+export interface TokenProps{
+    token: PlacedToken
+    buttonWidth: number
+    selected: boolean
 
-export function Token(props: React.HTMLAttributes<HTMLDivElement> & { token: PlacedToken, buttonWidth: number, selected: boolean }) {
+    onIncrease: () => void;
+    onDecrease: () => void;
+}
+
+export function Token(props: React.HTMLAttributes<HTMLDivElement> & TokenProps) {
     let image;
     switch (props.token.tokenType) {
         case "Explorer":
@@ -111,17 +119,20 @@ export function Token(props: React.HTMLAttributes<HTMLDivElement> & { token: Pla
     return (
         <div {...props}>
             {count}{tokenImgae}
-            {props.selected && <IncreaseDecreaseButton onIncrease={() => { }} onDecrease={() => { }} width={props.buttonWidth} />}
+            {props.selected && <IncreaseDecreaseButton onIncrease={props.onIncrease} onDecrease={props.onDecrease} width={props.buttonWidth} />}
         </div>
     );
 }
 
-export interface TokenProps {
+export interface TokensProps {
     boardTokens?: BoardToken[]
     usedBoards: (Board & BoardPlacement)[]
+
+    onIncreaseToken: (boardName:string, landNumber:number, tokenType:TokenType) => void;
+    onDecreaseToken: (boardName:string, landNumber:number, tokenType:TokenType) => void;
 }
 
-interface TokenState {
+interface TokensState {
     selectedToken?: {
         board: string,
         land: number,
@@ -129,7 +140,7 @@ interface TokenState {
     }
 }
 
-export class Tokens extends React.Component<TokenProps, TokenState>
+export class Tokens extends React.Component<TokensProps, TokensState>
 {
 
     constructor(props: any) {
@@ -289,6 +300,8 @@ export class Tokens extends React.Component<TokenProps, TokenState>
                             return <Token token={t} selected={isSelected}
                                 id={bt.boardName + l.landNumber + t.tokenType}
                                 key={bt.boardName + l.landNumber + t.tokenType}
+                                onIncrease={()=>this.props.onIncreaseToken(bt.boardName,l.landNumber,t.tokenType)}
+                                onDecrease={()=>this.props.onDecreaseToken(bt.boardName,l.landNumber,t.tokenType)}
                                 className={classnames(style.Tokens__token, tokenSizes.classname)}
                                 buttonWidth={tokenSizes.buttonWidth}
                                 style={customStyle}

@@ -24,6 +24,9 @@ const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": 
 interface BoardsProps {
     usedBoards: (Board & BoardPlacement)[]
     boardTokens?: BoardToken[]
+
+    onIncreaseToken: (boardName:string, landNumber:number, tokenType:TokenType) => void;
+    onDecreaseToken: (boardName:string, landNumber:number, tokenType:TokenType) => void;
 }
 
 export class Boards extends React.Component<BoardsProps>
@@ -108,7 +111,12 @@ export class Boards extends React.Component<BoardsProps>
             <div className={style.Boards__container}>
                 <div ref={this.boardAreaRef} className={style.Boards__boardArea}>
                     {usedBoards}
-                    <Tokens boardTokens={this.props.boardTokens} usedBoards={this.props.usedBoards}/>
+                    <Tokens 
+                    boardTokens={this.props.boardTokens} 
+                    usedBoards={this.props.usedBoards}
+                    onIncreaseToken={this.props.onIncreaseToken}
+                    onDecreaseToken={this.props.onDecreaseToken}
+                    />
                 </div>
                 <img className={style.Boards__centerViewButton} src={alignCenterImg} alt="center" onClick={() => this.resetPanZoom()} />
             </div>

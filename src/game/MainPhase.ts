@@ -50,8 +50,40 @@ function phaseSetup() {
 
 
 export const MainMoves = {
-    dostuff: function (G: SpiritIslandState, ctx: Ctx, boardName: string) {
-
+    increaseToken: function (G: SpiritIslandState, ctx: Ctx, boardName: string, landNumber: number, tokenType: TokenType) {
+        const tokens = G.boardTokens?.find(b => b.boardName === boardName)?.lands.find(l => l.landNumber === landNumber)?.tokens;
+        if (!tokens) {
+            return INVALID_MOVE;
+        }
+        const token = tokens.find(t => t.tokenType === tokenType);
+        if (token) {
+            //increase existing token
+            token.count++;
+        } else {
+            //add new token
+            tokens.push({
+                tokenType: tokenType,
+                count: 1
+            })
+        }
+    },
+    decreaseToken: function (G: SpiritIslandState, ctx: Ctx, boardName: string, landNumber: number, tokenType: TokenType) {
+        const tokens = G.boardTokens?.find(b => b.boardName === boardName)?.lands.find(l => l.landNumber === landNumber)?.tokens;
+        if (!tokens) {
+            return INVALID_MOVE;
+        }
+        const tokenIdx = tokens.findIndex(t => t.tokenType === tokenType);
+        if (tokenIdx === -1) {
+            return INVALID_MOVE;
+        } else {
+            //decrease existing token
+            if (tokens[tokenIdx].count <= 1) {
+                //delete token
+                tokens.splice(tokenIdx,1);
+            } else {
+                tokens[tokenIdx].count--;
+            }
+        }
     },
 
 }
