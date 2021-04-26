@@ -1,0 +1,8 @@
+@import "~styles/shared";
+
+.Tokens {
+  &__tokensImage {
+    object-fit: scale-down;
+    max-height: 100%;
+  }
+}

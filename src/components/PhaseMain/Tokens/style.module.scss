@@ -1,56 +1,7 @@
 @import "~styles/shared";
 
 .Tokens {
-  &__token {
-    position: absolute;
-    display: flex;
-  }
-  &__tokensNormal {
-    font-size: 60px;
-    height: 60px;
-    line-height: 60px;
-    min-width: 60px;
-  }
-  &__tokensSmall {
-    font-size: 42px;
-    height: 42px;
-    line-height: 42px;
-    min-width: 42px;
-  }
-  &__tokensTiny {
-    font-size: 30px;
-    height: 30px;
-    line-height: 30px;
-    min-width: 30px;
-  }
-
-  &__tokensImage {
-    object-fit: scale-down;
-    max-height: 100%;
-    //margin-bottom: -4px;
-  }
-
-  &__newTokenButton {
-    position: absolute;
-    background: transparentize(darken($c-orange, 30%), 0.5);
-    border: solid thin black;
-    border-radius: 15px;
-    text-align: center;
-  }
-
-  &__newTokensContainer {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  &__newToken{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 5px 10px;
-  }
-
-  &__newToken img{
-    width:60px
+  &__container {
+    display:block;
   }
 }

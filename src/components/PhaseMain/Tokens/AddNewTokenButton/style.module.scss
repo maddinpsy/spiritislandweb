@@ -1,0 +1,27 @@
+@import "~styles/shared";
+
+.Tokens {
+  &__newTokenButton {
+    position: absolute;
+    background: transparentize(darken($c-orange, 30%), 0.5);
+    border: solid thin black;
+    border-radius: 15px;
+    text-align: center;
+  }
+
+  &__newTokensContainer {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__newToken{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px 10px;
+  }
+
+  &__newToken img{
+    width:60px
+  }
+}

@@ -1,0 +1,28 @@
+@import "~styles/shared";
+
+.Tokens {
+  &__token {
+    position: absolute;
+    display: flex;
+  }
+  &__tokensNormal {
+    font-size: 60px;
+    height: 60px;
+    line-height: 60px;
+    min-width: 60px;
+  }
+  &__tokensSmall {
+    font-size: 42px;
+    height: 42px;
+    line-height: 42px;
+    min-width: 42px;
+  }
+  &__tokensTiny {
+    font-size: 30px;
+    height: 30px;
+    line-height: 30px;
+    min-width: 30px;
+  }
+
+
+}
