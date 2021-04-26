@@ -21,6 +21,7 @@ import { BoardDragDrop } from "helper/BoardDragDrop";
 import classnames from "classnames"
 import { IncreaseDecreaseButton } from "../IncreaseDecreaseButton";
 import { Board, BoardPlacement } from "game/SetupPhase";
+import { ModalWindow } from "components/ModalWindow";
 
 
 /** Defines the hardcoded sizes for the token containers. These are used to fit the tokens into the land polygons. */
@@ -55,7 +56,7 @@ const tokenContainerSizes: TokenSize[] = [
         extraDigi: 21 //px
     }
 ]
-export interface TokenProps{
+export interface TokenProps {
     token: PlacedToken
     buttonWidth: number
     selected: boolean
@@ -124,30 +125,46 @@ export function Token(props: React.HTMLAttributes<HTMLDivElement> & TokenProps) 
     );
 }
 
-export interface TokensProps {
-    boardTokens?: BoardToken[]
-    usedBoards: (Board & BoardPlacement)[]
-
-    onIncreaseToken: (boardName:string, landNumber:number, tokenType:TokenType) => void;
-    onDecreaseToken: (boardName:string, landNumber:number, tokenType:TokenType) => void;
+interface AddNewTokenButtonProps {
+    position: { left: number, top: number }
+    className: string
 }
 
-interface TokensState {
-    selectedToken?: {
-        board: string,
-        land: number,
-        token: TokenType
-    }
-}
 
-export class Tokens extends React.Component<TokensProps, TokensState>
-{
-
+class AddNewTokenButton extends React.Component<AddNewTokenButtonProps>{
     constructor(props: any) {
         super(props);
-        this.state = {}
+        this.state = { popupVisible: false }
     }
+    render() {
+        return (
+            <div
+                className={classnames(this.props.className, style.Tokens__newTokenButton)}
+                style={{ ...this.props.position }}
+                onClick={() => this.setState({ popupVisible: true })}
+            >
+                +
+            </div>
+        );
+    }
+}
 
+interface SelectedToken {
+    board: string,
+    land: number,
+    token: TokenType
+}
+
+interface LandTokensProps {
+    boardTokens: BoardToken
+    boardPos: Board & BoardPlacement
+    selectedToken?: SelectedToken
+    onSelectToken: (s: SelectedToken | undefined) => void
+    onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
+    onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
+}
+
+class LandTokens extends React.Component<LandTokensProps>{
     getLeftMostIntersection(currentTop: number, polygon: number[][]): number {
         let intersectionX = polygon
             //get lines
@@ -198,7 +215,7 @@ export class Tokens extends React.Component<TokensProps, TokensState>
         //if 2. dosn't find an intersection from the left: 
         //   decreese token size and start again.
 
-        const padding = 5;//px;
+        const padding = 15;//px;
 
         let sizeIdx = 0;
         let currentToken = 0;
@@ -258,7 +275,90 @@ export class Tokens extends React.Component<TokensProps, TokensState>
     }
 
     render() {
+        const bt = this.props.boardTokens;
+        return bt.lands.map(l => {
+            //get token position
+            const polyAbs = LandOutline[bt.boardName][l.landNumber].map(point => {
+                const { x, y } = BoardDragDrop.rotateBy({ x: point[0], y: point[1] }, this.props.boardPos.rotation);
+                return [x + this.props.boardPos.position.x, y + this.props.boardPos.position.y];
+            });
+            let tokenSizes = tokenContainerSizes[0];
+            let tokensAndNew = Array.from(l.tokens);
+            tokensAndNew.push({ count: 1, tokenType: "Badlands" });
+            let tokenPos = this.getTokenPosition(tokensAndNew, polyAbs, tokenSizes);
+            for (let i = 1; i < tokenContainerSizes.length; i++) {
+                if (tokenPos) {
+                    break;
+                }
+                tokenSizes = tokenContainerSizes[i];
+                tokenPos = this.getTokenPosition(tokensAndNew, polyAbs, tokenSizes);
+            }
+            if (!tokenPos) {
+                console.log("Could not fit tokens (" + tokensAndNew.map(t => t.count + " " + t.tokenType) + ") into land: " + bt.boardName + l.landNumber);
+                return (<div style={{ left: polyAbs[0][0], top: polyAbs[0][1], position: "absolute" }}>ERROR</div>);
+            }
+            const cTokenPos = tokenPos;
+            //generate token elements
+            const tokens = l.tokens.map((t, idx) => {
+                let customStyle: React.CSSProperties = {};
+                customStyle.left = cTokenPos[idx].left;
+                customStyle.top = cTokenPos[idx].top;
+                const isSelected = this.props.selectedToken?.board === bt.boardName &&
+                    this.props.selectedToken?.land === l.landNumber &&
+                    this.props.selectedToken?.token === t.tokenType;
+                return <Token token={t} selected={isSelected}
+                    id={bt.boardName + l.landNumber + t.tokenType}
+                    key={bt.boardName + l.landNumber + t.tokenType}
+                    onIncrease={() => this.props.onIncreaseToken(bt.boardName, l.landNumber, t.tokenType)}
+                    onDecrease={() => this.props.onDecreaseToken(bt.boardName, l.landNumber, t.tokenType)}
+                    className={classnames(style.Tokens__token, tokenSizes.classname)}
+                    buttonWidth={tokenSizes.buttonWidth}
+                    style={customStyle}
+                    onClick={() => {
+                        if (isSelected) {
+                            this.setState({ selectedToken: undefined });
+                        } else {
+                            this.setState({ selectedToken: { board: bt.boardName, land: l.landNumber, token: t.tokenType } });
+                        }
+                    }} />;
+            });
+            return (
+                <div id={"LandTokens_" + bt.boardName + l.landNumber} key={bt.boardName + l.landNumber}>
+                    {tokens}
+                    <AddNewTokenButton
+                        position={cTokenPos[cTokenPos.length - 1]}
+                        className={tokenSizes.classname}
+                    />
+                </div>
+            );
+        });
+    }
+}
 
+export interface TokensProps {
+    boardTokens?: BoardToken[]
+    usedBoards: (Board & BoardPlacement)[]
+
+    onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
+    onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
+}
+
+interface TokensState {
+    selectedToken?: {
+        board: string,
+        land: number,
+        token: TokenType
+    }
+}
+
+export class Tokens extends React.Component<TokensProps, TokensState>
+{
+    constructor(props: any) {
+        super(props);
+        this.state = {}
+    }
+
+    render() {
         let boardTokens = undefined;
         if (this.props.boardTokens)
             boardTokens = this.props.boardTokens
@@ -268,59 +368,14 @@ export class Tokens extends React.Component<TokensProps, TokensState>
                         console.log("Could not find board: " + bt.boardName);
                         return (<div>ERROR</div>);
                     }
-                    const lands = bt.lands.map(l => {
-                        //get token position
-                        const polyAbs = LandOutline[bt.boardName][l.landNumber].map(point => {
-                            const { x, y } = BoardDragDrop.rotateBy({ x: point[0], y: point[1] }, boardPos.rotation);
-                            return [x + boardPos.position.x, y + boardPos.position.y];
-                        })
-                        let tokenSizes = tokenContainerSizes[0];
-                        let tokenPos = this.getTokenPosition(l.tokens, polyAbs, tokenSizes);
-                        for (let i = 1; i < tokenContainerSizes.length; i++) {
-                            if (tokenPos) {
-                                break;
-                            }
-                            tokenSizes = tokenContainerSizes[i];
-                            tokenPos = this.getTokenPosition(l.tokens, polyAbs, tokenSizes);
-                        }
-                        if (!tokenPos) {
-                            console.log("Could not fit tokens (" + l.tokens.map(t => t.count + " " + t.tokenType) + ") into land: " + bt.boardName + l.landNumber);
-                            return (<div style={{ left: polyAbs[0][0], top: polyAbs[0][1], position: "absolute" }}>ERROR</div>);
-                        }
-                        const cTokenPos = tokenPos;
-                        //generate token elements
-                        const tokens = l.tokens.map((t, idx) => {
-                            let customStyle: React.CSSProperties = {};
-                            customStyle.left = cTokenPos[idx].left;
-                            customStyle.top = cTokenPos[idx].top;
-                            const isSelected = this.state.selectedToken?.board === bt.boardName &&
-                                this.state.selectedToken?.land === l.landNumber &&
-                                this.state.selectedToken?.token === t.tokenType;
-                            return <Token token={t} selected={isSelected}
-                                id={bt.boardName + l.landNumber + t.tokenType}
-                                key={bt.boardName + l.landNumber + t.tokenType}
-                                onIncrease={()=>this.props.onIncreaseToken(bt.boardName,l.landNumber,t.tokenType)}
-                                onDecrease={()=>this.props.onDecreaseToken(bt.boardName,l.landNumber,t.tokenType)}
-                                className={classnames(style.Tokens__token, tokenSizes.classname)}
-                                buttonWidth={tokenSizes.buttonWidth}
-                                style={customStyle}
-                                onClick={() => {
-                                    if (isSelected) {
-                                        this.setState({ selectedToken: undefined })
-                                    } else {
-                                        this.setState({ selectedToken: { board: bt.boardName, land: l.landNumber, token: t.tokenType } })
-                                    }
-                                }
-                                }
-                            />
-                        })
-                        return (
-                            <div id={"LandTokens_" + bt.boardName + l.landNumber} key={bt.boardName + l.landNumber}>
-                                {tokens}
-                            </div>
-                        )
-                    })
-                    return <div id={"BoardTokens_" + bt.boardName} key={bt.boardName}>{lands}</div>
+                    return <div id={"BoardTokens_" + bt.boardName} key={bt.boardName}>
+                        <LandTokens boardTokens={bt} boardPos={boardPos}
+                            selectedToken={this.state.selectedToken}
+                            onSelectToken={(s) => { this.setState({ selectedToken: s }) }}
+                            onIncreaseToken={this.props.onIncreaseToken}
+                            onDecreaseToken={this.props.onDecreaseToken}
+                        />
+                    </div>
                 });
 
         return (
@@ -329,4 +384,5 @@ export class Tokens extends React.Component<TokensProps, TokensState>
             </div>
         );
     }
+
 }
