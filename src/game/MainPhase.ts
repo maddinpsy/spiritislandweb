@@ -2,7 +2,25 @@ import { Ctx } from "boardgame.io";
 import { INVALID_MOVE } from 'boardgame.io/core';
 import { SpiritIslandState } from "./Game";
 
-export type TokenType =
+export const TokenNames = [
+    "Explorer" ,
+    "Town" ,
+    "City" ,
+    "Dahan" ,
+    "Blight" ,
+    "Presence1" ,
+    "Presence2" ,
+    "Presence3" ,
+    "Presence4" ,
+    "Presence5" ,
+    "Presence6" ,
+    "Wild" ,
+    "Beast" ,
+    "Disease" ,
+    "Badlands"
+] as const;
+ 
+export type TokenType =  
     "Explorer" |
     "Town" |
     "City" |
@@ -18,6 +36,7 @@ export type TokenType =
     "Beast" |
     "Disease" |
     "Badlands";
+    
 
 export type PlacedToken =
     {

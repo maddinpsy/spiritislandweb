@@ -14,7 +14,7 @@ import Wild from "assets/icons/Wildicon.png"
 import Blight from "assets/icons/Blighticon.png"
 import Disease from "assets/icons/Diseaseicon.png"
 
-import { BoardToken, PlacedToken as PlacedToken, TokenType } from "game/MainPhase";
+import { BoardToken, PlacedToken as PlacedToken, TokenNames, TokenType } from "game/MainPhase";
 import inside from "point-in-polygon";
 import { LandOutline } from "../Boards/LandOutline";
 import { BoardDragDrop } from "helper/BoardDragDrop";
@@ -56,18 +56,10 @@ const tokenContainerSizes: TokenSize[] = [
         extraDigi: 21 //px
     }
 ]
-export interface TokenProps {
-    token: PlacedToken
-    buttonWidth: number
-    selected: boolean
 
-    onIncrease: () => void;
-    onDecrease: () => void;
-}
-
-export function Token(props: React.HTMLAttributes<HTMLDivElement> & TokenProps) {
+export function TokenImage(props: { tokenType: TokenType }) {
     let image;
-    switch (props.token.tokenType) {
+    switch (props.tokenType) {
         case "Explorer":
             image = Explorer;
             break;
@@ -114,7 +106,21 @@ export function Token(props: React.HTMLAttributes<HTMLDivElement> & TokenProps) 
             image = Badlands;
             break;
     }
-    const tokenImgae = props.token.count > 0 && <img src={image} alt={props.token.tokenType} className={style.Tokens__tokensImage} />
+    return <img src={image} alt={props.tokenType} className={style.Tokens__tokensImage} />
+}
+
+export interface TokenProps {
+    token: PlacedToken
+    buttonWidth: number
+    selected: boolean
+
+    onIncrease: () => void;
+    onDecrease: () => void;
+}
+
+export function Token(props: React.HTMLAttributes<HTMLDivElement> & TokenProps) {
+
+    const tokenImgae = props.token.count > 0 && <TokenImage tokenType={props.token.tokenType} />
     const count = props.token.count > 0 && props.token.count;
 
     return (
@@ -128,20 +134,42 @@ export function Token(props: React.HTMLAttributes<HTMLDivElement> & TokenProps) 
 interface AddNewTokenButtonProps {
     position: { left: number, top: number }
     className: string
+    availableTokens: TokenType[]
+    showDialog: (data?: { title: string, content: JSX.Element }) => void;
+    onIncreaseToken: (tokenType: TokenType) => void;
 }
 
 
 class AddNewTokenButton extends React.Component<AddNewTokenButtonProps>{
-    constructor(props: any) {
-        super(props);
-        this.state = { popupVisible: false }
-    }
+
     render() {
+        if (this.props.availableTokens.length === 0) {
+            return <div />;
+        }
+        const popup = (
+            <div className={style.Tokens__newTokensContainer}>
+                {this.props.availableTokens.map(token => {
+                    return (
+                        <div
+                            className={style.Tokens__newToken}
+                            key={token}
+                            onClick={() => {
+                                this.props.onIncreaseToken(token);
+                                this.props.showDialog();
+                            }
+                            }
+                        >
+                            <TokenImage tokenType={token} /> {token.toString()}
+                        </div>
+                    )
+                })}
+            </div>
+        )
         return (
             <div
                 className={classnames(this.props.className, style.Tokens__newTokenButton)}
                 style={{ ...this.props.position }}
-                onClick={() => this.setState({ popupVisible: true })}
+                onClick={() => this.props.showDialog({ title: "Add new Token", content: popup })}
             >
                 +
             </div>
@@ -162,6 +190,7 @@ interface LandTokensProps {
     onSelectToken: (s: SelectedToken | undefined) => void
     onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
+    showDialog: (data?: { title: string, content: JSX.Element }) => void;
 }
 
 class LandTokens extends React.Component<LandTokensProps>{
@@ -316,9 +345,9 @@ class LandTokens extends React.Component<LandTokensProps>{
                     style={customStyle}
                     onClick={() => {
                         if (isSelected) {
-                            this.setState({ selectedToken: undefined });
+                            this.props.onSelectToken(undefined);
                         } else {
-                            this.setState({ selectedToken: { board: bt.boardName, land: l.landNumber, token: t.tokenType } });
+                            this.props.onSelectToken({ board: bt.boardName, land: l.landNumber, token: t.tokenType });
                         }
                     }} />;
             });
@@ -328,6 +357,9 @@ class LandTokens extends React.Component<LandTokensProps>{
                     <AddNewTokenButton
                         position={cTokenPos[cTokenPos.length - 1]}
                         className={tokenSizes.classname}
+                        showDialog={this.props.showDialog}
+                        availableTokens={TokenNames.filter(token => !l.tokens.some(usedtoken => usedtoken.tokenType === token))}
+                        onIncreaseToken={(type) => this.props.onIncreaseToken(bt.boardName, l.landNumber, type)}
                     />
                 </div>
             );
@@ -341,6 +373,7 @@ export interface TokensProps {
 
     onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
+    showDialog: (data?: { title: string, content: JSX.Element }) => void;
 }
 
 interface TokensState {
@@ -374,6 +407,7 @@ export class Tokens extends React.Component<TokensProps, TokensState>
                             onSelectToken={(s) => { this.setState({ selectedToken: s }) }}
                             onIncreaseToken={this.props.onIncreaseToken}
                             onDecreaseToken={this.props.onDecreaseToken}
+                            showDialog={this.props.showDialog}
                         />
                     </div>
                 });

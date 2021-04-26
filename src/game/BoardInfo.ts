@@ -12,6 +12,9 @@ export const BoardInfo: Board[] = [
         largeBoardUrl: "/boards/BoardA_big.png",
         startTokens: [
             {
+                landNumber: 1,
+                tokens: []
+            }, {
                 landNumber: 2,
                 tokens: [
                     { tokenType: "City", count: 1 },
@@ -27,6 +30,9 @@ export const BoardInfo: Board[] = [
                 tokens: [
                     { tokenType: "Blight", count: 1 },
                 ]
+            }, {
+                landNumber: 5,
+                tokens: []
             }, {
                 landNumber: 6,
                 tokens: [
@@ -76,6 +82,9 @@ export const BoardInfo: Board[] = [
                     { tokenType: "Blight", count: 1 },
                 ]
             }, {
+                landNumber: 5,
+                tokens: []
+            }, {
                 landNumber: 6,
                 tokens: [
                     { tokenType: "Town", count: 1 },
@@ -119,6 +128,9 @@ export const BoardInfo: Board[] = [
                     { tokenType: "Dahan", count: 2 },
                 ]
             }, {
+                landNumber: 4,
+                tokens: []
+            }, {
                 landNumber: 5,
                 tokens: [
                     { tokenType: "Blight", count: 1 },
@@ -134,7 +146,10 @@ export const BoardInfo: Board[] = [
                 tokens: [
                     { tokenType: "Town", count: 1 },
                 ]
-            }
+            }, {
+                landNumber: 8,
+                tokens: []
+            },
         ],
     }, {
         name: "D",
@@ -158,18 +173,30 @@ export const BoardInfo: Board[] = [
                     { tokenType: "Dahan", count: 1 },
                 ]
             }, {
+                landNumber: 3,
+                tokens: []
+            }, {
+                landNumber: 4,
+                tokens: []
+            }, {
                 landNumber: 5,
                 tokens: [
                     { tokenType: "Blight", count: 1 },
                     { tokenType: "Dahan", count: 1 },
                 ]
             }, {
+                landNumber: 6,
+                tokens: []
+            }, {
                 landNumber: 7,
                 tokens: [
                     { tokenType: "Town", count: 1 },
                     { tokenType: "Dahan", count: 2 },
                 ]
-            }
+            }, {
+                landNumber: 8,
+                tokens: []
+            },
         ],
 
     }, {
@@ -207,6 +234,9 @@ export const BoardInfo: Board[] = [
                 tokens: [
                     { tokenType: "Dahan", count: 1 },
                 ]
+            }, {
+                landNumber: 6,
+                tokens: []
             }, {
                 landNumber: 7,
                 tokens: [
@@ -260,6 +290,9 @@ export const BoardInfo: Board[] = [
                 tokens: [
                     { tokenType: "Dahan", count: 2 },
                 ]
+            }, {
+                landNumber: 7,
+                tokens: []
             }, {
                 landNumber: 8,
                 tokens: [
