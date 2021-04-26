@@ -7,12 +7,12 @@
     display: flex;
   }
   &__tokensNormal {
-    font-size: 30px;
-    height: 30px;
-  }
-  &__tokensSmall {
     font-size: 20px;
     height: 20px;
+  }
+  &__tokensSmall {
+    font-size: 14px;
+    height: 14px;
   }
   &__tokensTiny {
     font-size: 10px;

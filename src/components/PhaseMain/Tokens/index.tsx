@@ -35,17 +35,17 @@ interface TokenSize {
 const tokenContainerSizes: TokenSize[] = [
     { //normal
         classname: style.Tokens__tokensNormal,
-        height: 34, //px
-        baseSize: 34, //px
-        buttonWidth: 8, //px
-        extraDigi: 20 //px
-    },
-    { //small
-        classname: style.Tokens__tokensSmall,
         height: 22, //px
         baseSize: 22, //px
         buttonWidth: 6, //px
         extraDigi: 14 //px
+    },
+    { //small
+        classname: style.Tokens__tokensSmall,
+        height: 16, //px
+        baseSize: 16, //px
+        buttonWidth: 5, //px
+        extraDigi: 11 //px
     },
     { //tiny
         classname: style.Tokens__tokensTiny,
@@ -225,7 +225,7 @@ export class Tokens extends React.Component<TokensProps, TokensState>
                     tokenWidth += tokeSize.extraDigi;
                     tokenWidth += tokeSize.buttonWidth;
                 }
-                if (tokens[currentToken].count > 10) {
+                if (tokens[currentToken].count > 9) {
                     tokenWidth += tokeSize.extraDigi;
                 }
                 //check token in polygon
