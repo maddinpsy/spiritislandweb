@@ -8,4 +8,4 @@ export const SERVER_URL = isProduction
     ? origin
     : `${protocol}//${hostname}:${DEFAULT_PORT}`;
 
-export const S3_PREFIX = process.env.REACT_APP_S3_URL+"/"+process.env.REACT_APP_S3_BUCKET_NAME
+export const S3_PREFIX = process.env.REACT_APP_S3_URL
