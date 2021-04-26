@@ -1,6 +1,8 @@
 import { Ctx } from "boardgame.io";
 import { INVALID_MOVE } from 'boardgame.io/core';
+import { BoardInfo } from "./BoardInfo";
 import { SpiritIslandState } from "./Game";
+import { LandTokens } from "./MainPhase";
 
 export type Point = { x: number, y: number }
 export type Line = { start: Point, end: Point }
@@ -17,6 +19,9 @@ export type SetupSpirit = {
 export type Board = {
     name: string
     anchors: Line[];
+    smallBoardUrl:string
+    largeBoardUrl:string
+    startTokens: LandTokens[]
 }
 export type BoardPlacement = { position: Point, rotation: number }
 
@@ -41,14 +46,7 @@ export function gameSetup(): SpiritIslandState {
     //BottomRight 980	914
     //BottomLeft 64	908
     return {
-        availBoards: [
-            { name: "A", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
-            { name: "B", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
-            { name: "C", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
-            { name: "D", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
-            { name: "E", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] },
-            { name: "F", anchors: [{ start: { x: 22, y: 303 }, end: { x: 327, y: 305 } }, { start: { x: 327, y: 305 }, end: { x: 480, y: 41 } }, { start: { x: 480, y: 40 }, end: { x: 175, y: 38 } }] }
-        ],
+        availBoards: BoardInfo,
         usedBoards: [],
         setupSpirits: [
             { name: "Lightning's Swift Strike" },
@@ -60,82 +58,6 @@ export function gameSetup(): SpiritIslandState {
             { name: "Ocean's Hungry Grasp" },
             { name: "Bringer of Dreams and Nightmares" },
         ],
-        boardTokens: [
-            {
-                boardName: "A",
-                lands: [{
-                    landNumber: 1,
-                    tokens: [
-                        { tokenType: "City", count: 1 },
-                        { tokenType: "Dahan", count: 2 },
-                    ]
-                }, {
-                    landNumber: 2,
-                    tokens: [
-                        { tokenType: "Town", count: 1 },
-                        { tokenType: "Explorer", count: 3 },
-                        { tokenType: "Presence1", count: 1 },
-                    ]
-                }, {
-                    landNumber: 3,
-                    tokens: [
-                        { tokenType: "Town", count: 1 },
-                        { tokenType: "Explorer", count: 3 },
-                        { tokenType: "Presence1", count: 1 },
-                        { tokenType: "Presence3", count: 1 },
-                    ]
-                }, {
-                    landNumber: 4,
-                    tokens: [
-                        { tokenType: "Explorer", count: 1 },
-                        { tokenType: "Disease", count: 3 },
-                        { tokenType: "Wild", count: 1 },
-                    ]
-                },
-                {
-                    landNumber: 5,
-                    tokens: [
-                        { tokenType: "Presence2", count: 1 },
-                        { tokenType: "Blight", count: 3 },
-                        { tokenType: "Presence1", count: 1 },
-                    ]
-                },
-                {
-                    landNumber: 7,
-                    tokens: [
-                        { tokenType: "Badlands", count: 1 },
-                        { tokenType: "Wild", count: 4 },
-                        { tokenType: "Dahan", count: 10 },
-                        { tokenType: "Blight", count: 1 },
-                        { tokenType: "Disease", count: 1 },
-                        { tokenType: "City", count: 1 },
-                        { tokenType: "Town", count: 5 },
-                        { tokenType: "Explorer", count: 13 },
-                        { tokenType: "Presence1", count: 1 },
-                        { tokenType: "Presence2", count: 1 },
-                        { tokenType: "Presence3", count: 1 },
-                        { tokenType: "Presence4", count: 1 },
-                        { tokenType: "Presence5", count: 3 },
-                        { tokenType: "Presence6", count: 2 },
-                    ]
-                },
-                {
-                    landNumber: 6,
-                    tokens: [
-                        { tokenType: "Beast", count: 1 },
-                    ]
-                },
-                {
-                    landNumber: 8,
-                    tokens: [
-                        { tokenType: "Town", count: 1 },
-                        { tokenType: "Presence6", count: 3 },
-                        { tokenType: "Presence5", count: 1 },
-                    ]
-                }
-                ]
-            }
-        ]
     };
 }
 

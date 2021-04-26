@@ -6,16 +6,9 @@ import { AvailBoardDragData } from "../AvailableBoards";
 import { SpiritDragData } from "../AlailableSpirits";
 
 import style from "./style.module.scss";
-import boardA from "assets/Board A.png"
-import boardB from "assets/Board B.png"
-import boardC from "assets/Board C.png"
-import boardD from "assets/Board D.png"
-import boardE from "assets/Board E.png"
-import boardF from "assets/Board F.png"
 import { BoardDragDrop } from "helper/BoardDragDrop";
+import { S3_PREFIX } from "config";
 
-
-const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
 
 export interface UsedBoardDragData {
     type: "usedBoard"
@@ -37,12 +30,13 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
     markerRef1: React.RefObject<HTMLDivElement>
     boardRefs: { [boardName: string]: React.RefObject<HTMLDivElement> };
 
-    constructor(props: any) {
+    constructor(props: UsedBoardsProps) {
         super(props);
         this.divContainerRef = React.createRef();
         this.markerRef1 = React.createRef();
         this.boardRefs = {};
-        Object.keys(boardImages).forEach((key) => { this.boardRefs[key] = React.createRef() });
+        props.usedBoards.forEach((key) => { this.boardRefs[key.name] = React.createRef() });
+        props.availBoards.forEach((key) => { this.boardRefs[key.name] = React.createRef() });
         this.onDrop = this.onDrop.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
     }
@@ -131,7 +125,7 @@ export class UsedBoards extends React.Component<UsedBoardsProps>
                 >
                     <div className={style.UsedBoards__onBoardButton} style={{ right: "60px" }} onClick={() => this.rotateBoard(b.name, false)}>&#x2b6f;</div>
                     <div className={style.UsedBoards__onBoardButton} style={{ right: "100px" }} onClick={() => this.rotateBoard(b.name, true)}>&#x2b6e;</div>
-                    <img src={boardImages[b.name]} alt={b.name} className={style.UsedBoards__image} draggable="false" />
+                    <img src={S3_PREFIX+b.smallBoardUrl} alt={b.name} className={style.UsedBoards__image} draggable="false" />
                 </div>
             )
         });

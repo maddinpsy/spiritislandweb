@@ -14,7 +14,7 @@ import Wild from "assets/icons/Wildicon.png"
 import Blight from "assets/icons/Blighticon.png"
 import Disease from "assets/icons/Diseaseicon.png"
 
-import { BoardToken, placedToken as PlacedToken, TokenType } from "game/MainPhase";
+import { BoardToken, PlacedToken as PlacedToken, TokenType } from "game/MainPhase";
 import inside from "point-in-polygon";
 import { LandOutline } from "../Boards/LandOutline";
 import { BoardDragDrop } from "helper/BoardDragDrop";
@@ -35,24 +35,24 @@ interface TokenSize {
 const tokenContainerSizes: TokenSize[] = [
     { //normal
         classname: style.Tokens__tokensNormal,
-        height: 22, //px
-        baseSize: 22, //px
-        buttonWidth: 6, //px
-        extraDigi: 14 //px
+        height: 66, //px
+        baseSize: 66, //px
+        buttonWidth: 18, //px
+        extraDigi: 42 //px
     },
     { //small
         classname: style.Tokens__tokensSmall,
-        height: 16, //px
-        baseSize: 16, //px
-        buttonWidth: 5, //px
-        extraDigi: 11 //px
+        height: 48, //px
+        baseSize: 48, //px
+        buttonWidth: 15, //px
+        extraDigi: 33 //px
     },
     { //tiny
         classname: style.Tokens__tokensTiny,
-        height: 11, //px
-        baseSize: 11, //px
-        buttonWidth: 4, //px
-        extraDigi: 7 //px
+        height: 33, //px
+        baseSize: 33, //px
+        buttonWidth: 12, //px
+        extraDigi: 21 //px
     }
 ]
 export interface TokenProps{
@@ -262,7 +262,6 @@ export class Tokens extends React.Component<TokensProps, TokensState>
         let boardTokens = undefined;
         if (this.props.boardTokens)
             boardTokens = this.props.boardTokens
-                .filter(bt => bt.boardName === "A")
                 .map(bt => {
                     const boardPos = this.props.usedBoards.find(b => b.name === bt.boardName);
                     if (!boardPos) {

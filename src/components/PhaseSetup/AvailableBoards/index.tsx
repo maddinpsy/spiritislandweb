@@ -3,15 +3,7 @@ import * as React from "react";
 import { Board } from "game/SetupPhase";
 
 import style from "./style.module.scss";
-import boardA from "assets/Board A.png"
-import boardB from "assets/Board B.png"
-import boardC from "assets/Board C.png"
-import boardD from "assets/Board D.png"
-import boardE from "assets/Board E.png"
-import boardF from "assets/Board F.png"
-
-
-const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
+import { S3_PREFIX } from "config";
 
 export interface AvailBoardDragData {
     type: "availBoard"
@@ -52,7 +44,7 @@ export class AvailableBoards extends React.Component<AvailableBoardsProps>
                         ev.dataTransfer.setData("text", JSON.stringify(data))
                     }}
                 >
-                    <img src={boardImages[b.name]} className={style.AvailableBoards__image} draggable="false" />
+                    <img src={S3_PREFIX+b.smallBoardUrl} className={style.AvailableBoards__image} draggable="false" />
                 </div>)
         });
         return (

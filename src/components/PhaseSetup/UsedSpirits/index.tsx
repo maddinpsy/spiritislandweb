@@ -5,17 +5,9 @@ import { Board, BoardPlacement, Point, SetupSpirit } from "game/SetupPhase";
 import { SpiritDragData, spiritImages } from "../AlailableSpirits";
 
 import style from "./style.module.scss";
-import boardA from "assets/Board A.png"
-import boardB from "assets/Board B.png"
-import boardC from "assets/Board C.png"
-import boardD from "assets/Board D.png"
-import boardE from "assets/Board E.png"
-import boardF from "assets/Board F.png"
 import { GeneralDragData } from "../UsedBoards";
 import { BoardDragDrop } from "helper/BoardDragDrop";
 
-
-const boardImages: { [key: string]: string } = { "A": boardA, "B": boardB, "C": boardC, "D": boardD, "E": boardE, "F": boardF }
 
 interface UsedSpiritsProps {
     setupSpirits: SetupSpirit[]

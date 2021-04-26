@@ -3,7 +3,7 @@ import { ActivePlayers } from 'boardgame.io/core';
 
 //relative include path is neccesry, because we use esm for the server backend
 import { SetupMoves, SetupPhaseState, gameSetup } from './SetupPhase';
-import { MainMoves, MainPhaseState } from './MainPhase';
+import { MainMoves, MainPhaseState, mainPhaseSetup } from './MainPhase';
 
 
 export type SpiritIslandState = SetupPhaseState & MainPhaseState;
@@ -23,6 +23,7 @@ export const SpiritIsland: Game<SpiritIslandState, Ctx> = {
             start: true,
         },
         main: {
+            onBegin: mainPhaseSetup,
             moves: MainMoves,
         }
     }

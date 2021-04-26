@@ -19,21 +19,21 @@ export type TokenType =
     "Disease" |
     "Badlands";
 
-export type placedToken =
+export type PlacedToken =
     {
         tokenType: TokenType,
         count: number
     }
-export type Land =
+export type LandTokens =
     {
         landNumber: number,
-        tokens: placedToken[]
+        tokens: PlacedToken[]
     }
 
 export type BoardToken =
     {
         boardName: string,
-        lands: Land[]
+        lands: LandTokens[]
     }
 
 export type MainPhaseState =
@@ -44,8 +44,15 @@ export type MainPhaseState =
         boardTokens?: BoardToken[]
     }
 
-function phaseSetup() {
-
+export function mainPhaseSetup(G: SpiritIslandState) {
+    //init tokens
+    G.boardTokens = G.usedBoards.map(b => { return { boardName: b.name, lands: b.startTokens } });
+    //adjust board layout
+    //TOTO make board adjustment better, this is a bit hacky.
+    G.usedBoards.forEach(b=>{
+        b.position.x*=3;
+        b.position.y*=3;
+    })
 }
 
 
@@ -79,7 +86,7 @@ export const MainMoves = {
             //decrease existing token
             if (tokens[tokenIdx].count <= 1) {
                 //delete token
-                tokens.splice(tokenIdx,1);
+                tokens.splice(tokenIdx, 1);
             } else {
                 tokens[tokenIdx].count--;
             }
