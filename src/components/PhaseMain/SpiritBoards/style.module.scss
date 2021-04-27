@@ -6,9 +6,12 @@
     grid-row: 1;
     height: 100%;
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     background-color: lighten($c-brown, 10%);
-    border-right: solid darken($c-brown, 10%);;
+    border-right: solid darken($c-brown, 10%);
+    scrollbar-color: lighten($c-brown, 20%) darken($c-brown, 20%);
+    //scrollbar-width: thin;
   }
 
   &__header {
@@ -54,8 +57,18 @@
 
   &__handCards
   {
-    background: lightsalmon;
-    height: 170px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__handCardContainer
+  {
+    width:33%;
+  }
+
+  &__handCardContainer img{
+    max-width: 100%;
+    object-fit: scale-down;
   }
 
 

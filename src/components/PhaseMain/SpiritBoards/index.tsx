@@ -4,6 +4,7 @@ import style from "./style.module.scss";
 
 import { ActiveSpirit } from "game/GamePhaseMain";
 import { SpiritDetails } from "components/SpiritDetails";
+import { Types } from "spirit-island-card-katalog/types";
 
 interface SpiritPanelsHeaderProps {
     spiritName: string
@@ -29,6 +30,30 @@ function SpiritPanelsHeader(props: SpiritPanelsHeaderProps) {
             </div>
         </div>
     );
+}
+
+interface PowerCardProps {
+    cards: Types.PowerCardData[]
+}
+
+
+export class HandCards extends React.Component<PowerCardProps>
+{
+    render() {
+        const cardImages = this.props.cards.map(c =>
+            <div className={style.SpiritBoards__handCardContainer}>
+                <img
+                    key={c.name}
+                    alt={c.name}
+                    src={c.imageUrl}
+                />
+            </div>
+        );
+
+        return (<div className={style.SpiritBoards__handCards}>
+            {cardImages}
+        </div>)
+    }
 }
 
 interface SpiritBoardsProps {
@@ -79,9 +104,7 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
                     <div>Destroyed Presences: {curSpirit.destroyedPresences}</div>
                     <div>Current Elements:</div>
                 </div>
-                <div className={style.SpiritBoards__handCards}>
-                        Hand Cards
-                </div>
+                <HandCards cards={curSpirit.startHand} />
 
             </div>
         );

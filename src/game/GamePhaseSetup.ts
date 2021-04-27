@@ -1,5 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { INVALID_MOVE } from 'boardgame.io/core';
+//relative path, because we use esm to start
+import { Types } from "../spirit-island-card-katalog/types";
 import { BoardInfo } from "./BoardInfo";
 import { SpiritIslandState } from "./Game";
 import { LandTokens } from "./GamePhaseMain";
@@ -8,12 +10,13 @@ import { SpiritInfo } from "./SpiritInfo";
 export type Point = { x: number, y: number }
 export type Line = { start: Point, end: Point }
 
+
 export type SetupSpirit = {
     name: string
     logoUrl:string
     frontSideUrl:string
     backSideUrl:string
-    //startHand:Cards[]
+    startHand:Types.PowerCardData[]
 
     /** Ether the name of the board, where the spirit is placed. Or undefined if spirit is still available. */
     curretBoard?: String;
