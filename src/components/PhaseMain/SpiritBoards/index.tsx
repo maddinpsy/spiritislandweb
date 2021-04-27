@@ -9,6 +9,7 @@ import { Types } from "spirit-island-card-katalog/types";
 import { EnergyIcon, DiscardedCardsIcon, DestroyedPresencesIcon, ElementList } from "../Icons"
 import { DiscardedCards } from "./DiscardedCards";
 import { HandCards } from "./HandCards";
+import { PlayedCards } from "./PlayedCards";
 
 interface SpiritPanelsHeaderProps {
     spiritName: string
@@ -46,7 +47,8 @@ interface SpiritPanelProps {
     setSpiritElement: (spiritName: string, elementType: Types.Elements, count: number) => void
     playCard: (spiritName: string, handCardIdx: number) => void
     discardFromHand: (spiritName: string, handCardIdx: number) => void
-    discardPlayed: (spiritName: string) => void
+    discardPlayed: (spiritName: string, playCardIdx: number) => void
+    undoPlayCard: (spiritName: string, playCardIdx: number) => void
     reclaimCards: (spiritName: string) => void
     reclaimOne: (spiritName: string, discardedCardIdx: number) => void
 }
@@ -58,8 +60,10 @@ interface SpiritPanelsState {
 
 export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanelsState>
 {
+    timeOutId: number;
     constructor(props: SpiritPanelProps) {
         super(props);
+        this.timeOutId = -1;
         this.state = { currentSpiritsIdx: 0 }
         this.nextSpirit = this.nextSpirit.bind(this);
         this.previousSpirit = this.previousSpirit.bind(this);
@@ -74,7 +78,9 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
     }
 
     private unselectedHandcard() {
-        this.setState({ selectedHandCardIdx: undefined });
+        this.timeOutId = window.setTimeout(() => {
+            this.setState({ selectedHandCardIdx: undefined });
+        });
     }
 
     private showDiscardedCardsDialog(curSpirit: ActiveSpirit) {
@@ -85,11 +91,11 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
                     reclaimOne={(idx) => {
                         this.props.reclaimOne(curSpirit.name, idx);
                         this.props.showDialog();
-                    } }
+                    }}
                     reclaimCards={() => {
                         this.props.reclaimCards(curSpirit.name);
                         this.props.showDialog();
-                    } } />
+                    }} />
             });
     }
 
@@ -100,7 +106,8 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
                 //click anywere to unselect the handcard
                 onClick={() => this.unselectedHandcard()}
                 //unselect handcard when loosing focus
-                //onBlur={() => this.unselectedHandcard()}
+                onBlur={() => this.unselectedHandcard()}
+                onFocus={() => { if (this.timeOutId >= 0) window.clearTimeout(this.timeOutId) }}
                 //onBlur only works if tabIndex is set
                 tabIndex={1}
             >
@@ -140,7 +147,10 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
                     selectedHandCardIdx={this.state.selectedHandCardIdx}
                     onSelectCard={(idx) => this.setState({ selectedHandCardIdx: idx })}
                 />
-
+                <PlayedCards cards={curSpirit.playedCards}
+                    discardPlayed={(idx) => this.props.discardPlayed(curSpirit.name, idx)}
+                    undoPlayCard={(idx) => this.props.undoPlayCard(curSpirit.name, idx)}
+                />
             </div>
         );
     }

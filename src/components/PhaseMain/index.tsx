@@ -41,12 +41,14 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                 <SpiritPanels
                     spirits={this.props.G.activeSpirits}
                     showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
+                    //moves
                     setSpiritEnergy={this.props.moves.setSpiritEnergy}
                     setSpiritDestroyedPresences={this.props.moves.setSpiritDestroyedPresences}
                     setSpiritElement={this.props.moves.setSpiritElement}
                     playCard={this.props.moves.playCard}
                     discardFromHand={this.props.moves.discardFromHand}
                     discardPlayed={this.props.moves.discardPlayed}
+                    undoPlayCard={this.props.moves.undoPlayCard}
                     reclaimCards={this.props.moves.reclaimCards}
                     reclaimOne={this.props.moves.reclaimOne}
                 />

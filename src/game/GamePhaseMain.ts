@@ -181,16 +181,36 @@ export const MainMoves = {
     playCard: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
+        if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
+
         const card = spirit.handCards.splice(handCardIdx, 1);
         spirit.playedCards.push(card[0]);
     },
     discardFromHand: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
+        if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
+
         const card = spirit.handCards.splice(handCardIdx, 1);
         spirit.discardedCards.push(card[0]);
     },
-    discardPlayed: function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
+    undoPlayCard: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, playCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
+
+        const card = spirit.playedCards.splice(playCardIdx, 1);
+        spirit.handCards.push(card[0]);
+    },
+    discardPlayed: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, playCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
+
+        const card = spirit.playedCards.splice(playCardIdx, 1);
+        spirit.discardedCards.push(card[0]);
+    },
+    discardAllPlayed: function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
 
@@ -211,6 +231,8 @@ export const MainMoves = {
     reclaimOne: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, discardedCardIdx: number) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
+        if (!spirit.discardedCards[discardedCardIdx]) return INVALID_MOVE;
+
         const card = spirit.discardedCards.splice(discardedCardIdx, 1);
         spirit.handCards.push(card[0]);
     },
