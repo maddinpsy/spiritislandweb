@@ -19,19 +19,34 @@ import water_icon from "assets/elements/water_checked.png"
 import { IncreaseDecreaseButton } from "../IncreaseDecreaseButton";
 import { NewElementButton } from "./NewElementButton";
 
-
-export function EnergyIcon(props: { energy: number }) {
-    return <div className={style.Icons__energyContainer}>
-        <div className={style.Icons__energyText} style={{ backgroundImage: "url(" + coin_empty + ")" }}>{props.energy}</div>
-        <IncreaseDecreaseButton className={style.Icons__iconIncDecButton} onDecrease={() => { }} onIncrease={() => { }} />
-    </div>
+interface EnergyIconProps {
+    energy: number
+    setEnergy: (energy: number) => void
 }
 
-export function DestroyedPresencesIcon(props: { count: number }) {
+export function EnergyIcon(props: EnergyIconProps) {
+    return <div className={style.Icons__energyContainer}>
+        <div className={style.Icons__energyText} style={{ backgroundImage: "url(" + coin_empty + ")" }}>{props.energy}</div>
+        <IncreaseDecreaseButton
+            className={style.Icons__iconIncDecButton}
+            onDecrease={() => { props.setEnergy(props.energy - 1) }}
+            onIncrease={() => { props.setEnergy(props.energy + 1) }}
+        />
+    </div>
+}
+interface DestroyedPresencesIconProps {
+    count: number
+    setDestroyedPresences: (destroyedPresences: number) => void
+}
+export function DestroyedPresencesIcon(props: DestroyedPresencesIconProps) {
     return <div className={style.Icons__destroyedContainer}>
         <div className={style.Icons__destroyedText}>{props.count}</div>
         <img src={destroyed_presences} alt="" className={style.Icons__destroyedImage} />
-        <IncreaseDecreaseButton className={style.Icons__iconIncDecButton} onDecrease={() => { }} onIncrease={() => { }} />
+        <IncreaseDecreaseButton
+            className={style.Icons__iconIncDecButton}
+            onDecrease={() => { props.setDestroyedPresences(props.count - 1) }}
+            onIncrease={() => { props.setDestroyedPresences(props.count + 1) }}
+        />
     </div>
 }
 
@@ -91,6 +106,7 @@ interface ElementListProps {
         count: number
     }[]
     showDialog: (data?: { title: string, content: JSX.Element }) => void;
+    setSpiritElement: (type: Types.Elements, count: number) => void
 }
 export function ElementList(props: ElementListProps) {
     const elemetDivs = props.elemetCount.map(e => {
@@ -98,7 +114,11 @@ export function ElementList(props: ElementListProps) {
             <div className={style.Icons__elementContainer} key={e.type}>
                 <div className={style.Icons__elementText}>{e.count}</div>
                 <ElementIcon type={e.type} />
-                <IncreaseDecreaseButton className={style.Icons__iconIncDecButton} onDecrease={() => { }} onIncrease={() => { }} />
+                <IncreaseDecreaseButton
+                    className={style.Icons__iconIncDecButton}
+                    onDecrease={() => { props.setSpiritElement(e.type, e.count - 1) }}
+                    onIncrease={() => { props.setSpiritElement(e.type, e.count + 1) }}
+                />
             </div>
         )
     });
@@ -109,7 +129,7 @@ export function ElementList(props: ElementListProps) {
                 availableElements={allElements.filter(e => !props.elemetCount.find(g => g.type === e))}
                 className={style.Icons__newElementButton}
                 showDialog={props.showDialog}
-                onAddElement={() => { }} />
+                onAddElement={(type) => { props.setSpiritElement(type, 1) }} />
         }
     </div>
 }

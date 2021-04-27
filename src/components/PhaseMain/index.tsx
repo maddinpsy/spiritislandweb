@@ -36,11 +36,19 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     boardTokens={this.props.G.boardTokens}
                     onIncreaseToken={this.props.moves.increaseToken}
                     onDecreaseToken={this.props.moves.decreaseToken}
-                    showDialog={(data)=>this.setState({dialogContent:data?.content, dialogTitle:data?.title})}
+                    showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
                 />
                 <SpiritPanels
                     spirits={this.props.G.activeSpirits}
-                    showDialog={(data)=>this.setState({dialogContent:data?.content, dialogTitle:data?.title})}
+                    showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
+                    setSpiritEnergy={this.props.moves.setSpiritEnergy}
+                    setSpiritDestroyedPresences={this.props.moves.setSpiritDestroyedPresences}
+                    setSpiritElement={this.props.moves.setSpiritElement}
+                    playCard={this.props.moves.playCard}
+                    discardFromHand={this.props.moves.discardFromHand}
+                    discardPlayed={this.props.moves.discardPlayed}
+                    reclaimCards={this.props.moves.reclaimCards}
+                    reclaimOne={this.props.moves.reclaimOne}
                 />
                 <BottomRow></BottomRow>
                 {this.state.dialogContent && popupDialog}

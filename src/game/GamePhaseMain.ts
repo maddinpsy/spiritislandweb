@@ -1,5 +1,7 @@
 import { Ctx } from "boardgame.io";
 import { INVALID_MOVE } from 'boardgame.io/core';
+//relative path, because we use esm to start
+import { Types } from "../spirit-island-card-katalog/types";
 import { SpiritIslandState } from "./Game";
 import { SetupSpirit } from "./GamePhaseSetup";
 
@@ -61,10 +63,10 @@ export type ActiveSpirit = SetupSpirit &
 {
     currentEnergy: number;
     destroyedPresences: number;
-    //handCards:Cards[];
-    //playedCards:Cards[];
-    //discardedCards:Cards[];
-    //currentElements:Elements[]
+    handCards: Types.PowerCardData[];
+    playedCards: Types.PowerCardData[];
+    discardedCards: Types.PowerCardData[];
+    currentElements: { type: Types.Elements, count: number }[]
 }
 
 export type MainPhaseState =
@@ -94,6 +96,10 @@ export function mainPhaseSetup(G: SpiritIslandState) {
             return {
                 currentEnergy: 0,
                 destroyedPresences: 0,
+                handCards: setupSpirit.startHand,
+                discardedCards: [],
+                playedCards: [],
+                currentElements: [],
                 ...setupSpirit
             }
         });
@@ -136,5 +142,62 @@ export const MainMoves = {
             }
         }
     },
+
+    setSpiritEnergy: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, energy: number) {
+        if(energy<0) return INVALID_MOVE;
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        spirit.currentEnergy = energy;
+    },
+
+    setSpiritDestroyedPresences: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, destroyedPresences: number) {
+        if(destroyedPresences<0) return INVALID_MOVE;
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        spirit.destroyedPresences = destroyedPresences;
+    },
+
+
+    setSpiritElement: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, elementType: Types.Elements, count: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        const elIdx = spirit.currentElements.findIndex(e => e.type === elementType);
+        if (elIdx === -1) {
+            //add new element to the list
+            spirit.currentElements.push({ type: elementType, count: count });
+        } else {
+            //update list
+            if (count === 0) {
+                //remove
+                spirit.currentElements.splice(elIdx, 1);
+            } else {
+                //adjust
+                spirit.currentElements[elIdx].count = count;
+            }
+        }
+    },
+
+    //play cards
+    playCard: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+    },
+    discardFromHand: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+    },
+    discardPlayed: function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+    },
+    reclaimCards: function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+    },
+    reclaimOne: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, discardedCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+    },
+
 
 }

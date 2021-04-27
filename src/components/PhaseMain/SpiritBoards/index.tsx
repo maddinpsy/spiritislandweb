@@ -7,6 +7,7 @@ import { SpiritDetails } from "components/SpiritDetails";
 import { Types } from "spirit-island-card-katalog/types";
 
 import { EnergyIcon, DiscardedCardsIcon, DestroyedPresencesIcon, ElementList } from "../Icons"
+import { cursorTo } from "readline";
 
 interface SpiritPanelsHeaderProps {
     spiritName: string
@@ -62,6 +63,16 @@ export class HandCards extends React.Component<PowerCardProps>
 interface SpiritBoardsProps {
     spirits: ActiveSpirit[]
     showDialog: (data?: { title: string, content: JSX.Element }) => void;
+
+    //moves
+    setSpiritEnergy: (spiritName: string, energy: number) => void
+    setSpiritDestroyedPresences: (spiritName: string, destroyedPresences: number) => void
+    setSpiritElement: (spiritName: string, elementType: Types.Elements, count: number) => void
+    playCard: (spiritName: string, handCardIdx: number) => void
+    discardFromHand: (spiritName: string, handCardIdx: number) => void
+    discardPlayed: (spiritName: string) => void
+    reclaimCards: (spiritName: string) => void
+    reclaimOne: (spiritName: string, discardedCardIdx: number) => void
 }
 
 interface SpiritPanelsState {
@@ -87,14 +98,6 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
 
     render() {
         const curSpirit = this.props.spirits[this.state.currentSpiritsIdx];
-        const el = [
-            { type: Types.Elements.Air, count: 2 },
-            { type: Types.Elements.Earth, count: 1 },
-            { type: Types.Elements.Animal, count: 1 },
-            { type: Types.Elements.Water, count: 4 },
-            { type: Types.Elements.Fire, count: 3 },
-
-        ]
         return (
             <div className={style.SpiritBoards__container}>
                 <SpiritPanelsHeader spiritName={curSpirit.name} onNext={this.nextSpirit} onPrev={this.previousSpirit} />
@@ -111,19 +114,23 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
                 </div>
                 <div className={style.SpiritBoards__activeSpiritInfo}>
                     <div>
-                        <EnergyIcon energy={curSpirit.currentEnergy} />
+                        <EnergyIcon energy={curSpirit.currentEnergy}
+                            setEnergy={(count) => this.props.setSpiritEnergy(curSpirit.name, count)}
+                        />
                     </div>
                     <div>
-                        <DiscardedCardsIcon count={curSpirit.currentEnergy} />
+                        <DiscardedCardsIcon count={curSpirit.discardedCards.length} />
                     </div>
                     <div>
-                        <DestroyedPresencesIcon count={curSpirit.destroyedPresences} />
+                        <DestroyedPresencesIcon count={curSpirit.destroyedPresences}
+                            setDestroyedPresences={(count) => this.props.setSpiritDestroyedPresences(curSpirit.name, count)} />
                     </div>
                     <div>
-                        <ElementList elemetCount={el} showDialog={this.props.showDialog}/>
+                        <ElementList elemetCount={curSpirit.currentElements} showDialog={this.props.showDialog}
+                            setSpiritElement={(type, count) => this.props.setSpiritElement(curSpirit.name, type, count)} />
                     </div>
                 </div>
-                <HandCards cards={curSpirit.startHand} />
+                <HandCards cards={curSpirit.handCards} />
 
             </div>
         );
