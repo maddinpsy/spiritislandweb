@@ -113,22 +113,21 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
 
                 </div>
                 <div className={style.SpiritBoards__activeSpiritInfo}>
-                    <div>
-                        <EnergyIcon energy={curSpirit.currentEnergy}
-                            setEnergy={(count) => this.props.setSpiritEnergy(curSpirit.name, count)}
-                        />
-                    </div>
-                    <div>
-                        <DiscardedCardsIcon count={curSpirit.discardedCards.length} />
-                    </div>
-                    <div>
-                        <DestroyedPresencesIcon count={curSpirit.destroyedPresences}
-                            setDestroyedPresences={(count) => this.props.setSpiritDestroyedPresences(curSpirit.name, count)} />
-                    </div>
-                    <div>
-                        <ElementList elemetCount={curSpirit.currentElements} showDialog={this.props.showDialog}
-                            setSpiritElement={(type, count) => this.props.setSpiritElement(curSpirit.name, type, count)} />
-                    </div>
+                    <EnergyIcon energy={curSpirit.currentEnergy}
+                        setEnergy={(count) => this.props.setSpiritEnergy(curSpirit.name, count)}
+                    />
+                    <DiscardedCardsIcon
+                        count={curSpirit.discardedCards.length}
+                    />
+                    <DestroyedPresencesIcon
+                        count={curSpirit.destroyedPresences}
+                        setDestroyedPresences={(count) => this.props.setSpiritDestroyedPresences(curSpirit.name, count)}
+                    />
+                    <ElementList
+                        elemetCount={curSpirit.currentElements}
+                        showDialog={this.props.showDialog}
+                        setSpiritElement={(type, count) => this.props.setSpiritElement(curSpirit.name, type, count)}
+                    />
                 </div>
                 <HandCards cards={curSpirit.handCards} />
 

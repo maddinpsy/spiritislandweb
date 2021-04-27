@@ -41,6 +41,7 @@
   &__elementList {
     display: flex;
     display: inline-block;
+    break-before: always;
   }
   &__elementContainer {
     margin-right: 10px;
