@@ -53,4 +53,14 @@
     padding: 7px;
     border-radius: 10px;
   }
+
+  &__debugDiv {
+    position: absolute;
+    left: 200px;
+    top: 100px;
+    width: 500px;
+    height: 500px;
+    border: solid;
+    box-sizing: border-box;
+  }
 }
