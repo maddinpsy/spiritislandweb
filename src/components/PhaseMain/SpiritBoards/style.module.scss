@@ -50,7 +50,7 @@
 
   &__activeSpiritInfo
   {
-    padding:10px;
+    padding:2px;
     display:flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -67,6 +67,8 @@
     width:100%;
     text-align: center;
     font-weight: 800;
+    margin-top: 10px;
+    margin-bottom: 5px;
   }
 
   &__handCardContainer

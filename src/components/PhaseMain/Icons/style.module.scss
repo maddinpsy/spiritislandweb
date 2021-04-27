@@ -1,0 +1,59 @@
+@import "~styles/shared";
+
+.Icons {
+  &__energyContainer {
+    line-height: 43px;
+    display: inline-block;
+  }
+  &__energyText {
+    text-align: center;
+    background-size: 40px 40px;
+    width: 40px;
+  }
+
+  
+  &__discardedContainer{
+    display: inline-block;
+  }
+  &__discardedText{
+    display: inline-block;
+  }
+  &__discardedImage{
+    width: 40px;
+    display: inline;
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+
+
+  &__destroyedContainer{
+    display: inline-block;
+  }
+  &__destroyedText{
+    display: inline-block;
+  }
+  &__destroyedImage{
+    width: 40px;
+    display: inline;
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+
+  &__elementList{
+    display: flex;
+    display: inline-block;
+  }
+  &__elementContainer{
+    margin-right: 5px;
+    display: inline-block;
+  }
+  &__elementText{
+    display: inline-block;
+  }
+  &__elementImage{
+    width: 32px;
+    display: inline;
+    vertical-align: middle;
+  }
+
+}

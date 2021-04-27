@@ -6,6 +6,8 @@ import { ActiveSpirit } from "game/GamePhaseMain";
 import { SpiritDetails } from "components/SpiritDetails";
 import { Types } from "spirit-island-card-katalog/types";
 
+import { EnergyIcon, DiscardedCardsIcon, DestroyedPresencesIcon, ElementList } from "../Icons"
+
 interface SpiritPanelsHeaderProps {
     spiritName: string
     onNext: () => void;
@@ -85,6 +87,14 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
 
     render() {
         const curSpirit = this.props.spirits[this.state.currentSpiritsIdx];
+        const el = [
+            { type: Types.Elements.Air, count: 2 },
+            { type: Types.Elements.Earth, count: 1 },
+            { type: Types.Elements.Animal, count: 1 },
+            { type: Types.Elements.Water, count: 4 },
+            { type: Types.Elements.Fire, count: 3 },
+
+        ]
         return (
             <div className={style.SpiritBoards__container}>
                 <SpiritPanelsHeader spiritName={curSpirit.name} onNext={this.nextSpirit} onPrev={this.previousSpirit} />
@@ -100,10 +110,10 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
 
                 </div>
                 <div className={style.SpiritBoards__activeSpiritInfo}>
-                    <div>Current Energy: {curSpirit.currentEnergy}</div>
-                    <div>Discarded Cards: {curSpirit.currentEnergy}</div>
-                    <div>Destroyed Presences: {curSpirit.destroyedPresences}</div>
-                    <div>Current Elements:</div>
+                    <div>Current Energy: <EnergyIcon energy={curSpirit.currentEnergy} /></div>
+                    <div>Discarded Cards: <DiscardedCardsIcon count={curSpirit.currentEnergy} /></div>
+                    <div>Destroyed Presences: <DestroyedPresencesIcon count={curSpirit.destroyedPresences} /></div>
+                    <div>Current Elements: <ElementList elemetCount={el} /></div>
                 </div>
                 <HandCards cards={curSpirit.startHand} />
 
