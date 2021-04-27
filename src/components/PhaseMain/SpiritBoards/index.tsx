@@ -51,6 +51,7 @@ export class HandCards extends React.Component<PowerCardProps>
         );
 
         return (<div className={style.SpiritBoards__handCards}>
+            <div className={style.SpiritBoards__handCardsTitle}>Hand Cards</div>
             {cardImages}
         </div>)
     }
