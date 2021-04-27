@@ -55,15 +55,12 @@ interface SpiritPanelProps {
 
 interface SpiritPanelsState {
     currentSpiritsIdx: number
-    selectedHandCardIdx?: number
 }
 
 export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanelsState>
 {
-    timeOutId: number;
     constructor(props: SpiritPanelProps) {
         super(props);
-        this.timeOutId = -1;
         this.state = { currentSpiritsIdx: 0 }
         this.nextSpirit = this.nextSpirit.bind(this);
         this.previousSpirit = this.previousSpirit.bind(this);
@@ -75,12 +72,6 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
 
     private previousSpirit() {
         this.setState({ currentSpiritsIdx: (this.state.currentSpiritsIdx + 1) % this.props.spirits.length })
-    }
-
-    private unselectedHandcard() {
-        this.timeOutId = window.setTimeout(() => {
-            this.setState({ selectedHandCardIdx: undefined });
-        });
     }
 
     private showDiscardedCardsDialog(curSpirit: ActiveSpirit) {
@@ -102,15 +93,7 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
     render() {
         const curSpirit = this.props.spirits[this.state.currentSpiritsIdx];
         return (
-            <div className={style.SpiritBoards__container}
-                //click anywere to unselect the handcard
-                onClick={() => this.unselectedHandcard()}
-                //unselect handcard when loosing focus
-                onBlur={() => this.unselectedHandcard()}
-                onFocus={() => { if (this.timeOutId >= 0) window.clearTimeout(this.timeOutId) }}
-                //onBlur only works if tabIndex is set
-                tabIndex={1}
-            >
+            <div className={style.SpiritBoards__container}>
                 <SpiritPanelsHeader spiritName={curSpirit.name} onNext={this.nextSpirit} onPrev={this.previousSpirit} />
                 <div className={style.SpiritBoards__frontsideBoard}>
                     <img
@@ -144,8 +127,6 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
                 <HandCards cards={curSpirit.handCards}
                     playCard={(idx) => this.props.playCard(curSpirit.name, idx)}
                     discardFromHand={(idx) => this.props.discardFromHand(curSpirit.name, idx)}
-                    selectedHandCardIdx={this.state.selectedHandCardIdx}
-                    onSelectCard={(idx) => this.setState({ selectedHandCardIdx: idx })}
                 />
                 <PlayedCards cards={curSpirit.playedCards}
                     discardPlayed={(idx) => this.props.discardPlayed(curSpirit.name, idx)}
