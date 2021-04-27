@@ -7,7 +7,7 @@ import { SpiritDetails } from "components/SpiritDetails";
 import { Types } from "spirit-island-card-katalog/types";
 
 import { EnergyIcon, DiscardedCardsIcon, DestroyedPresencesIcon, ElementList } from "../Icons"
-import { cursorTo } from "readline";
+import { Button } from "components/Button";
 
 interface SpiritPanelsHeaderProps {
     spiritName: string
@@ -35,21 +35,43 @@ function SpiritPanelsHeader(props: SpiritPanelsHeaderProps) {
     );
 }
 
-interface PowerCardProps {
+interface HandCardProps {
     cards: Types.PowerCardData[]
+    selectedHandCardIdx?: number
+    onSelectCard: (cardIdx?: number) => void
+    //moves
+    playCard: (handCardIdx: number) => void
+    discardFromHand: (handCardIdx: number) => void
 }
 
 
-export class HandCards extends React.Component<PowerCardProps>
+export class HandCards extends React.Component<HandCardProps>
 {
+    constructor(props: HandCardProps) {
+        super(props);
+        this.selectCard = this.selectCard.bind(this);
+    }
+    selectCard(ev: React.MouseEvent, cardIndex: number) {
+        //stop the top level unselect
+        ev.stopPropagation();
+        this.props.onSelectCard(cardIndex);
+    }
     render() {
-        const cardImages = this.props.cards.map(c =>
+        const cardImages = this.props.cards.map((c, idx) =>
             <div className={style.SpiritBoards__handCardContainer}>
                 <img
                     key={c.name}
                     alt={c.name}
                     src={c.imageUrl}
+                    onClick={(ev) => { this.selectCard(ev, idx) }}
                 />
+                {this.props.selectedHandCardIdx === idx && 
+                <div className={style.SpiritBoards__handCardButtonOverlay}>
+                    <Button size="small" onClick={()=>this.props.playCard(idx)}>Play</Button>
+                    <Button size="small" onClick={()=>this.props.discardFromHand(idx)}>Discard</Button>
+                    <Button size="small" onClick={()=>this.props.discardFromHand(idx)} >Forget</Button>
+                </div>
+                }
             </div>
         );
 
@@ -77,6 +99,7 @@ interface SpiritBoardsProps {
 
 interface SpiritPanelsState {
     currentSpiritsIdx: number
+    selectedHandCardIdx?: number
 }
 
 export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanelsState>
@@ -96,10 +119,21 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
         this.setState({ currentSpiritsIdx: (this.state.currentSpiritsIdx + 1) % this.props.spirits.length })
     }
 
+    unselectedHandcard() {
+        this.setState({ selectedHandCardIdx: undefined });
+    }
+
     render() {
         const curSpirit = this.props.spirits[this.state.currentSpiritsIdx];
         return (
-            <div className={style.SpiritBoards__container}>
+            <div className={style.SpiritBoards__container}
+                //click anywere to unselect the handcard
+                onClick={() => this.unselectedHandcard()}
+                //unselect handcard when loosing focus
+                //onBlur={() => this.unselectedHandcard()}
+                //onBlur only works if tabIndex is set
+                tabIndex={1}
+            >
                 <SpiritPanelsHeader spiritName={curSpirit.name} onNext={this.nextSpirit} onPrev={this.previousSpirit} />
                 <div className={style.SpiritBoards__frontsideBoard}>
                     <img
@@ -129,7 +163,12 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
                         setSpiritElement={(type, count) => this.props.setSpiritElement(curSpirit.name, type, count)}
                     />
                 </div>
-                <HandCards cards={curSpirit.handCards} />
+                <HandCards cards={curSpirit.handCards}
+                    playCard={(idx) => this.props.playCard(curSpirit.name, idx)}
+                    discardFromHand={(idx) => this.props.discardFromHand(curSpirit.name, idx)}
+                    selectedHandCardIdx={this.state.selectedHandCardIdx}
+                    onSelectCard={(idx) => this.setState({ selectedHandCardIdx: idx })}
+                />
 
             </div>
         );

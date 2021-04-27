@@ -24,62 +24,69 @@
     width: 30px;
     line-height: 30px;
     height: 100%;
-    float:right;
+    float: right;
   }
-  &__headerButtonPrevious{
+  &__headerButtonPrevious {
     background: $c-orange;
     width: 30px;
     height: 100%;
     line-height: 30px;
-    float:left;
+    float: left;
   }
   &__headerButtonTitle {
-    display: inline-block;    
+    display: inline-block;
     font-weight: 800;
     height: 100%;
     line-height: 30px;
   }
 
-  &__frontsideBoard{
+  &__frontsideBoard {
     width: 100%;
   }
-  &__frontsideBoard img{
+  &__frontsideBoard img {
     max-width: 100%;
     object-fit: scale-down;
   }
 
-  &__activeSpiritInfo
-  {
-    padding:2px;
-    display:flex;
+  &__activeSpiritInfo {
+    padding: 2px;
+    display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
   }
 
-  &__handCards
-  {
+  &__handCards {
     display: flex;
     flex-wrap: wrap;
   }
 
-  &__handCardsTitle
-  {
-    width:100%;
+  &__handCardsTitle {
+    width: 100%;
     text-align: center;
     font-weight: 800;
     margin-top: 10px;
     margin-bottom: 5px;
   }
 
-  &__handCardContainer
-  {
-    width:33%;
+  &__handCardContainer {
+    width: 33%;
+    position: relative;
+  }
+  
+  &__handCardButtonOverlay {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  &__handCardContainer img{
+  &__handCardContainer img {
     max-width: 100%;
     object-fit: scale-down;
   }
-
-
 }

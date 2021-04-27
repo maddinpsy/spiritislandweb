@@ -144,14 +144,14 @@ export const MainMoves = {
     },
 
     setSpiritEnergy: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, energy: number) {
-        if(energy<0) return INVALID_MOVE;
+        if (energy < 0) return INVALID_MOVE;
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
         spirit.currentEnergy = energy;
     },
 
     setSpiritDestroyedPresences: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, destroyedPresences: number) {
-        if(destroyedPresences<0) return INVALID_MOVE;
+        if (destroyedPresences < 0) return INVALID_MOVE;
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
         spirit.destroyedPresences = destroyedPresences;
@@ -181,22 +181,38 @@ export const MainMoves = {
     playCard: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
+        const card = spirit.handCards.splice(handCardIdx, 1);
+        spirit.playedCards.push(card[0]);
     },
     discardFromHand: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
+        const card = spirit.handCards.splice(handCardIdx, 1);
+        spirit.discardedCards.push(card[0]);
     },
     discardPlayed: function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
+
+        const card = spirit.playedCards.forEach(card=>
+            spirit.discardedCards.push(card)
+        );
+        spirit.playedCards=[];
     },
     reclaimCards: function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
+
+        const card = spirit.discardedCards.forEach(card=>
+            spirit.handCards.push(card)
+        );
+        spirit.discardedCards=[];
     },
     reclaimOne: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, discardedCardIdx: number) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
+        const card = spirit.discardedCards.splice(discardedCardIdx, 1);
+        spirit.handCards.push(card[0]);
     },
 
 
