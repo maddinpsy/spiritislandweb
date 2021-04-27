@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Board, BoardPlacement, Point } from "game/SetupPhase";
+import { Board, BoardPlacement, Point } from "game/GamePhaseSetup";
 
 import style from "./style.module.scss";
 
@@ -8,7 +8,7 @@ import style from "./style.module.scss";
 import alignCenterImg from "assets/router.svg"
 
 import createPanZoom, { PanZoom } from "panzoom";
-import { BoardToken, TokenType } from "game/MainPhase";
+import { BoardToken, TokenType } from "game/GamePhaseMain";
 import { Tokens } from "../Tokens";
 import { BoardDragDrop } from "helper/BoardDragDrop";
 import { isProduction } from "config";

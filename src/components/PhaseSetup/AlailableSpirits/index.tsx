@@ -11,7 +11,7 @@ import spirit5 from "assets/spirits/Rampant_Logo_big.png"
 import spirit6 from "assets/spirits/Thunderspeaker_Logo_big.png"
 import spirit7 from "assets/spirits/Ocean_Logo_big.png"
 import spirit8 from "assets/spirits/Bodan_Logo_big.png"
-import { SetupSpirit } from "game/SetupPhase";
+import { SetupSpirit } from "game/GamePhaseSetup";
 import { GeneralDragData } from "../UsedBoards";
 
 export const spiritImages: string[] = [

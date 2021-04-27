@@ -6,7 +6,7 @@ import style from "./style.module.scss";
 
 import { IncreaseDecreaseButton } from "../../IncreaseDecreaseButton";
 import { TokenImage } from "../TokenImage";
-import { PlacedToken } from "game/MainPhase";
+import { PlacedToken } from "game/GamePhaseMain";
 
 
 /** Defines the hardcoded sizes for the token containers. These are used to fit the tokens into the land polygons. */

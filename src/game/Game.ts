@@ -2,8 +2,8 @@ import { Ctx, Game } from 'boardgame.io';
 import { ActivePlayers } from 'boardgame.io/core';
 
 //relative include path is neccesry, because we use esm for the server backend
-import { SetupMoves, SetupPhaseState, gameSetup } from './SetupPhase';
-import { MainMoves, MainPhaseState, mainPhaseSetup } from './MainPhase';
+import { SetupMoves, SetupPhaseState, gameSetup } from './GamePhaseSetup';
+import { MainMoves, MainPhaseState, mainPhaseSetup } from './GamePhaseMain';
 
 
 export type SpiritIslandState = SetupPhaseState & MainPhaseState;

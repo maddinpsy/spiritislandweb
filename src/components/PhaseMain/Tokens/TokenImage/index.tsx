@@ -14,7 +14,7 @@ import Wild from "assets/icons/Wildicon.png"
 import Blight from "assets/icons/Blighticon.png"
 import Disease from "assets/icons/Diseaseicon.png"
 
-import { TokenType } from "game/MainPhase";
+import { TokenType } from "game/GamePhaseMain";
 
 
 /** Defines the hardcoded sizes for the token containers. These are used to fit the tokens into the land polygons. */

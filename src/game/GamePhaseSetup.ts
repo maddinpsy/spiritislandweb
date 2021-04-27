@@ -2,7 +2,7 @@ import { Ctx } from "boardgame.io";
 import { INVALID_MOVE } from 'boardgame.io/core';
 import { BoardInfo } from "./BoardInfo";
 import { SpiritIslandState } from "./Game";
-import { LandTokens } from "./MainPhase";
+import { LandTokens } from "./GamePhaseMain";
 
 export type Point = { x: number, y: number }
 export type Line = { start: Point, end: Point }

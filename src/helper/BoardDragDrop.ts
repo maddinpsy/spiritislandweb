@@ -1,4 +1,4 @@
-import { Board, BoardPlacement, Line, Point } from "game/SetupPhase";
+import { Board, BoardPlacement, Line, Point } from "game/GamePhaseSetup";
 import inside from "point-in-polygon";
 
 export namespace BoardDragDrop {

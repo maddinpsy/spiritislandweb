@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Board } from "game/SetupPhase";
+import { Board } from "game/GamePhaseSetup";
 
 import style from "./style.module.scss";
 

@@ -4,13 +4,13 @@ import * as React from "react";
 import style from "./style.module.scss";
 
 
-import { BoardToken, PlacedToken as PlacedToken, TokenNames, TokenType } from "game/MainPhase";
+import { BoardToken, PlacedToken as PlacedToken, TokenNames, TokenType } from "game/GamePhaseMain";
 import inside from "point-in-polygon";
 import { LandOutline } from "../../Boards/LandOutline";
 import { BoardDragDrop } from "helper/BoardDragDrop";
 import classnames from "classnames"
 import { IncreaseDecreaseButton } from "../../IncreaseDecreaseButton";
-import { Board, BoardPlacement } from "game/SetupPhase";
+import { Board, BoardPlacement } from "game/GamePhaseSetup";
 import { TokenOnBoard } from "../TokenOnBoard";
 import { AddNewTokenButton } from "../AddNewTokenButton";
 

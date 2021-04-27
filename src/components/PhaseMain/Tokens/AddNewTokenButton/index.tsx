@@ -6,7 +6,7 @@ import style from "./style.module.scss";
 
 import classnames from "classnames"
 import { TokenImage } from "../TokenImage";
-import { TokenType } from "game/MainPhase";
+import { TokenType } from "game/GamePhaseMain";
 
 
 interface AddNewTokenButtonProps {

@@ -3,8 +3,8 @@ import * as React from "react";
 
 import style from "./style.module.scss";
 
-import { Board, BoardPlacement } from "game/SetupPhase";
-import { BoardToken, TokenType } from "game/MainPhase";
+import { Board, BoardPlacement } from "game/GamePhaseSetup";
+import { BoardToken, TokenType } from "game/GamePhaseMain";
 import { LandTokens } from "./LandTokens";
 
 

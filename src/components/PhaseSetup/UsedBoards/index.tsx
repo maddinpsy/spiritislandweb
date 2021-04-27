@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Board, BoardPlacement, Line, Point } from "game/SetupPhase";
+import { Board, BoardPlacement, Line, Point } from "game/GamePhaseSetup";
 
 import { AvailBoardDragData } from "../AvailableBoards";
 import { SpiritDragData } from "../AlailableSpirits";

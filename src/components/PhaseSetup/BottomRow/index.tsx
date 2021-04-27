@@ -1,7 +1,7 @@
 import { Button } from "components/Button";
 import { ModalWindow } from "components/ModalWindow";
 import { SubscribeWindow } from "components/SubscribeWindow";
-import { Board, BoardPlacement, SetupSpirit } from "game/SetupPhase";
+import { Board, BoardPlacement, SetupSpirit } from "game/GamePhaseSetup";
 import * as React from "react";
 
 import style from "./style.module.scss";

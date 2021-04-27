@@ -1,5 +1,5 @@
 import { S3_PREFIX } from "../serverConfig";
-import { Board } from "./SetupPhase";
+import { Board } from "./GamePhaseSetup";
 
 export const BoardInfo: Board[] = [
     {
