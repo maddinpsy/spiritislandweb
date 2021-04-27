@@ -40,6 +40,7 @@
     line-height: 30px;
   }
 
+  //spirit panel
   &__frontsideBoard {
     width: 100%;
   }
@@ -48,6 +49,7 @@
     object-fit: scale-down;
   }
 
+  //spirit info (money, elemetns,...)
   &__activeSpiritInfo {
     padding: 2px;
     display: flex;
@@ -55,6 +57,7 @@
     justify-content: space-evenly;
   }
 
+  //hand cards
   &__handCards {
     display: flex;
     flex-wrap: wrap;
@@ -86,6 +89,36 @@
   }
 
   &__handCardContainer img {
+    max-width: 100%;
+    object-fit: scale-down;
+  }
+
+
+  //discarded cards
+  
+  &__discardedCardList {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__discardedCardContainer {
+    width: 330px;
+    position: relative;
+  }
+
+  &__discardedCardButtonOverlay {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__discardedCardContainer img {
     max-width: 100%;
     object-fit: scale-down;
   }

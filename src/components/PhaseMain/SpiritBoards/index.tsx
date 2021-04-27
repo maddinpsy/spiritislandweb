@@ -65,12 +65,12 @@ export class HandCards extends React.Component<HandCardProps>
                     src={c.imageUrl}
                     onClick={(ev) => { this.selectCard(ev, idx) }}
                 />
-                {this.props.selectedHandCardIdx === idx && 
-                <div className={style.SpiritBoards__handCardButtonOverlay}>
-                    <Button size="small" onClick={()=>this.props.playCard(idx)}>Play</Button>
-                    <Button size="small" onClick={()=>this.props.discardFromHand(idx)}>Discard</Button>
-                    <Button size="small" onClick={()=>this.props.discardFromHand(idx)} >Forget</Button>
-                </div>
+                {this.props.selectedHandCardIdx === idx &&
+                    <div className={style.SpiritBoards__handCardButtonOverlay}>
+                        <Button size="small" onClick={() => this.props.playCard(idx)}>Play</Button>
+                        <Button size="small" onClick={() => this.props.discardFromHand(idx)}>Discard</Button>
+                        <Button size="small" onClick={() => alert("TODO")} >Forget</Button>
+                    </div>
                 }
             </div>
         );
@@ -82,6 +82,60 @@ export class HandCards extends React.Component<HandCardProps>
     }
 }
 
+interface DiscardedCardsProps {
+    cards: Types.PowerCardData[]
+    //moves
+    reclaimOne: (cardIdx: number) => void
+    reclaimCards: () => void
+}
+
+
+export class DiscardedCards extends React.Component<DiscardedCardsProps, { selectedCard?: number }>
+{
+    constructor(props: DiscardedCardsProps) {
+        super(props);
+        this.state = {};
+
+        this.selectCard = this.selectCard.bind(this);
+        this.unselectCard = this.unselectCard.bind(this);
+    }
+    selectCard(ev: React.MouseEvent, cardIndex: number) {
+        //stop the top level unselect
+        ev.stopPropagation();
+        this.setState({ selectedCard: cardIndex })
+    }
+    unselectCard() {
+        this.setState({ selectedCard: undefined })
+    }
+
+    render() {
+        const cardImages = this.props.cards.map((c, idx) =>
+            <div
+                className={style.SpiritBoards__discardedCardContainer}>
+                <img
+                    key={c.name}
+                    alt={c.name}
+                    src={c.imageUrl}
+                    onClick={(ev) => { this.selectCard(ev, idx) }}
+                />
+                {this.state.selectedCard === idx &&
+                    <div className={style.SpiritBoards__discardedCardButtonOverlay}>
+                        <Button size="small" onClick={(ev) =>{ev.stopPropagation(); this.props.reclaimOne(idx)}}>Reclaim</Button>
+                        <Button size="small" onClick={() => alert("TODO")} >Forget</Button>
+                    </div>
+                }
+            </div>
+        );
+
+        return (
+            <div onClick={() => this.unselectCard()}>
+                <Button size="small" onClick={() => this.props.reclaimCards()}>Reclaim All</Button>
+                <div className={style.SpiritBoards__discardedCardList}>
+                    {cardImages}
+                </div>
+            </div>)
+    }
+}
 interface SpiritBoardsProps {
     spirits: ActiveSpirit[]
     showDialog: (data?: { title: string, content: JSX.Element }) => void;
@@ -152,6 +206,20 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
                     />
                     <DiscardedCardsIcon
                         count={curSpirit.discardedCards.length}
+                        onClick={() => {if(curSpirit.discardedCards.length>0) this.props.showDialog({
+                            title: "Discarded Cards", content:
+                                <DiscardedCards
+                                    cards={curSpirit.discardedCards}
+                                    reclaimOne={(idx) => {
+                                        this.props.reclaimOne(curSpirit.name, idx);
+                                        this.props.showDialog()
+                                    }}
+                                    reclaimCards={() => {
+                                        this.props.reclaimCards(curSpirit.name);
+                                        this.props.showDialog()
+                                    }}
+                                />
+                        })}}
                     />
                     <DestroyedPresencesIcon
                         count={curSpirit.destroyedPresences}

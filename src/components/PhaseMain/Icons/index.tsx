@@ -50,8 +50,9 @@ export function DestroyedPresencesIcon(props: DestroyedPresencesIconProps) {
     </div>
 }
 
-export function DiscardedCardsIcon(props: { count: number }) {
-    return <div className={style.Icons__discardedContainer}>
+export function DiscardedCardsIcon(props: { count: number,onClick?:(ev:React.MouseEvent)=>void }) {
+    return <div className={style.Icons__discardedContainer}
+    onClick={props.onClick}>
         <div className={style.Icons__discardedText}>{props.count}</div>
         <img className={style.Icons__discardedImage} src={two_cards} alt="" />
     </div>
