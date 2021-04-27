@@ -5,6 +5,8 @@ import { SpiritIslandState } from "game/Game";
 import style from "./style.module.scss";
 import { Boards } from "./Boards";
 import { ModalWindow } from "components/ModalWindow";
+import { SpiritPanels } from "./SpiritBoards";
+import { BottomRow } from "components/PhaseSetup/BottomRow";
 
 export interface PhaseMainProps {
     G: SpiritIslandState
@@ -36,6 +38,11 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     onDecreaseToken={this.props.moves.decreaseToken}
                     showDialog={(data)=>this.setState({dialogContent:data?.content, dialogTitle:data?.title})}
                 />
+                <SpiritPanels
+                    spirits={this.props.G.activeSpirits}
+                    showDialog={(data)=>this.setState({dialogContent:data?.content, dialogTitle:data?.title})}
+                />
+                <BottomRow></BottomRow>
                 {this.state.dialogContent && popupDialog}
             </div>
         );

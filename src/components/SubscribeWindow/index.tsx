@@ -81,7 +81,7 @@ export class SubscribeForm extends React.Component<{}, SubscribeFormState> {
         );
         //show subscribe window
         return (
-            <div>
+            <div style={{width: "30vw"}}>
                 <p>
                     This software is still under development. Expect missing features and bugs.
                     You can enter you emailaddress to get informed about the development progress.

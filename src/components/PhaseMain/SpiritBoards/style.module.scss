@@ -1,0 +1,62 @@
+@import "~styles/shared";
+
+.SpiritBoards {
+  &__container {
+    grid-column: 1;
+    grid-row: 1;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: lighten($c-brown, 10%);
+    border-right: solid darken($c-brown, 10%);;
+  }
+
+  &__header {
+    height: 30px;
+    text-align: center;
+  }
+
+  &__headerButtonNext {
+    background: $c-orange;
+    width: 30px;
+    line-height: 30px;
+    height: 100%;
+    float:right;
+  }
+  &__headerButtonPrevious{
+    background: $c-orange;
+    width: 30px;
+    height: 100%;
+    line-height: 30px;
+    float:left;
+  }
+  &__headerButtonTitle {
+    display: inline-block;    
+    height: 100%;
+    line-height: 30px;
+  }
+
+  &__frontsideBoard{
+    width: 100%;
+  }
+  &__frontsideBoard img{
+    max-width: 100%;
+    object-fit: scale-down;
+  }
+
+  &__activeSpiritInfo
+  {
+    padding:10px;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+
+  &__handCards
+  {
+    background: lightsalmon;
+    height: 170px;
+  }
+
+
+}
