@@ -6,54 +6,61 @@
     display: inline-block;
   }
   &__energyText {
+    display: inline-block;
     text-align: center;
     background-size: 40px 40px;
     width: 40px;
   }
 
-  
-  &__discardedContainer{
+  &__discardedContainer {
     display: inline-block;
   }
-  &__discardedText{
+  &__discardedText {
     display: inline-block;
   }
-  &__discardedImage{
+  &__discardedImage {
     width: 40px;
     display: inline;
     vertical-align: middle;
     margin-left: 5px;
   }
 
-
-  &__destroyedContainer{
+  &__destroyedContainer {
     display: inline-block;
   }
-  &__destroyedText{
+  &__destroyedText {
     display: inline-block;
   }
-  &__destroyedImage{
+  &__destroyedImage {
     width: 40px;
     display: inline;
     vertical-align: middle;
     margin-left: 5px;
   }
 
-  &__elementList{
+  &__elementList {
     display: flex;
     display: inline-block;
   }
-  &__elementContainer{
-    margin-right: 5px;
+  &__elementContainer {
+    margin-right: 10px;
     display: inline-block;
   }
-  &__elementText{
+  &__elementText {
     display: inline-block;
   }
-  &__elementImage{
+  &__elementImage {
     width: 32px;
     display: inline;
     vertical-align: middle;
   }
 
+  &__iconIncDecButton {
+    width: 12px;
+    display: inline-block;
+    vertical-align: middle;
+    height: 35px;
+    line-height: 40px;
+    margin-left: 4px;
+  }
 }

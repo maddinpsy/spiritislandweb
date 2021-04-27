@@ -110,10 +110,18 @@ export class SpiritPanels extends React.Component<SpiritBoardsProps, SpiritPanel
 
                 </div>
                 <div className={style.SpiritBoards__activeSpiritInfo}>
-                    <div>Current Energy: <EnergyIcon energy={curSpirit.currentEnergy} /></div>
-                    <div>Discarded Cards: <DiscardedCardsIcon count={curSpirit.currentEnergy} /></div>
-                    <div>Destroyed Presences: <DestroyedPresencesIcon count={curSpirit.destroyedPresences} /></div>
-                    <div>Current Elements: <ElementList elemetCount={el} /></div>
+                    <div>
+                        <EnergyIcon energy={curSpirit.currentEnergy} />
+                    </div>
+                    <div>
+                        <DiscardedCardsIcon count={curSpirit.currentEnergy} />
+                    </div>
+                    <div>
+                        <DestroyedPresencesIcon count={curSpirit.destroyedPresences} />
+                    </div>
+                    <div>
+                        <ElementList elemetCount={el} showDialog={this.props.showDialog}/>
+                    </div>
                 </div>
                 <HandCards cards={curSpirit.startHand} />
 

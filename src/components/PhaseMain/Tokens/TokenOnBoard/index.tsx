@@ -29,7 +29,7 @@ export function TokenOnBoard(props: React.HTMLAttributes<HTMLDivElement> & Token
     return (
         <div {...props}>
             {count}{tokenImgae}
-            {props.selected && <IncreaseDecreaseButton onIncrease={props.onIncrease} onDecrease={props.onDecrease} width={props.buttonWidth} />}
+            {props.selected && <IncreaseDecreaseButton onIncrease={props.onIncrease} onDecrease={props.onDecrease} style={{width:props.buttonWidth}} />}
         </div>
     );
 }

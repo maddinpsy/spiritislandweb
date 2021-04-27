@@ -16,11 +16,14 @@ import moon_icon from "assets/elements/moon_checked.png"
 import plant_icon from "assets/elements/plant_checked.png"
 import sun_icon from "assets/elements/sun_checked.png"
 import water_icon from "assets/elements/water_checked.png"
+import { IncreaseDecreaseButton } from "../IncreaseDecreaseButton";
+import { NewElementButton } from "./NewElementButton";
 
 
 export function EnergyIcon(props: { energy: number }) {
     return <div className={style.Icons__energyContainer}>
         <div className={style.Icons__energyText} style={{ backgroundImage: "url(" + coin_empty + ")" }}>{props.energy}</div>
+        <IncreaseDecreaseButton className={style.Icons__iconIncDecButton} onDecrease={() => { }} onIncrease={() => { }} />
     </div>
 }
 
@@ -28,6 +31,7 @@ export function DestroyedPresencesIcon(props: { count: number }) {
     return <div className={style.Icons__destroyedContainer}>
         <div className={style.Icons__destroyedText}>{props.count}</div>
         <img src={destroyed_presences} alt="" className={style.Icons__destroyedImage} />
+        <IncreaseDecreaseButton className={style.Icons__iconIncDecButton} onDecrease={() => { }} onIncrease={() => { }} />
     </div>
 }
 
@@ -69,17 +73,44 @@ export function ElementIcon(props: { type: Types.Elements }) {
     return <img src={image} alt={props.type} className={style.Icons__elementImage} />
 }
 
-export function ElementList(props: { elemetCount: { type: Types.Elements, count: number }[] }) {
+
+const allElements = [
+    Types.Elements.Sun,
+    Types.Elements.Moon,
+    Types.Elements.Fire,
+    Types.Elements.Air,
+    Types.Elements.Water,
+    Types.Elements.Earth,
+    Types.Elements.Plant,
+    Types.Elements.Animal,
+]
+
+interface ElementListProps {
+    elemetCount: {
+        type: Types.Elements
+        count: number
+    }[]
+    showDialog: (data?: { title: string, content: JSX.Element }) => void;
+}
+export function ElementList(props: ElementListProps) {
     const elemetDivs = props.elemetCount.map(e => {
         return (
             <div className={style.Icons__elementContainer} key={e.type}>
                 <div className={style.Icons__elementText}>{e.count}</div>
                 <ElementIcon type={e.type} />
+                <IncreaseDecreaseButton className={style.Icons__iconIncDecButton} onDecrease={() => { }} onIncrease={() => { }} />
             </div>
         )
     });
     return <div className={style.Icons__elementList}>
         {elemetDivs}
+        {props.elemetCount.length < allElements.length &&
+            <NewElementButton
+                availableElements={allElements.filter(e => !props.elemetCount.find(g => g.type === e))}
+                className={style.Icons__newElementButton}
+                showDialog={props.showDialog}
+                onAddElement={() => { }} />
+        }
     </div>
 }
 

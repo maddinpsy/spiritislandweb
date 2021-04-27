@@ -9,7 +9,6 @@ import inside from "point-in-polygon";
 import { LandOutline } from "../../Boards/LandOutline";
 import { BoardDragDrop } from "helper/BoardDragDrop";
 import classnames from "classnames"
-import { IncreaseDecreaseButton } from "../../IncreaseDecreaseButton";
 import { Board, BoardPlacement } from "game/GamePhaseSetup";
 import { TokenOnBoard } from "../TokenOnBoard";
 import { AddNewTokenButton } from "../AddNewTokenButton";
