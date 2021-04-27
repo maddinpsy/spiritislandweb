@@ -252,7 +252,7 @@ export namespace Types {
         }
 
         getImageFolder(): string {
-            return S3_PREFIX + "cards/powers/";
+            return S3_PREFIX + "/cards/powers/";
         }
 
         toPureData(): PowerCardData {
@@ -298,7 +298,7 @@ export namespace Types {
         }
 
         getImageFolder(): string {
-            return S3_PREFIX + "cards/fears/";
+            return S3_PREFIX + "/cards/fears/";
         }
 
         public getImagePath() {
@@ -322,7 +322,7 @@ export namespace Types {
         }
 
         getImageFolder(): string {
-            return S3_PREFIX + "cards/events/";
+            return S3_PREFIX + "/cards/events/";
         }
 
         public getImagePath() {
