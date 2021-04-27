@@ -83,48 +83,48 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 
 ### Display tokens on board
 
-- [ ] Token display in each region
-  - [ ] all tokens greater than zero displayed as <Icon> x <Number>
-  - [ ] at least space for 8 tokens with one digit count in each region
-  - [ ] decrees size of all tokens in one region, if too full
-  - [ ] don't overlap over region border, even when two digit and lots of tokens 
-  - [ ] hide when count reaches zero
-- [ ] Possible tokens
-  - [ ] Explorer
-  - [ ] Town
-  - [ ] City
-  - [ ] Dahan
-  - [ ] Blight
+- [x] Token display in each region
+  - [x] all tokens greater than zero displayed as <Icon> x <Number>
+  - [x] at least space for 8 tokens with one digit count in each region
+  - [x] decrees size of all tokens in one region, if too full
+  - [x] don't overlap over region border, even when two digit and lots of tokens 
+  - [x] hide when count reaches zero
+- [x] Possible tokens
+  - [x] Explorer
+  - [x] Town
+  - [x] City
+  - [x] Dahan
+  - [x] Blight
   - [ ] Presence for each color
-  - [ ] Wild
-  - [ ] Beast
-  - [ ] Disease
-  - [ ] Badlands
-- [ ] User Interaction
-  - [ ] Every Player can change every region
-  - [ ] Plus Icon to add new token, shows dialog with all possible tokens
-  - [ ] small plus/minus icons on each count to increase/decrease number
-  - [ ] Actions are keep in sync with all players
-  - [ ] No animation on update
+  - [x] Wild
+  - [x] Beast
+  - [x] Disease
+  - [x] Badlands
+- [x] User Interaction
+  - [x] Every Player can change every region
+  - [x] Plus Icon to add new token, shows dialog with all possible tokens
+  - [x] small plus/minus icons on each count to increase/decrease number
+  - [x] Actions are keep in sync with all players
+  - [x] No animation on update
 
 ### Display spirit boards
 
-- [ ] Display Spirit boards of all chosen spirits
-- [ ] Possibility to show back site
-- [ ] possibility to minimize the boards (make it smaller)
+- [x] Display Spirit boards of all chosen spirits
+- [x] Possibility to show back site
+- [x] possibility to minimize the boards (make it smaller)
 - [ ] Show Tokens on Presence Track
 - [ ] Drag Drop tokens on presence tracks into regions (removes token from track, adds token in region)
 
 ### Display spirits cards
 
-- [ ] show hand cards
-- [ ] show discarded cards
-- [ ] reclaim all and reclaim one button
+- [x] show hand cards
+- [x] show discarded cards
+- [x] reclaim all and reclaim one button
 - [ ] option to delete a card (forget a power)
-- [ ] option to choose cards, display chosen cards (for all players)
+- [x] option to choose cards, display chosen cards (for all players)
 - [ ] button to end round. All chosen cards will be discarded
 - [ ] choose innate powers, show beside of chosen cards, don't discard them
-- [ ] option to undo play card (take the active card back to hand)
+- [x] option to undo play card (take the active card back to hand)
 
 ### Draw cards
 
