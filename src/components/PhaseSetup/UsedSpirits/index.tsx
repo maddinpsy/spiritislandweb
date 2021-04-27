@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Board, BoardPlacement, Point, SetupSpirit } from "game/GamePhaseSetup";
 
-import { SpiritDragData, spiritImages } from "../AlailableSpirits";
+import { SpiritDragData } from "../AlailableSpirits";
 
 import style from "./style.module.scss";
 import { GeneralDragData } from "../UsedBoards";
@@ -85,7 +85,7 @@ export class UsedSpirits extends React.Component<UsedSpiritsProps>
                     onDrop={this.onDrop}
                     onDragOver={this.onDragOver}
                 >
-                    <img src={spiritImages[idx]} alt={s.name} className={style.UsedSpirit__image} draggable="false" />
+                    <img src={s.logoUrl} alt={s.name} className={style.UsedSpirit__image} draggable="false" />
                 </div>
             )
         });

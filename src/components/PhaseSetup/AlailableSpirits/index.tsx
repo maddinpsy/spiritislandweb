@@ -2,28 +2,9 @@ import * as React from "react";
 
 import style from "./style.module.scss";
 
-// the order is the same as defined in game/SetupPhase gameSetup()
-import spirit1 from "assets/spirits/Lightning_Logo_big.png"
-import spirit2 from "assets/spirits/Rivers_Logo_big.png"
-import spirit3 from "assets/spirits/Earth_Logo_big.png"
-import spirit4 from "assets/spirits/Shadows_Logo_big.png"
-import spirit5 from "assets/spirits/Rampant_Logo_big.png"
-import spirit6 from "assets/spirits/Thunderspeaker_Logo_big.png"
-import spirit7 from "assets/spirits/Ocean_Logo_big.png"
-import spirit8 from "assets/spirits/Bodan_Logo_big.png"
 import { SetupSpirit } from "game/GamePhaseSetup";
 import { GeneralDragData } from "../UsedBoards";
 
-export const spiritImages: string[] = [
-    spirit1,
-    spirit2,
-    spirit3,
-    spirit4,
-    spirit5,
-    spirit6,
-    spirit7,
-    spirit8,
-]
 
 export interface SpiritDragData {
     type: "spirit"
@@ -69,7 +50,7 @@ export class AvailableSpirits extends React.Component<AvailableSpiritsProps>
                         ev.dataTransfer.setData("text", JSON.stringify(data))
                     }}
                 >
-                    <img src={spiritImages[idx]} className={style.AvailableSpirits__image} draggable="false" />
+                    <img src={spirit.logoUrl} className={style.AvailableSpirits__image} draggable="false" />
                     <div className={style.AvailableSpirits__name} >{spirit.name}</div>
                 </div>)
         });

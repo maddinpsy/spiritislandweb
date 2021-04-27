@@ -1,26 +1,27 @@
 import { Ctx } from "boardgame.io";
 import { INVALID_MOVE } from 'boardgame.io/core';
 import { SpiritIslandState } from "./Game";
+import { SetupSpirit } from "./GamePhaseSetup";
 
 export const TokenNames = [
-    "Explorer" ,
-    "Town" ,
-    "City" ,
-    "Dahan" ,
-    "Blight" ,
-    "Presence1" ,
-    "Presence2" ,
-    "Presence3" ,
-    "Presence4" ,
-    "Presence5" ,
-    "Presence6" ,
-    "Wild" ,
-    "Beast" ,
-    "Disease" ,
+    "Explorer",
+    "Town",
+    "City",
+    "Dahan",
+    "Blight",
+    "Presence1",
+    "Presence2",
+    "Presence3",
+    "Presence4",
+    "Presence5",
+    "Presence6",
+    "Wild",
+    "Beast",
+    "Disease",
     "Badlands"
 ] as const;
- 
-export type TokenType =  
+
+export type TokenType =
     "Explorer" |
     "Town" |
     "City" |
@@ -36,7 +37,7 @@ export type TokenType =
     "Beast" |
     "Disease" |
     "Badlands";
-    
+
 
 export type PlacedToken =
     {
@@ -55,23 +56,47 @@ export type BoardToken =
         lands: LandTokens[]
     }
 
+
+export type ActiveSpirit = SetupSpirit &
+{
+    currentEnergy: number;
+    destroyedPresences: number;
+    //handCards:Cards[];
+    //playedCards:Cards[];
+    //discardedCards:Cards[];
+    //currentElements:Elements[]
+}
+
 export type MainPhaseState =
     {
         //as objects
         //Tokens:{[board:string]:{[land:number]:{[token:TokenType]:number}}}
         //as array
         boardTokens?: BoardToken[]
+        activeSpirits: ActiveSpirit[]
     }
 
 export function mainPhaseSetup(G: SpiritIslandState) {
     //init tokens
     G.boardTokens = G.usedBoards.map(b => { return { boardName: b.name, lands: b.startTokens } });
+
     //adjust board layout
     //TOTO make board adjustment better, this is a bit hacky.
-    G.usedBoards.forEach(b=>{
-        b.position.x*=3;
-        b.position.y*=3;
+    G.usedBoards.forEach(b => {
+        b.position.x *= 3;
+        b.position.y *= 3;
     })
+
+    //init spirits
+    G.activeSpirits = G.setupSpirits
+        .filter(setupSpirit => setupSpirit.curretBoard !== undefined)
+        .map(setupSpirit => {
+            return {
+                currentEnergy: 0,
+                destroyedPresences: 0,
+                ...setupSpirit
+            }
+        });
 }
 
 

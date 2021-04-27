@@ -3,15 +3,18 @@ import { INVALID_MOVE } from 'boardgame.io/core';
 import { BoardInfo } from "./BoardInfo";
 import { SpiritIslandState } from "./Game";
 import { LandTokens } from "./GamePhaseMain";
+import { SpiritInfo } from "./SpiritInfo";
 
 export type Point = { x: number, y: number }
 export type Line = { start: Point, end: Point }
 
 export type SetupSpirit = {
     name: string
-    //logo_url:string
-    //frontside_url:string
-    //backside_url:string
+    logoUrl:string
+    frontSideUrl:string
+    backSideUrl:string
+    //startHand:Cards[]
+
     /** Ether the name of the board, where the spirit is placed. Or undefined if spirit is still available. */
     curretBoard?: String;
 }
@@ -48,16 +51,8 @@ export function gameSetup(): SpiritIslandState {
     return {
         availBoards: BoardInfo,
         usedBoards: [],
-        setupSpirits: [
-            { name: "Lightning's Swift Strike" },
-            { name: "River Surges in Sunlight" },
-            { name: "Vital Strength of the Earth" },
-            { name: "Shadows Flicker Like Flame" },
-            { name: "A Spread of Rampant Green" },
-            { name: "Thunderspeaker" },
-            { name: "Ocean's Hungry Grasp" },
-            { name: "Bringer of Dreams and Nightmares" },
-        ],
+        setupSpirits: SpiritInfo,
+        activeSpirits:[]
     };
 }
 
