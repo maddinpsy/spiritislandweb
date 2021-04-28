@@ -19,6 +19,7 @@ import { isProduction } from "config";
 interface BoardsProps {
     usedBoards: (Board & BoardPlacement)[]
     boardTokens?: BoardToken[]
+    presenceColors:string[]
 
     onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
@@ -147,6 +148,7 @@ export class Boards extends React.Component<BoardsProps>
                         onIncreaseToken={this.props.onIncreaseToken}
                         onDecreaseToken={this.props.onDecreaseToken}
                         showDialog={this.props.showDialog}
+                        presenceColors={this.props.presenceColors}
                     />
                     {!isProduction && <div ref={this.debugRef} className={style.Boards__debugDiv} />}
 

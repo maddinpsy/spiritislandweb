@@ -57,6 +57,8 @@ interface LandTokensProps {
     boardTokens: BoardToken
     boardPos: Board & BoardPlacement
     selectedToken?: SelectedToken
+    presenceColors: string[]
+
     onSelectToken: (s: SelectedToken | undefined) => void
     onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
@@ -231,7 +233,9 @@ export class LandTokens extends React.Component<LandTokensProps>{
                         } else {
                             this.props.onSelectToken({ board: bt.boardName, land: l.landNumber, token: t.tokenType });
                         }
-                    }} />;
+                    }}
+                    presenceColors={this.props.presenceColors}
+                    />;
             }); //end for each token
             return (
                 <div id={"LandTokens_" + bt.boardName + l.landNumber} key={bt.boardName + l.landNumber}>
@@ -240,10 +244,11 @@ export class LandTokens extends React.Component<LandTokensProps>{
                         //use extra added tokenpos
                         position={cTokenPos[cTokenPos.length - 1]}
                         className={tokenSizes.classname}
+                        presenceColors={this.props.presenceColors}
                         showDialog={this.props.showDialog}
                         availableTokens={TokenNames.filter(token => !l.tokens.some(usedtoken => usedtoken.tokenType === token))}
                         onIncreaseToken={(type) => this.props.onIncreaseToken(bt.boardName, l.landNumber, type)}
-                    />
+                    /> 
                 </div>
             );
         }); //end for each lands

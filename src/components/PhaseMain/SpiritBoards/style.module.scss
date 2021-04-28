@@ -58,17 +58,11 @@
     pointer-events: none;
   }
   &__presence {
-    background: green;
     position: absolute;
-    border-radius: 150px;
-    transform: translate(-50%, -50%);
-    box-shadow: inset -2px -2px 5px #000;
     pointer-events: all;
+    transform: translate(-50%, -50%);
   }
-  &__presence img {
-    display: block;
-    opacity:0;
-  }
+  
   //spirit info (money, elemetns,...)
   &__activeSpiritInfo {
     padding: 2px;

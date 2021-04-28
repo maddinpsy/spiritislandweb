@@ -13,18 +13,18 @@ export type Line = { start: Point, end: Point }
 
 export type SetupSpirit = {
     name: string
-    logoUrl:string
-    frontSideUrl:string
-    backSideUrl:string
-    startHand:Types.PowerCardData[]
-
-    /**position of presence center in percent of width/height*/
-    presenceTrackPosition:Point[]
-    /**diameter of presence in percent of image width*/
-    presenceTrackDiameter:number
-    /**this is set as css property of all presence markers*/
-    presenceBackground:string
-
+    logoUrl: string
+    frontSideUrl: string
+    backSideUrl: string
+    startHand: Types.PowerCardData[]
+    presenceAppearance: {
+        /**position of presence center in percent of width/height*/
+        presenceTrackPosition: Point[]
+        /**diameter of presence in percent of image width*/
+        presenceTrackDiameter: number
+        /**this is set as css property of all presence markers*/
+        presenceBackground: string
+    }
     /** Ether the name of the board, where the spirit is placed. Or undefined if spirit is still available. */
     curretBoard?: String;
 }
@@ -32,8 +32,8 @@ export type SetupSpirit = {
 export type Board = {
     name: string
     anchors: Line[];
-    smallBoardUrl:string
-    largeBoardUrl:string
+    smallBoardUrl: string
+    largeBoardUrl: string
     startTokens: LandTokens[]
 }
 export type BoardPlacement = { position: Point, rotation: number }
@@ -62,7 +62,7 @@ export function gameSetup(): SpiritIslandState {
         availBoards: BoardInfo,
         usedBoards: [],
         setupSpirits: SpiritInfo,
-        activeSpirits:[]
+        activeSpirits: []
     };
 }
 

@@ -12,7 +12,7 @@ import { HandCards } from "./HandCards";
 import { PlayedCards } from "./PlayedCards";
 import { Point } from "../../../game/GamePhaseSetup";
 
-import presenceIcon from "assets/tokens/Presenceicon.png"
+import { PresenceImage } from "../Tokens/PresenceImage";
 
 interface SpiritPanelsHeaderProps {
     spiritName: string
@@ -41,31 +41,37 @@ function SpiritPanelsHeader(props: SpiritPanelsHeaderProps) {
 }
 
 interface SpiritPresenceTrackProps {
-    presencePosition: Point[]
-    presenceDiameter: number
+    presenceApearance: {
+        presenceTrackPosition: Point[]
+        presenceTrackDiameter: number
+        presenceBackground: string
+    }
     presenceCovered: boolean[]
-    presenceBackground: string
     onTogglePresence: (idx: number) => void
 }
 
 function SpiritPresenceTrack(props: SpiritPresenceTrackProps) {
-    if (props.presencePosition.length !== props.presenceCovered.length) {
-        console.log("SpiritPresenceTrack Arrays differ:" + props.presencePosition.length + "!==" + props.presenceCovered.length);
+    const appearance = props.presenceApearance;
+    if (appearance.presenceTrackPosition.length !== props.presenceCovered.length) {
+        console.log("SpiritPresenceTrack Arrays differ:" + appearance.presenceTrackPosition.length + "!==" + props.presenceCovered.length);
         return <div>ERROR</div>
     }
-    const presenceDivs = props.presencePosition.map((pos, idx) => {
+    const presenceDivs = appearance.presenceTrackPosition.map((pos, idx) => {
         let elStyle: React.CSSProperties = {};
         elStyle.left = (pos.x * 100) + "%";
         elStyle.top = (pos.y * 100) + "%";
-        elStyle.width = (props.presenceDiameter * 100) + "%";
-        elStyle.background = props.presenceBackground;
+        elStyle.width = (appearance.presenceTrackDiameter * 100) + "%";
+        //hide if disabled
+        if(!props.presenceCovered[idx]){
+            elStyle.opacity=0;
+        }
         return (
             <div
                 className={style.SpiritBoards__presence}
                 style={elStyle}
-                onClick={() => props.onTogglePresence(idx)}
+                onClick={() => {props.onTogglePresence(idx);console.log("tk")}}
             >
-                <img src={presenceIcon} alt="" />
+                <PresenceImage cssBackground={appearance.presenceBackground}/>
             </div>
         );
     })
@@ -145,11 +151,9 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
                         }
                     />
                     <SpiritPresenceTrack
-                        presencePosition={curSpirit.presenceTrackPosition}
-                        presenceDiameter={curSpirit.presenceTrackDiameter}
+                        presenceApearance={curSpirit.presenceAppearance}
                         presenceCovered={curSpirit.presenceTrackCovered}
-                        presenceBackground={curSpirit.presenceBackground}
-                        onTogglePresence={(idx) => { this.props.toggleSpiritPresence(curSpirit.name, idx) }} />
+                        onTogglePresence={(idx) => { this.props.toggleSpiritPresence(curSpirit.name, idx); console.log("aok")}} />
                 </div>
                 <div className={style.SpiritBoards__activeSpiritInfo}>
                     <EnergyIcon energy={curSpirit.currentEnergy}

@@ -13,6 +13,8 @@ interface AddNewTokenButtonProps {
     position: { left: number, top: number }
     className: string
     availableTokens: TokenType[]
+    presenceColors:string[]
+
     showDialog: (data?: { title: string, content: JSX.Element }) => void;
     onIncreaseToken: (tokenType: TokenType) => void;
 }
@@ -26,7 +28,10 @@ export class AddNewTokenButton extends React.Component<AddNewTokenButtonProps>{
         }
         const popup = (
             <div className={style.Tokens__newTokensContainer}>
-                {this.props.availableTokens.map(token => {
+                {this.props.availableTokens
+                //only show presence token for available spirits
+                .filter(t=>!t.startsWith("Presence") || Number(t.substr(8))<=this.props.presenceColors.length)
+                .map(token => {
                     return (
                         <div
                             className={style.Tokens__newToken}
@@ -37,7 +42,7 @@ export class AddNewTokenButton extends React.Component<AddNewTokenButtonProps>{
                             }
                             }
                         >
-                            <TokenImage tokenType={token} /> {token.toString()}
+                            <TokenImage tokenType={token} presenceColors={this.props.presenceColors}/> {token.toString()}
                         </div>
                     )
                 })}

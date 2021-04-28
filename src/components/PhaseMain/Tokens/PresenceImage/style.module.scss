@@ -1,0 +1,15 @@
+@import "~styles/shared";
+
+.PresenceImage {
+  &__presence {
+    border-radius: 50px;
+    box-shadow: inset -2px -2px 5px #000;
+    height: 100%;
+  }
+  &__presence img {
+    display: block;
+    opacity:0;
+    height: 100%;
+  }
+  
+}

@@ -11,6 +11,7 @@ import { LandTokens } from "./LandTokens";
 export interface TokensProps {
     boardTokens?: BoardToken[]
     usedBoards: (Board & BoardPlacement)[]
+    presenceColors:string[]
 
     onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
@@ -45,6 +46,7 @@ export class Tokens extends React.Component<TokensProps, TokensState>
                     return <div id={"BoardTokens_" + bt.boardName} key={bt.boardName}>
                         <LandTokens boardTokens={bt} boardPos={boardPos}
                             selectedToken={this.state.selectedToken}
+                            presenceColors={this.props.presenceColors}
                             onSelectToken={(s) => { this.setState({ selectedToken: s }) }}
                             onIncreaseToken={this.props.onIncreaseToken}
                             onDecreaseToken={this.props.onDecreaseToken}

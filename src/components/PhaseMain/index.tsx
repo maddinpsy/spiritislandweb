@@ -37,6 +37,7 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     onIncreaseToken={this.props.moves.increaseToken}
                     onDecreaseToken={this.props.moves.decreaseToken}
                     showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
+                    presenceColors={this.props.G.activeSpirits.map(s=>s.presenceAppearance.presenceBackground)}
                 />
                 <SpiritPanels
                     spirits={this.props.G.activeSpirits}

@@ -9,17 +9,17 @@ import Explorer from "assets/tokens/Explorericon.png"
 import Town from "assets/tokens/Townicon.png"
 import Beast from "assets/tokens/Beasticon.png"
 import Dahan from "assets/tokens/Dahanicon.png"
-import Presence from "assets/tokens/Presenceicon.png"
 import Wild from "assets/tokens/Wildicon.png"
 import Blight from "assets/tokens/Blighticon.png"
 import Disease from "assets/tokens/Diseaseicon.png"
 
 import { TokenType } from "game/GamePhaseMain";
+import { PresenceImage } from "../PresenceImage";
 
 
 /** Defines the hardcoded sizes for the token containers. These are used to fit the tokens into the land polygons. */
 
-export function TokenImage(props: { tokenType: TokenType }) {
+export function TokenImage(props: { tokenType: TokenType, presenceColors: string[] }) {
     let image;
     switch (props.tokenType) {
         case "Explorer":
@@ -37,24 +37,6 @@ export function TokenImage(props: { tokenType: TokenType }) {
         case "Blight":
             image = Blight;
             break;
-        case "Presence1":
-            image = Presence;
-            break;
-        case "Presence2":
-            image = Presence;
-            break;
-        case "Presence3":
-            image = Presence;
-            break;
-        case "Presence4":
-            image = Presence;
-            break;
-        case "Presence5":
-            image = Presence;
-            break;
-        case "Presence6":
-            image = Presence;
-            break;
         case "Wild":
             image = Wild;
             break;
@@ -67,6 +49,22 @@ export function TokenImage(props: { tokenType: TokenType }) {
         case "Badlands":
             image = Badlands;
             break;
+        case "Presence1":
+            return <PresenceImage cssBackground={props.presenceColors[0]} />
+        case "Presence2":
+            return <PresenceImage cssBackground={props.presenceColors[1]} />
+        case "Presence3":
+            return <PresenceImage cssBackground={props.presenceColors[2]} />
+        case "Presence4":
+            return <PresenceImage cssBackground={props.presenceColors[3]} />
+        case "Presence5":
+            return <PresenceImage cssBackground={props.presenceColors[4]} />
+        case "Presence6":
+            return <PresenceImage cssBackground={props.presenceColors[5]} />
     }
+
     return <img src={image} alt={props.tokenType} className={style.Tokens__tokensImage} />
+
+
+
 }

@@ -103,7 +103,7 @@ export function mainPhaseSetup(G: SpiritIslandState) {
                 discardedCards: [],
                 playedCards: [],
                 currentElements: [],
-                presenceTrackCovered:setupSpirit.presenceTrackPosition.map(_=>true),
+                presenceTrackCovered:setupSpirit.presenceAppearance.presenceTrackPosition.map(_=>true),
                 ...setupSpirit
             }
         });
