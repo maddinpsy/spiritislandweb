@@ -69,17 +69,44 @@ export type ActiveSpirit = SetupSpirit &
     currentElements: { type: Types.Elements, count: number }[]
     /** true if precenes is still on the track
      * array is same size as presenceTrackPosition */
-    presenceTrackCovered:boolean[]
+    presenceTrackCovered: boolean[]
+}
+
+export type PowerCardPileData = {
+    available: Types.PowerCardData[]
+    discarded: Types.PowerCardData[]
+    flipSets: {
+        flippedBy: string,
+        cards: Types.PowerCardData[]
+    }[]
 }
 
 export type MainPhaseState =
     {
-        //as objects
-        //Tokens:{[board:string]:{[land:number]:{[token:TokenType]:number}}}
-        //as array
+        //Tokens on the boards, as array
         boardTokens?: BoardToken[]
         activeSpirits: ActiveSpirit[]
+
+        //power cards
+        minorPowercards: PowerCardPileData
+        majorPowercards: PowerCardPileData
     }
+
+export const defaultMainPhaseState: MainPhaseState =
+{
+    boardTokens: undefined,
+    activeSpirits: [],
+    minorPowercards: {
+        available: [],
+        discarded: [],
+        flipSets: []
+    },
+    majorPowercards: {
+        available: [],
+        discarded: [],
+        flipSets: []
+    }
+}
 
 export function mainPhaseSetup(G: SpiritIslandState) {
     //init tokens
@@ -103,7 +130,7 @@ export function mainPhaseSetup(G: SpiritIslandState) {
                 discardedCards: [],
                 playedCards: [],
                 currentElements: [],
-                presenceTrackCovered:setupSpirit.presenceAppearance.presenceTrackPosition.map(_=>true),
+                presenceTrackCovered: setupSpirit.presenceAppearance.presenceTrackPosition.map(_ => true),
                 ...setupSpirit
             }
         });
@@ -224,19 +251,19 @@ export const MainMoves = {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
 
-        const card = spirit.playedCards.forEach(card=>
+        const card = spirit.playedCards.forEach(card =>
             spirit.discardedCards.push(card)
         );
-        spirit.playedCards=[];
+        spirit.playedCards = [];
     },
     reclaimCards: function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
 
-        const card = spirit.discardedCards.forEach(card=>
+        const card = spirit.discardedCards.forEach(card =>
             spirit.handCards.push(card)
         );
-        spirit.discardedCards=[];
+        spirit.discardedCards = [];
     },
     reclaimOne: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, discardedCardIdx: number) {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);

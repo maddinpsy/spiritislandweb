@@ -47,23 +47,11 @@ export type SetupPhaseState =
         setupSpirits: SetupSpirit[]
     }
 
-export function gameSetup(): SpiritIslandState {
-    //Requirements on anchors:
-    //Center of Anchors is Center of Image
-    //Anchers create perfect parallelogram
-    //All Anchors have the same length
-    //Anchor in CountClockwise Direction
-
-    //TopLeft 525	116
-    //TopRight 1441	122
-    //BottomRight 980	914
-    //BottomLeft 64	908
-    return {
-        availBoards: BoardInfo,
-        usedBoards: [],
-        setupSpirits: SpiritInfo,
-        activeSpirits: []
-    };
+export const defaultSetupPhaseState: SetupPhaseState =
+{
+    availBoards: BoardInfo,
+    usedBoards: [],
+    setupSpirits: SpiritInfo,
 }
 
 function checkBoardPlacement(usedBoards: (Board & BoardPlacement)[], newBoard: (Board & BoardPlacement)): boolean {
