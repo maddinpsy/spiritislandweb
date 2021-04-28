@@ -1,0 +1,14 @@
+@import "~styles/shared";
+
+.PowerCardPile {
+  &__container {
+    height: 95px;
+    width: 70px;
+    float: right;
+  }
+&__image {
+  height: 100%;
+  display: block;
+  object-fit: scale-down;
+  }
+}

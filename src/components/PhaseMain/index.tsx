@@ -1,12 +1,17 @@
 import * as React from "react";
 
-import { BoardProps } from "boardgame.io/react";
 import { SpiritIslandState } from "game/Game";
 import style from "./style.module.scss";
 import { Boards } from "./Boards";
 import { ModalWindow } from "components/ModalWindow";
 import { SpiritPanels } from "./SpiritBoards";
 import { BottomRow } from "components/PhaseSetup/BottomRow";
+
+import backMajor from "assets/Back Major.jpg"
+import backMinor from "assets/Back Minor.jpg"
+import { Button } from "components/Button";
+import { PowerCardPile } from "./PowerCardPile";
+import { Types } from "spirit-island-card-katalog/types";
 
 export interface PhaseMainProps {
     G: SpiritIslandState
@@ -37,7 +42,7 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     onIncreaseToken={this.props.moves.increaseToken}
                     onDecreaseToken={this.props.moves.decreaseToken}
                     showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
-                    presenceColors={this.props.G.activeSpirits.map(s=>s.presenceAppearance.presenceBackground)}
+                    presenceColors={this.props.G.activeSpirits.map(s => s.presenceAppearance.presenceBackground)}
                 />
                 <SpiritPanels
                     spirits={this.props.G.activeSpirits}
@@ -54,7 +59,20 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     reclaimCards={this.props.moves.reclaimCards}
                     reclaimOne={this.props.moves.reclaimOne}
                 />
-                <BottomRow></BottomRow>
+                <BottomRow>
+                    <PowerCardPile 
+                    deckType={Types.PowerDeckType.Major}
+                    availableCards={this.props.G.majorPowercards.available} 
+                    discardedCards={this.props.G.majorPowercards.discarded} 
+                    flippedCards={this.props.G.majorPowercards.flipSets} 
+                    />
+                    <PowerCardPile 
+                    deckType={Types.PowerDeckType.Minor}
+                    availableCards={this.props.G.minorPowercards.available} 
+                    discardedCards={this.props.G.minorPowercards.discarded} 
+                    flippedCards={this.props.G.minorPowercards.flipSets} 
+                    />
+                </BottomRow>
                 {this.state.dialogContent && popupDialog}
             </div>
         );

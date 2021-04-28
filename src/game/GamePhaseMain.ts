@@ -2,6 +2,7 @@ import { Ctx } from "boardgame.io";
 import { INVALID_MOVE } from 'boardgame.io/core';
 //relative path, because we use esm to start
 import { Types } from "../spirit-island-card-katalog/types";
+import { DB } from "../spirit-island-card-katalog/db";
 import { SpiritIslandState } from "./Game";
 import { SetupSpirit } from "./GamePhaseSetup";
 
@@ -134,6 +135,16 @@ export function mainPhaseSetup(G: SpiritIslandState) {
                 ...setupSpirit
             }
         });
+
+    //init powercard decks
+    G.minorPowercards.available = DB.PowerCards.
+    filter(c => c.type === Types.PowerDeckType.Minor).
+    filter(c => c.set === Types.ProductSet.Basegame).
+    map(c => c.toPureData());
+    G.majorPowercards.available = DB.PowerCards.
+    filter(c => c.type === Types.PowerDeckType.Major).
+    filter(c => c.set === Types.ProductSet.Basegame).
+    map(c => c.toPureData());
 }
 
 
