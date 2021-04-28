@@ -67,6 +67,9 @@ export type ActiveSpirit = SetupSpirit &
     playedCards: Types.PowerCardData[];
     discardedCards: Types.PowerCardData[];
     currentElements: { type: Types.Elements, count: number }[]
+    /** true if precenes is still on the track
+     * array is same size as presenceTrackPosition */
+    presenceTrackCovered:boolean[]
 }
 
 export type MainPhaseState =
@@ -100,6 +103,7 @@ export function mainPhaseSetup(G: SpiritIslandState) {
                 discardedCards: [],
                 playedCards: [],
                 currentElements: [],
+                presenceTrackCovered:setupSpirit.presenceTrackPosition.map(_=>true),
                 ...setupSpirit
             }
         });
@@ -175,6 +179,12 @@ export const MainMoves = {
                 spirit.currentElements[elIdx].count = count;
             }
         }
+    },
+
+    toggleSpiritPanelPresence: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, presenceIndex: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        spirit.presenceTrackCovered[presenceIndex] = !spirit.presenceTrackCovered[presenceIndex];
     },
 
     //play cards

@@ -45,6 +45,7 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     setSpiritEnergy={this.props.moves.setSpiritEnergy}
                     setSpiritDestroyedPresences={this.props.moves.setSpiritDestroyedPresences}
                     setSpiritElement={this.props.moves.setSpiritElement}
+                    toggleSpiritPresence={this.props.moves.toggleSpiritPanelPresence}
                     playCard={this.props.moves.playCard}
                     discardFromHand={this.props.moves.discardFromHand}
                     discardPlayed={this.props.moves.discardPlayed}

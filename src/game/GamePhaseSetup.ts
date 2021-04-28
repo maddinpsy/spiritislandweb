@@ -18,6 +18,13 @@ export type SetupSpirit = {
     backSideUrl:string
     startHand:Types.PowerCardData[]
 
+    /**position of presence center in percent of width/height*/
+    presenceTrackPosition:Point[]
+    /**diameter of presence in percent of image width*/
+    presenceTrackDiameter:number
+    /**this is set as css property of all presence markers*/
+    presenceBackground:string
+
     /** Ether the name of the board, where the spirit is placed. Or undefined if spirit is still available. */
     curretBoard?: String;
 }

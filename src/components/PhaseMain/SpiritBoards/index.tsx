@@ -10,6 +10,9 @@ import { EnergyIcon, DiscardedCardsIcon, DestroyedPresencesIcon, ElementList } f
 import { DiscardedCards } from "./DiscardedCards";
 import { HandCards } from "./HandCards";
 import { PlayedCards } from "./PlayedCards";
+import { Point } from "../../../game/GamePhaseSetup";
+
+import presenceIcon from "assets/tokens/Presenceicon.png"
 
 interface SpiritPanelsHeaderProps {
     spiritName: string
@@ -37,6 +40,42 @@ function SpiritPanelsHeader(props: SpiritPanelsHeaderProps) {
     );
 }
 
+interface SpiritPresenceTrackProps {
+    presencePosition: Point[]
+    presenceDiameter: number
+    presenceCovered: boolean[]
+    presenceBackground: string
+    onTogglePresence: (idx: number) => void
+}
+
+function SpiritPresenceTrack(props: SpiritPresenceTrackProps) {
+    if (props.presencePosition.length !== props.presenceCovered.length) {
+        console.log("SpiritPresenceTrack Arrays differ:" + props.presencePosition.length + "!==" + props.presenceCovered.length);
+        return <div>ERROR</div>
+    }
+    const presenceDivs = props.presencePosition.map((pos, idx) => {
+        let elStyle: React.CSSProperties = {};
+        elStyle.left = (pos.x * 100) + "%";
+        elStyle.top = (pos.y * 100) + "%";
+        elStyle.width = (props.presenceDiameter * 100) + "%";
+        elStyle.background = props.presenceBackground;
+        return (
+            <div
+                className={style.SpiritBoards__presence}
+                style={elStyle}
+                onClick={() => props.onTogglePresence(idx)}
+            >
+                <img src={presenceIcon} alt="" />
+            </div>
+        );
+    })
+    return (
+        <div className={style.SpiritBoards__presenceContainer}>
+            {presenceDivs}
+        </div>
+    )
+}
+
 interface SpiritPanelProps {
     spirits: ActiveSpirit[]
     showDialog: (data?: { title: string, content: JSX.Element }) => void;
@@ -45,6 +84,7 @@ interface SpiritPanelProps {
     setSpiritEnergy: (spiritName: string, energy: number) => void
     setSpiritDestroyedPresences: (spiritName: string, destroyedPresences: number) => void
     setSpiritElement: (spiritName: string, elementType: Types.Elements, count: number) => void
+    toggleSpiritPresence: (spiritName: string, presenceIndex: number) => void
     playCard: (spiritName: string, handCardIdx: number) => void
     discardFromHand: (spiritName: string, handCardIdx: number) => void
     discardPlayed: (spiritName: string, playCardIdx: number) => void
@@ -104,7 +144,12 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
                         })
                         }
                     />
-
+                    <SpiritPresenceTrack
+                        presencePosition={curSpirit.presenceTrackPosition}
+                        presenceDiameter={curSpirit.presenceTrackDiameter}
+                        presenceCovered={curSpirit.presenceTrackCovered}
+                        presenceBackground={curSpirit.presenceBackground}
+                        onTogglePresence={(idx) => { this.props.toggleSpiritPresence(curSpirit.name, idx) }} />
                 </div>
                 <div className={style.SpiritBoards__activeSpiritInfo}>
                     <EnergyIcon energy={curSpirit.currentEnergy}
@@ -133,6 +178,7 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
                     undoPlayCard={(idx) => this.props.undoPlayCard(curSpirit.name, idx)}
                 />
             </div>
+
         );
     }
 
