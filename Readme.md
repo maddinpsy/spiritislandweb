@@ -112,8 +112,8 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 - [x] Display Spirit boards of all chosen spirits
 - [x] Possibility to show back site
 - [x] possibility to minimize the boards (make it smaller)
-- [ ] Show Tokens on Presence Track
-- [ ] Drag Drop tokens on presence tracks into regions (removes token from track, adds token in region)
+- [x] Show Tokens on Presence Track
+- ~~[ ] Drag Drop tokens on presence tracks into regions (removes token from track, adds token in region)~~(moved to v0.2)
 
 ### Display spirits cards
 
@@ -201,6 +201,7 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 - [ ] Spirit Boards from all extensions
 - [ ] choose which extensions, before game start
 - [ ] Options to add custom boards
+- [ ] Drag Drop tokens on presence tracks into regions (removes token from track, adds token in region)
 
 ### Draw cards
 
