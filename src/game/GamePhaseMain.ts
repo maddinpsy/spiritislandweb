@@ -364,13 +364,17 @@ export const MainMoves = {
             throw new Error("Can't flipOne without random")
         }
         let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
+        //make sure we have enoght cards
+        if(deck.available.length+deck.discarded.length<1){
+            return INVALID_MOVE;
+        }
         //refill if empty
         if (deck.available.length === 0) {
             deck.available = deck.discarded;
             deck.discarded = [];
         }
         //flip a random card
-        const idx = ctx.random.Die(deck.available.length)
+        const idx = ctx.random.Die(deck.available.length)-1;
         //remove from available
         const card = deck.available.splice(idx, 1);
         if(!card || card.length!==1){
@@ -394,6 +398,10 @@ export const MainMoves = {
             throw new Error("Can't flipOne without random")
         }
         let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
+        //make sure we have enoght cards
+        if(deck.available.length+deck.discarded.length<4){
+            return INVALID_MOVE;
+        }
         let flippedCards:Types.PowerCardData[] = [];
         for (let i = 0; i < 4; i++) {
             //refill if empty
@@ -402,7 +410,7 @@ export const MainMoves = {
                 deck.discarded = [];
             }
             //flip a random card
-            const idx = ctx.random.Die(deck.available.length)
+            const idx = ctx.random.Die(deck.available.length)-1;
             //remove from available
             const card = deck.available.splice(idx, 1);
             if(!card || card.length!==1){
