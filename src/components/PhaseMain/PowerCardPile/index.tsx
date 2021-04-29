@@ -56,7 +56,7 @@ function FlipSet(props: FlipSetProps) {
     }
     const playerName = props.playerNames.find(p => String(p.id) === props.flipSet.flippedBy)?.name || "unknown";
     return <div className={style.PowerCardPile__flippedCardSetContainer}>
-        <div className={style.PowerCardPile__flippedCardSetTitle}>Flipped By: {playerName} </div>
+        <div className={style.PowerCardPile__flippedCardSetTitle}>Flipped by {playerName} </div>
         <PowerCardList cards={props.flipSet.cards} actions={[takeAction]} />
     </div>
 }

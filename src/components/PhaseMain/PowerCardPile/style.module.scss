@@ -6,9 +6,15 @@
     width: 70px;
     float: right;
   }
-&__image {
-  height: 100%;
-  display: block;
-  object-fit: scale-down;
+  &__image {
+    height: 100%;
+    display: block;
+    object-fit: scale-down;
+  }
+  &__flippedCardSetContainer {
+    width: 90vw;
+  }
+  &__flippedCardSetTitle {
+    font-weight: 800;
   }
 }

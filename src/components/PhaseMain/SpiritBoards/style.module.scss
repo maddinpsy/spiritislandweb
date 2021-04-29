@@ -17,6 +17,8 @@
   &__header {
     height: 30px;
     text-align: center;
+    display: flex;
+    justify-content: space-between;
   }
 
   &__headerButtonNext {
@@ -24,20 +26,19 @@
     width: 30px;
     line-height: 30px;
     height: 100%;
-    float: right;
   }
   &__headerButtonPrevious {
     background: $c-orange;
     width: 30px;
     height: 100%;
     line-height: 30px;
-    float: left;
   }
   &__headerButtonTitle {
-    display: inline-block;
     font-weight: 800;
     height: 100%;
     line-height: 30px;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   //spirit panel
@@ -62,7 +63,7 @@
     pointer-events: all;
     transform: translate(-50%, -50%);
   }
-  
+
   //spirit info (money, elemetns,...)
   &__activeSpiritInfo {
     padding: 2px;
