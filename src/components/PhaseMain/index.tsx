@@ -7,15 +7,14 @@ import { ModalWindow } from "components/ModalWindow";
 import { SpiritPanels } from "./SpiritBoards";
 import { BottomRow } from "components/PhaseSetup/BottomRow";
 
-import backMajor from "assets/Back Major.jpg"
-import backMinor from "assets/Back Minor.jpg"
-import { Button } from "components/Button";
 import { PowerCardPile } from "./PowerCardPile";
 import { Types } from "spirit-island-card-katalog/types";
+import { FilteredMetadata } from "boardgame.io";
 
 export interface PhaseMainProps {
     G: SpiritIslandState
     moves: Record<string, (...args: any[]) => void>
+    playerNames:FilteredMetadata
 }
 
 export interface PhaseMainState {
@@ -69,6 +68,7 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                         availableCards={this.props.G.majorPowercards.available}
                         discardedCards={this.props.G.majorPowercards.discarded}
                         flippedCards={this.props.G.majorPowercards.flipSets}
+                        playerNames={this.props.playerNames}
                         //moves
                         flipOne={() =>
                             this.props.moves.flipOne(Types.PowerDeckType.Major)}
@@ -86,6 +86,7 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                         availableCards={this.props.G.minorPowercards.available}
                         discardedCards={this.props.G.minorPowercards.discarded}
                         flippedCards={this.props.G.minorPowercards.flipSets}
+                        playerNames={this.props.playerNames}
                         //moves
                         flipOne={() =>
                             this.props.moves.flipOne(Types.PowerDeckType.Minor)}

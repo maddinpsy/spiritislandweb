@@ -17,6 +17,7 @@ export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandSt
         window.setTimeout(() => this.setState({ loading: false }), 1000);
     }
     render() {
+        const playerNames=this.props.matchData || [];
         if (this.state.loading) {
             //show loading compontne to avoid startup flicker
             return (
@@ -34,7 +35,7 @@ export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandSt
             return (<PhaseSetup G={this.props.G} moves={this.props.moves}/>);
         }
         if (this.props.ctx.phase === "main") {
-            return (<PhaseMain G={this.props.G} moves={this.props.moves}/>);
+            return (<PhaseMain G={this.props.G} moves={this.props.moves} playerNames={playerNames}/>);
         }
         return (<div>Error ctx.phase={this.props.ctx.phase}</div>)
     }

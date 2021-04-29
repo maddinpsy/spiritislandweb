@@ -8,6 +8,7 @@ import { Button } from "components/Button";
 import { Types } from "spirit-island-card-katalog/types";
 import { ModalWindow } from "components/ModalWindow";
 import { PowerCardList } from "./PowerCardList";
+import { FilteredMetadata } from "boardgame.io";
 
 
 interface ActionSelectMenuProps {
@@ -39,6 +40,7 @@ function ActionSelectMenu(props: ActionSelectMenuProps) {
 
 interface FlipSetProps {
     flipSet: { flippedBy: string, cards: Types.PowerCardData[] }
+    playerNames: FilteredMetadata
     //moves
     takeFlipped: (cardIdx: number, spiritName: string) => void
     discardFlipSet: () => void
@@ -51,8 +53,9 @@ function FlipSet(props: FlipSetProps) {
         title: "Take",
         onSelect: takeCard
     }
+    const playerName = props.playerNames.find(p => String(p.id) === props.flipSet.flippedBy)?.name || "unknown";
     return <div className={style.PowerCardPile__flippedCardSetContainer}>
-        <div className={style.PowerCardPile__flippedCardSetTitle}>Flipped By: {props.flipSet.flippedBy} </div>
+        <div className={style.PowerCardPile__flippedCardSetTitle}>Flipped By: {playerName} </div>
         <PowerCardList cards={props.flipSet.cards} actions={[]} />
     </div>
 }
@@ -64,6 +67,7 @@ export interface PowerCardPileProps {
     availableCards: Types.PowerCardData[]
     discardedCards: Types.PowerCardData[]
     flippedCards: { flippedBy: string, cards: Types.PowerCardData[] }[]
+    playerNames: FilteredMetadata
     //moves
     flipOne: () => void
     flipFour: () => void
@@ -170,6 +174,7 @@ export class PowerCardPile extends React.Component<PowerCardPileProps, PowerCard
                                 <FlipSet
                                     key={flipSet.flippedBy + idx}
                                     flipSet={flipSet}
+                                    playerNames={this.props.playerNames}
                                     discardFlipSet={() => this.props.discardFlipSet(idx)}
                                     takeFlipped={(cardIdx) => this.props.takeFlipped(idx, cardIdx)}
                                 />)
