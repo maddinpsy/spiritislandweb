@@ -60,17 +60,39 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     reclaimOne={this.props.moves.reclaimOne}
                 />
                 <BottomRow>
-                    <PowerCardPile 
-                    deckType={Types.PowerDeckType.Major}
-                    availableCards={this.props.G.majorPowercards.available} 
-                    discardedCards={this.props.G.majorPowercards.discarded} 
-                    flippedCards={this.props.G.majorPowercards.flipSets} 
+                    <PowerCardPile
+                        deckType={Types.PowerDeckType.Major}
+                        availableCards={this.props.G.majorPowercards.available}
+                        discardedCards={this.props.G.majorPowercards.discarded}
+                        flippedCards={this.props.G.majorPowercards.flipSets}
+                        //moves
+                        flipOne={() =>
+                            this.props.moves.flipOne(Types.PowerDeckType.Major)}
+                        flipFour={() =>
+                            this.props.moves.flipFour(Types.PowerDeckType.Major)}
+                        takeFlipped={(flipSetIdx, cardIdx, spiritName) =>
+                            this.props.moves.takeFlipped(Types.PowerDeckType.Major, flipSetIdx, cardIdx, spiritName)}
+                        discardFlipSet={(flipSetIdx) =>
+                            this.props.moves.discardFlipSet(Types.PowerDeckType.Major, flipSetIdx)}
+                        takeDiscarded={(discardedCardIdx, spiritName) =>
+                            this.props.moves.takeDiscarded(Types.PowerDeckType.Major, discardedCardIdx, spiritName)}
                     />
-                    <PowerCardPile 
-                    deckType={Types.PowerDeckType.Minor}
-                    availableCards={this.props.G.minorPowercards.available} 
-                    discardedCards={this.props.G.minorPowercards.discarded} 
-                    flippedCards={this.props.G.minorPowercards.flipSets} 
+                    <PowerCardPile
+                        deckType={Types.PowerDeckType.Minor}
+                        availableCards={this.props.G.minorPowercards.available}
+                        discardedCards={this.props.G.minorPowercards.discarded}
+                        flippedCards={this.props.G.minorPowercards.flipSets}
+                        //moves
+                        flipOne={() =>
+                            this.props.moves.flipOne(Types.PowerDeckType.Minor)}
+                        flipFour={() =>
+                            this.props.moves.flipFour(Types.PowerDeckType.Minor)}
+                        takeFlipped={(flipSetIdx, cardIdx, spiritName) =>
+                            this.props.moves.takeFlipped(Types.PowerDeckType.Minor, flipSetIdx, cardIdx, spiritName)}
+                        discardFlipSet={(flipSetIdx) =>
+                            this.props.moves.discardFlipSet(Types.PowerDeckType.Minor, flipSetIdx)}
+                        takeDiscarded={(discardedCardIdx, spiritName) =>
+                            this.props.moves.takeDiscarded(Types.PowerDeckType.Minor, discardedCardIdx, spiritName)}
                     />
                 </BottomRow>
                 {this.state.dialogContent && popupDialog}

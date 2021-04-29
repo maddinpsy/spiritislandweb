@@ -37,11 +37,39 @@ function ActionSelectMenu(props: ActionSelectMenuProps) {
     )
 }
 
+interface FlipSetProps{
+    flipSet:{ flippedBy: string, cards: Types.PowerCardData[] }
+    //moves
+    takeFlipped: (cardIdx: number, spiritName: string) => void
+    discardFlipSet: () => void
+}
+function FlipSet(props: FlipSetProps) {
+    function takeCard(idx:number){
+
+    }
+    const takeAction={
+        title:"Take",
+        onSelect:takeCard
+    }
+    return <div className={style.PowerCardPile__flippedCardSetContainer}>
+        <div className={style.PowerCardPile__flippedCardSetTitle}>Flipped By: {props.flipSet.flippedBy} </div>
+        <PowerCardList cards={props.flipSet.cards} actions={[]}/>
+    </div>
+}
+
+
+
 export interface PowerCardPileProps {
     deckType: Types.PowerDeckType
     availableCards: Types.PowerCardData[]
     discardedCards: Types.PowerCardData[]
     flippedCards: { flippedBy: string, cards: Types.PowerCardData[] }[]
+    //moves
+    flipOne: () => void
+    flipFour: () => void
+    takeFlipped: (flipSetIdx: number, cardIdx: number, spiritName: string) => void
+    discardFlipSet: (flipSetIdx: number,) => void
+    takeDiscarded: (discardedCardIdx: number, spiritName: string) => void
 }
 
 enum ViewState {
@@ -64,7 +92,6 @@ export class PowerCardPile extends React.Component<PowerCardPileProps, PowerCard
     }
 
     hideDialog() {
-        console.log("as123d")
         this.setState({ currentView: ViewState.Nothing });
     }
     showMenu() {
@@ -109,7 +136,7 @@ export class PowerCardPile extends React.Component<PowerCardPileProps, PowerCard
                         title={this.props.deckType + " Card Deck"}
                         onClose={this.hideDialog}
                     >
-                        <PowerCardList cards={this.props.availableCards} actions={[]}/>
+                        <PowerCardList cards={this.props.availableCards} actions={[]} />
                     </ModalWindow>
                 );
                 break;
@@ -119,7 +146,7 @@ export class PowerCardPile extends React.Component<PowerCardPileProps, PowerCard
                         title={"Discarded " + this.props.deckType + " Cards"}
                         onClose={this.hideDialog}
                     >
-                        <PowerCardList cards={this.props.discardedCards} actions={[]}/>
+                        <PowerCardList cards={this.props.discardedCards} actions={[]} />
                     </ModalWindow>
                 );
                 break;
@@ -131,14 +158,18 @@ export class PowerCardPile extends React.Component<PowerCardPileProps, PowerCard
                     >
                         <div>
                             <div style={{ display: "flex", flexDirection: "row" }}>
-                                <Button>Flip one card</Button>
-                                <Button>Flip four cards</Button>
+                                <Button onClick={() => this.props.flipOne()}>Flip one card</Button>
+                                <Button onClick={() => this.props.flipFour()}>Flip four cards</Button>
                             </div>
-                            <div>Flipped by maddin</div>
-                                Cards...
-                        <div>Flipped by fefu</div>
-                                Cards...
-                    </div>
+                            {this.props.flippedCards.map((flipSet, idx) =>
+                                <FlipSet 
+                                key={flipSet.flippedBy + idx} 
+                                flipSet={flipSet} 
+                                discardFlipSet={()=>this.props.discardFlipSet(idx)}
+                                takeFlipped={(cardIdx)=>this.props.takeFlipped(idx,cardIdx,"TODO")}
+                                />)
+                            }
+                        </div>
                     </ModalWindow>
                 );
                 break;
