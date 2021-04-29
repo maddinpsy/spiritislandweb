@@ -42,12 +42,13 @@ interface FlipSetProps {
     flipSet: { flippedBy: string, cards: Types.PowerCardData[] }
     playerNames: FilteredMetadata
     //moves
-    takeFlipped: (cardIdx: number, spiritName: string) => void
+    takeFlipped: (cardIdx: number) => void
     discardFlipSet: () => void
 }
 function FlipSet(props: FlipSetProps) {
     function takeCard(idx: number) {
-
+        props.takeFlipped(idx);
+        props.discardFlipSet();
     }
     const takeAction = {
         title: "Take",
@@ -56,7 +57,7 @@ function FlipSet(props: FlipSetProps) {
     const playerName = props.playerNames.find(p => String(p.id) === props.flipSet.flippedBy)?.name || "unknown";
     return <div className={style.PowerCardPile__flippedCardSetContainer}>
         <div className={style.PowerCardPile__flippedCardSetTitle}>Flipped By: {playerName} </div>
-        <PowerCardList cards={props.flipSet.cards} actions={[]} />
+        <PowerCardList cards={props.flipSet.cards} actions={[takeAction]} />
     </div>
 }
 

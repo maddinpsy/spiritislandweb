@@ -23,7 +23,7 @@ export class PowerCardList extends React.Component<PowerCardListProps, PowerCard
         this.timeOutId = -1;
         this.selectCard = this.selectCard.bind(this);
     }
-    selectCard(ev: React.MouseEvent, cardIndex: number) {
+    selectCard(cardIndex: number) {
         this.setState({ selectedCardIdx: cardIndex });
     }
     unselectedCard() {
@@ -39,12 +39,22 @@ export class PowerCardList extends React.Component<PowerCardListProps, PowerCard
                     key={c.name}
                     alt={c.name}
                     src={c.imageUrl}
-                    onClick={(ev) => { this.selectCard(ev, idx) }}
+                    onClick={() => this.selectCard(idx)}
                 />
                 {this.state.selectedCardIdx === idx &&
                     <div className={style.PowerCardList__buttonOverlay}>
                         {this.props.actions.map(action =>
-                            <Button key={action.title} size="small" onClick={() => { action.onSelect(idx) }}>{action.title}</Button>
+                            <Button
+                                key={action.title}
+                                size="small"
+                                onClick={
+                                    () => {
+                                        action.onSelect(idx);
+                                        this.setState({ selectedCardIdx: undefined })
+                                    }
+                                }>
+                                {action.title}
+                            </Button>
                         )}
                     </div>
                 }
