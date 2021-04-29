@@ -21,12 +21,13 @@ export interface PhaseMainProps {
 export interface PhaseMainState {
     dialogTitle?: string
     dialogContent?: JSX.Element
+    currentSpiritsIdx: number
 }
 
 export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
     constructor(props: any) {
         super(props)
-        this.state = {}
+        this.state = { currentSpiritsIdx: 0 }
     }
     render() {
         const popupDialog = (
@@ -34,6 +35,7 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                 {this.state.dialogContent}
             </ModalWindow>
         );
+        const curSpiritName = this.props.G.activeSpirits[this.state.currentSpiritsIdx].name;
         return (
             <div className={style.PhaseMain__container}>
                 <Boards
@@ -47,6 +49,8 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                 <SpiritPanels
                     spirits={this.props.G.activeSpirits}
                     showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
+                    currentSpiritsIdx={this.state.currentSpiritsIdx}
+                    setCurrentSpiritIdx={(idx) => this.setState({ currentSpiritsIdx: idx })}
                     //moves
                     setSpiritEnergy={this.props.moves.setSpiritEnergy}
                     setSpiritDestroyedPresences={this.props.moves.setSpiritDestroyedPresences}
@@ -70,12 +74,12 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                             this.props.moves.flipOne(Types.PowerDeckType.Major)}
                         flipFour={() =>
                             this.props.moves.flipFour(Types.PowerDeckType.Major)}
-                        takeFlipped={(flipSetIdx, cardIdx, spiritName) =>
-                            this.props.moves.takeFlipped(Types.PowerDeckType.Major, flipSetIdx, cardIdx, spiritName)}
+                        takeFlipped={(flipSetIdx, cardIdx) =>
+                            this.props.moves.takeFlipped(Types.PowerDeckType.Major, flipSetIdx, cardIdx, curSpiritName)}
                         discardFlipSet={(flipSetIdx) =>
                             this.props.moves.discardFlipSet(Types.PowerDeckType.Major, flipSetIdx)}
-                        takeDiscarded={(discardedCardIdx, spiritName) =>
-                            this.props.moves.takeDiscarded(Types.PowerDeckType.Major, discardedCardIdx, spiritName)}
+                        takeDiscarded={(discardedCardIdx) =>
+                            this.props.moves.takeDiscarded(Types.PowerDeckType.Major, discardedCardIdx, curSpiritName)}
                     />
                     <PowerCardPile
                         deckType={Types.PowerDeckType.Minor}
@@ -87,12 +91,12 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                             this.props.moves.flipOne(Types.PowerDeckType.Minor)}
                         flipFour={() =>
                             this.props.moves.flipFour(Types.PowerDeckType.Minor)}
-                        takeFlipped={(flipSetIdx, cardIdx, spiritName) =>
-                            this.props.moves.takeFlipped(Types.PowerDeckType.Minor, flipSetIdx, cardIdx, spiritName)}
+                        takeFlipped={(flipSetIdx, cardIdx) =>
+                            this.props.moves.takeFlipped(Types.PowerDeckType.Minor, flipSetIdx, cardIdx, curSpiritName)}
                         discardFlipSet={(flipSetIdx) =>
                             this.props.moves.discardFlipSet(Types.PowerDeckType.Minor, flipSetIdx)}
-                        takeDiscarded={(discardedCardIdx, spiritName) =>
-                            this.props.moves.takeDiscarded(Types.PowerDeckType.Minor, discardedCardIdx, spiritName)}
+                        takeDiscarded={(discardedCardIdx) =>
+                            this.props.moves.takeDiscarded(Types.PowerDeckType.Minor, discardedCardIdx, curSpiritName)}
                     />
                 </BottomRow>
                 {this.state.dialogContent && popupDialog}

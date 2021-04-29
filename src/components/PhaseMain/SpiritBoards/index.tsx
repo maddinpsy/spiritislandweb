@@ -62,16 +62,16 @@ function SpiritPresenceTrack(props: SpiritPresenceTrackProps) {
         elStyle.top = (pos.y * 100) + "%";
         elStyle.width = (appearance.presenceTrackDiameter * 100) + "%";
         //hide if disabled
-        if(!props.presenceCovered[idx]){
-            elStyle.opacity=0;
+        if (!props.presenceCovered[idx]) {
+            elStyle.opacity = 0;
         }
         return (
             <div
                 className={style.SpiritBoards__presence}
                 style={elStyle}
-                onClick={() => {props.onTogglePresence(idx);console.log("tk")}}
+                onClick={() => { props.onTogglePresence(idx); console.log("tk") }}
             >
-                <PresenceImage cssBackground={appearance.presenceBackground}/>
+                <PresenceImage cssBackground={appearance.presenceBackground} />
             </div>
         );
     })
@@ -85,6 +85,8 @@ function SpiritPresenceTrack(props: SpiritPresenceTrackProps) {
 interface SpiritPanelProps {
     spirits: ActiveSpirit[]
     showDialog: (data?: { title: string, content: JSX.Element }) => void;
+    currentSpiritsIdx: number
+    setCurrentSpiritIdx: (idx: number) => void
 
     //moves
     setSpiritEnergy: (spiritName: string, energy: number) => void
@@ -99,25 +101,21 @@ interface SpiritPanelProps {
     reclaimOne: (spiritName: string, discardedCardIdx: number) => void
 }
 
-interface SpiritPanelsState {
-    currentSpiritsIdx: number
-}
 
-export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanelsState>
+export class SpiritPanels extends React.Component<SpiritPanelProps>
 {
     constructor(props: SpiritPanelProps) {
         super(props);
-        this.state = { currentSpiritsIdx: 0 }
         this.nextSpirit = this.nextSpirit.bind(this);
         this.previousSpirit = this.previousSpirit.bind(this);
     }
 
     private nextSpirit() {
-        this.setState({ currentSpiritsIdx: (this.state.currentSpiritsIdx + this.props.spirits.length - 1) % this.props.spirits.length })
+        this.props.setCurrentSpiritIdx((this.props.currentSpiritsIdx + this.props.spirits.length - 1) % this.props.spirits.length);
     }
 
     private previousSpirit() {
-        this.setState({ currentSpiritsIdx: (this.state.currentSpiritsIdx + 1) % this.props.spirits.length })
+        this.props.setCurrentSpiritIdx((this.props.currentSpiritsIdx + this.props.spirits.length + 1) % this.props.spirits.length);
     }
 
     private showDiscardedCardsDialog(curSpirit: ActiveSpirit) {
@@ -137,7 +135,7 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
     }
 
     render() {
-        const curSpirit = this.props.spirits[this.state.currentSpiritsIdx];
+        const curSpirit = this.props.spirits[this.props.currentSpiritsIdx];
         return (
             <div className={style.SpiritBoards__container}>
                 <SpiritPanelsHeader spiritName={curSpirit.name} onNext={this.nextSpirit} onPrev={this.previousSpirit} />
@@ -153,7 +151,7 @@ export class SpiritPanels extends React.Component<SpiritPanelProps, SpiritPanels
                     <SpiritPresenceTrack
                         presenceApearance={curSpirit.presenceAppearance}
                         presenceCovered={curSpirit.presenceTrackCovered}
-                        onTogglePresence={(idx) => { this.props.toggleSpiritPresence(curSpirit.name, idx); console.log("aok")}} />
+                        onTogglePresence={(idx) => { this.props.toggleSpiritPresence(curSpirit.name, idx); console.log("aok") }} />
                 </div>
                 <div className={style.SpiritBoards__activeSpiritInfo}>
                     <EnergyIcon energy={curSpirit.currentEnergy}
