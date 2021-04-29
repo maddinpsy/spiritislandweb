@@ -5,9 +5,6 @@
   &__cardList {
     display: flex;
     flex-wrap: wrap;
-    overflow-y:auto;
-    max-height: 80vh;
-    max-width: 90vw;
   }
 
   &__cardContainer {

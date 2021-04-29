@@ -59,5 +59,11 @@
 
   &__bodyContainer {
     margin: 1em;
+    overflow-y:auto;
+    max-height: 80vh;
+    max-width: 90vw;
+
+    scrollbar-color: #b98557 #9c6c41;
+    scrollbar-width: thin;
   }
 }
