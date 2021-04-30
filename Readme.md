@@ -150,21 +150,21 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 
 ### Fear Cards and Terror
 
-- [ ] Display random card pile, face down
-- [ ] option to show content, but face down
-- [ ] display slot for earned cards
-- [ ] display slot for discard cards
-- [ ] option to flip any card, will be shown face up the rest of the game
+- [x] Display random card pile, face down
+- [x] option to show content, but face down
+- [x] display slot for earned cards
+- [x] display slot for discard cards
+- [x] option to flip any card, will be shown face up the rest of the game
 - [ ] move cards to next slot by drag drop 
 - [ ] show current terror level
-- [ ] Show fear count, just a number
-- [ ] Small Plus sign to increase number
+- [x] Show fear count, just a number
+- [x] Small Plus sign to increase number
 - [ ] Reset Sign to reset number to zero
 
 ### Blight
 
-- [ ] Display Blight count
-- [ ] Small Plus/Minus sign to increase/decrease number
+- [x] Display Blight count
+- [x] Small Plus/Minus sign to increase/decrease number
 </details>  
 
 ## Road Map version 0.2
