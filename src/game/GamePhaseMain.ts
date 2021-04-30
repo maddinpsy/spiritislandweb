@@ -6,7 +6,6 @@ import { DB } from "../spirit-island-card-katalog/db";
 import { SpiritIslandState } from "./Game";
 import { SetupSpirit } from "./GamePhaseSetup";
 import { InvaderCardData, InvaderCardsStage1, InvaderCardsStage2, InvaderCardsStage3 } from "./InvaderCards";
-import { S3_PREFIX } from "serverConfig";
 
 export const TokenNames = [
     "Explorer",
@@ -84,6 +83,14 @@ export type PowerCardPileData = {
     }[]
 }
 
+export type FearCardPileData = {
+    deckLeve1: Types.FearCardData[]
+    deckLeve2: Types.FearCardData[]
+    deckLeve3: Types.FearCardData[]
+    earned: Types.FearCardData[]
+    discarded: Types.FearCardData[]
+}
+
 export type MainPhaseState =
     {
         //Tokens on the boards, as array
@@ -102,6 +109,12 @@ export type MainPhaseState =
             rage: InvaderCardData[]
             discard: InvaderCardData[]
         }
+        //Fear
+        fearDeck: FearCardPileData,
+        fearGenerated: number,
+
+        //blightCount:number,
+        //healthyIsland:boolean,
     }
 
 export const defaultMainPhaseState: MainPhaseState =
@@ -124,7 +137,15 @@ export const defaultMainPhaseState: MainPhaseState =
         build: [],
         rage: [],
         discard: []
-    }
+    },
+    fearDeck: {
+        deckLeve1: [],
+        deckLeve2: [],
+        deckLeve3: [],
+        earned: [],
+        discarded: [],
+    },
+    fearGenerated:0
 }
 
 export function mainPhaseSetup(G: SpiritIslandState, ctx: Ctx) {
@@ -189,6 +210,16 @@ export function mainPhaseSetup(G: SpiritIslandState, ctx: Ctx) {
     //remove cards to match given number
     s3.splice(0, s3.length - invaderDeckLayout[2]);
     G.invaderDeck.available = [...s1, ...s2, ...s3];
+
+    //init fear deck
+    const fearDeckLayout = [3, 3, 3];
+    let allFearCards = DB.FearCards
+    .filter(c=>c.set===Types.ProductSet.Basegame)
+    .map(c=>c.toPureData());
+    allFearCards= ctx.random.Shuffle(allFearCards);
+    G.fearDeck.deckLeve1=allFearCards.splice(0,fearDeckLayout[0])
+    G.fearDeck.deckLeve2=allFearCards.splice(0,fearDeckLayout[1])
+    G.fearDeck.deckLeve3=allFearCards.splice(0,fearDeckLayout[2])
 }
 
 
@@ -552,4 +583,5 @@ export const MainMoves = {
         G.invaderDeck.discard.push(card[0]);
     },
 
+    //fearCards
 }

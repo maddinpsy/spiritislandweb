@@ -13,6 +13,7 @@ import { FilteredMetadata } from "boardgame.io";
 
 import { InvaderCard } from "./InvaderCard";
 import { InvaderCardData } from "game/InvaderCards";
+import { FearCardPile } from "./FearCardPile";
 
 interface InvaderDeckAndSlotsProps {
     invaderDeck: {
@@ -160,6 +161,14 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                             this.props.moves.discardFlipSet(Types.PowerDeckType.Minor, flipSetIdx)}
                         takeDiscarded={(discardedCardIdx) =>
                             this.props.moves.takeDiscarded(Types.PowerDeckType.Minor, discardedCardIdx, curSpiritName)}
+                    />
+                    <FearCardPile
+                        fearCardPile={this.props.G.fearDeck}
+                        /*
+                        invadersExplore={this.props.moves.invadersExplore}
+                        invadersBuild={this.props.moves.invadersBuild}
+                        invadersRage={this.props.moves.invadersRage}
+                        invadersDiscard={this.props.moves.invadersDiscard}*/
                     />
                 </BottomRow>
                 {this.state.dialogContent && popupDialog}

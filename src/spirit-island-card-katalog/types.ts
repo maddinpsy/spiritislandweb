@@ -233,7 +233,7 @@ export namespace Types {
         set: ProductSet,
         type: CardType,
         name: string
-        imageUrl:string,
+        imageUrl: string,
         cost: number,
         speed: Speed,
         range: RangesData | null,
@@ -244,11 +244,11 @@ export namespace Types {
     }
 
     export class PowerCard implements PowerCardData {
-        public imageUrl:string;
+        public imageUrl: string;
         constructor(public set: ProductSet, public type: PowerType, public name: string, public cost: number, public speed: Speed,
             public range: Ranges | null, public target: Target, public elements: Elements[],
             public artist: string, public description: string) {
-                this.imageUrl=this.getImagePath()+".webp";
+            this.imageUrl = this.getImagePath() + ".webp";
         }
 
         getImageFolder(): string {
@@ -260,7 +260,7 @@ export namespace Types {
                 set: this.set,
                 type: this.type,
                 name: this.name,
-                imageUrl:this.imageUrl,
+                imageUrl: this.imageUrl,
                 cost: this.cost,
                 speed: this.speed,
                 range: this.range ? {
@@ -289,18 +289,43 @@ export namespace Types {
         }
     }
 
+    export interface FearCardData {
+        set: ProductSet,
+        type: CardType,
+        name: string
+        flipped:boolean,
+        imageUrl: string,
+        level1: string
+        level2: string
+        level3: string
+    }
+
     export class FearCard {
         public description: string;
+        public imageUrl: string;
 
         constructor(public set: ProductSet, public type: FearType, public name: string, public level1: string, public level2: string, public level3: string) {
             // set description for searching
             this.description = level1 + " " + level2 + " " + level3;
+            this.imageUrl = this.getImagePath() + ".webp";
         }
 
         getImageFolder(): string {
             return S3_PREFIX + "/cards/fears/";
         }
 
+        public toPureData(): FearCardData {
+            return {
+                set: this.set,
+                type: this.type,
+                name: this.name,
+                flipped:false,
+                imageUrl: this.imageUrl,
+                level1: this.level1,
+                level2: this.level2,
+                level3: this.level3,
+            }
+        }
         public getImagePath() {
             let name;
             if (Array.isArray(this.name)) {
