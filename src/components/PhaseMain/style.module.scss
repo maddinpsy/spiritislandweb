@@ -6,15 +6,21 @@
     height: 100vh;
     display: grid;
     grid-template-columns: 1fr 2fr ;
-    grid-template-rows: 1fr 100px;
+    grid-template-rows: 1fr 150px;
     overflow: auto;
   }
-  &__image{
-    height: 100px;
+  &__invaderSlotList{
+    height: 100%;
     float:right;
     display: flex;
+    flex-direction: row-reverse;
+  }
+  &__invaderSlot{
+    display: flex;
     flex-direction: column-reverse;
-    font-size: smaller;
+    font-size: small;
     text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 }

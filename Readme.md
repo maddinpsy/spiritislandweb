@@ -140,12 +140,12 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 
 ### Invader Cards
 
-- [ ] display random card pile, face down
-- [ ] default configuration for cards
-- [ ] display slots for explore, build, rage
+- [x] display random card pile, face down
+- [x] default configuration for cards
+- [x] display slots for explore, build, rage
 - [ ] display discard pile, face down
 - [ ] option to show content of discard pile
-- [ ] flip top card on click, pile
+- [x] flip top card on click, pile
 - [ ] drag drop cards from one slot to the next
 
 ### Fear Cards and Terror
