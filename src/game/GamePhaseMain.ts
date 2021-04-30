@@ -113,7 +113,7 @@ export type MainPhaseState =
         fearDeck: FearCardPileData,
         fearGenerated: number,
 
-        //blightCount:number,
+        blightOnCard: number,
         //healthyIsland:boolean,
     }
 
@@ -145,7 +145,8 @@ export const defaultMainPhaseState: MainPhaseState =
         earned: [],
         discarded: [],
     },
-    fearGenerated: 0
+    fearGenerated: 0,
+    blightOnCard: 0
 }
 
 export function mainPhaseSetup(G: SpiritIslandState, ctx: Ctx) {
@@ -220,6 +221,9 @@ export function mainPhaseSetup(G: SpiritIslandState, ctx: Ctx) {
     G.fearDeck.deckLeve1 = allFearCards.splice(0, fearDeckLayout[0])
     G.fearDeck.deckLeve2 = allFearCards.splice(0, fearDeckLayout[1])
     G.fearDeck.deckLeve3 = allFearCards.splice(0, fearDeckLayout[2])
+
+    //blight 
+    G.blightOnCard = G.activeSpirits.length * 2;
 }
 
 
@@ -645,9 +649,15 @@ export const MainMoves = {
         G.fearDeck.discarded.push(card);
     },
     setGeneratedFear: function (G: SpiritIslandState, ctx: Ctx, count: number) {
-        count=count % (G.activeSpirits.length*4+1);
-        count+=G.activeSpirits.length*4+1;
-        count= count % (G.activeSpirits.length*4+1);
+        count = count % (G.activeSpirits.length * 4 + 1);
+        count += G.activeSpirits.length * 4 + 1;
+        count = count % (G.activeSpirits.length * 4 + 1);
         G.fearGenerated = count;
+    },
+
+    //Blight
+    setBlightOnCard: function (G: SpiritIslandState, ctx: Ctx, count: number) {
+        if (count < 0) return INVALID_MOVE;
+        G.blightOnCard = count;
     }
 }

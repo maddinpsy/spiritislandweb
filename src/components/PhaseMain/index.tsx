@@ -17,6 +17,7 @@ import { FearCardPile } from "./FearCardPile";
 import { IncreaseDecreaseButton } from "./IncreaseDecreaseButton";
 
 import fearIconImage from "assets/fear.png"
+import blightIconImage from "assets/tokens/Blighticon.png"
 
 interface InvaderDeckAndSlotsProps {
     invaderDeck: {
@@ -78,6 +79,20 @@ function FearIcon(props: { count: number, onSetFearCount: (count: number) => voi
         <IncreaseDecreaseButton
             onIncrease={() => { props.onSetFearCount(props.count + 1) }}
             onDecrease={() => { props.onSetFearCount(props.count - 1) }}
+        />
+    </div>
+}
+
+
+function BlightIcon(props: { count: number, onSetBlightCount: (count: number) => void }) {
+    return <div className={style.PhaseMain__FearIconContainer} >
+        <div>
+        <img src={blightIconImage} alt="Blight" className={style.PhaseMain__FearIconImage}/>
+        <div>{props.count}</div>
+        </div>
+        <IncreaseDecreaseButton
+            onIncrease={() => { props.onSetBlightCount(props.count + 1) }}
+            onDecrease={() => { props.onSetBlightCount(props.count - 1) }}
         />
     </div>
 }
@@ -187,6 +202,10 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     <FearIcon 
                     count={this.props.G.fearGenerated} 
                     onSetFearCount={(count: number) => this.props.moves.setGeneratedFear(count)} />
+                    <BlightIcon 
+                    count={this.props.G.blightOnCard} 
+                    onSetBlightCount={(count: number) => this.props.moves.setBlightOnCard(count)} />
+                    
                 </BottomRow>
                 {this.state.dialogContent && popupDialog}
             </div>
