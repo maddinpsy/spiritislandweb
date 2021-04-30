@@ -148,6 +148,9 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     undoPlayCard={this.props.moves.undoPlayCard}
                     reclaimCards={this.props.moves.reclaimCards}
                     reclaimOne={this.props.moves.reclaimOne}
+                    forgetFromHand={this.props.moves.forgetFromHand}
+                    forgetFromPlayed={this.props.moves.forgetFromPlayed}
+                    forgetFromDiscarded={this.props.moves.forgetFromDiscarded}
                 />
                 <BottomRow>
                     <InvaderDeckAndSlots

@@ -100,6 +100,9 @@ interface SpiritPanelProps {
     undoPlayCard: (spiritName: string, playCardIdx: number) => void
     reclaimCards: (spiritName: string) => void
     reclaimOne: (spiritName: string, discardedCardIdx: number) => void
+    forgetFromHand: (spiritName: string, handCardIdx: number) => void
+    forgetFromPlayed: (spiritName: string, playCardIdx: number) => void
+    forgetFromDiscarded: (spiritName: string, discardedCardIdx: number) => void
 }
 
 
@@ -131,7 +134,9 @@ export class SpiritPanels extends React.Component<SpiritPanelProps>
                     reclaimCards={() => {
                         this.props.reclaimCards(curSpirit.name);
                         this.props.showDialog();
-                    }} />
+                    }} 
+                    forgetFromDiscarded={(idx) => this.props.forgetFromDiscarded(curSpirit.name, idx)}
+                    />
             });
     }
 
@@ -197,10 +202,12 @@ export class SpiritPanels extends React.Component<SpiritPanelProps>
                 <HandCards cards={curSpirit.handCards}
                     playCard={(idx) => this.props.playCard(curSpirit.name, idx)}
                     discardFromHand={(idx) => this.props.discardFromHand(curSpirit.name, idx)}
+                    forgetFromHand={(idx) => this.props.forgetFromHand(curSpirit.name, idx)}
                 />
                 <PlayedCards cards={curSpirit.playedCards}
                     discardPlayed={(idx) => this.props.discardPlayed(curSpirit.name, idx)}
                     undoPlayCard={(idx) => this.props.undoPlayCard(curSpirit.name, idx)}
+                    forgetFromPlayed={(idx) => this.props.forgetFromPlayed(curSpirit.name, idx)}
                 />
             </div>
 

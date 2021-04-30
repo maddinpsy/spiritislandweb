@@ -12,6 +12,7 @@ interface PlayedCardsProps {
     //moves
     discardPlayed: (playCardIdx: number) => void
     undoPlayCard: (playCardIdx: number) => void
+    forgetFromPlayed: (playCardIdx: number) => void
 }
 interface PlayedCardsState {
     selectedCard?: number
@@ -62,7 +63,7 @@ export class PlayedCards extends React.Component<PlayedCardsProps, PlayedCardsSt
                     <div className={style.PlayedCards__buttonOverlay}>
                         <Button size="small" onClick={() => this.props.undoPlayCard(idx)}>Undo</Button>
                         <Button size="small" onClick={() => this.props.discardPlayed(idx)}>Discard</Button>
-                        <Button size="small" onClick={() => alert("TODO")} >Forget</Button>
+                        <Button size="small" onClick={() => this.props.forgetFromPlayed(idx)}>Forget</Button>
                     </div>
                 }
             </div>

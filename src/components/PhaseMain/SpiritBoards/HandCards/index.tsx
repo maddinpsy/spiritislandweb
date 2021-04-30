@@ -12,6 +12,7 @@ interface HandCardProps {
     //moves
     playCard: (handCardIdx: number) => void
     discardFromHand: (handCardIdx: number) => void
+    forgetFromHand: (handCardIdx: number) => void
 }
 
 interface HandCardState {
@@ -50,7 +51,7 @@ export class HandCards extends React.Component<HandCardProps, HandCardState>
                     <div className={style.SpiritBoards__handCardButtonOverlay}>
                         <Button size="small" onClick={() => {this.props.playCard(idx);this.unselectedCard()}}>Play</Button>
                         <Button size="small" onClick={() => {this.props.discardFromHand(idx);this.unselectedCard()}}>Discard</Button>
-                        <Button size="small" onClick={() => alert("TODO")} >Forget</Button>
+                        <Button size="small" onClick={() => {this.props.forgetFromHand(idx);this.unselectedCard()}} >Forget</Button>
                     </div>
                 }
             </div>
