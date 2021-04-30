@@ -114,6 +114,8 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 - [x] possibility to minimize the boards (make it smaller)
 - [x] Show Tokens on Presence Track
 - ~~[ ] Drag Drop tokens on presence tracks into regions (removes token from track, adds token in region)~~(moved to v0.2)
+- [x] Element Counter with increase/decrease buttons (for each spirit, but in snyc so other users can see it)
+- [ ] make Element Counter look nicer. Default show all; gray out when zero
 
 ### Display spirits cards
 
@@ -125,6 +127,7 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 - [ ] button to end round. All chosen cards will be discarded
 - [ ] choose innate powers, show beside of chosen cards, don't discard them
 - [x] option to undo play card (take the active card back to hand)
+- [ ] refactor all cards with actions, in one react componente
 
 ### Draw cards
 
@@ -147,6 +150,8 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 - [ ] option to show content of discard pile
 - [x] flip top card on click, pile
 - [ ] drag drop cards from one slot to the next
+- [ ] animate card movement (flip/shift)
+- [ ] show multiple cards per slot (up to two?)
 
 ### Fear Cards and Terror
 
@@ -160,6 +165,7 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 - [x] Show fear count, just a number
 - [x] Small Plus sign to increase number
 - [ ] Reset Sign to reset number to zero
+- [ ] Card movemnet animation (flip/shift)
 
 ### Blight
 
@@ -176,6 +182,7 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 ### Server and multi player
 
 - [ ] spectate game, when joining after setup phase?!
+- [ ] cahnge nickname button
 
 ### Design board layout
 
@@ -187,6 +194,8 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 - [ ] Spirits from all extensions
 - [ ] choose which extensions, before game start
 - [ ] Options to add custom spirits
+- [ ] Remove Presence from board, increases the destryed presence counter
+- [ ] Played cards, increase the element counter
 
 ### Display tokens on board
 
@@ -195,6 +204,7 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 - [ ] City + x Strife
 - [ ] transform to basic type, when strife count reaches zero
 - [ ] Strife has extra plus/minus signs
+- [ ] Auto Add Presence based on Spirit Rules, when Game starts
 
 ### Display spirit boards
 
@@ -221,6 +231,8 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 ### Blight
 
 - [ ] Auto decrease/increase number when blight is changed in one region
+- [ ] Animation ?
+- [ ] Blighte/Healthy Island Cards
 
 ### Events
 
