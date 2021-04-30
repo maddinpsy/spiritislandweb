@@ -5,16 +5,18 @@ import { ActivePlayers } from 'boardgame.io/core';
 import { defaultSetupPhaseState, SetupMoves, SetupPhaseState } from './GamePhaseSetup';
 import { MainMoves, MainPhaseState, mainPhaseSetup, defaultMainPhaseState } from './GamePhaseMain';
 
+export type SpiritIslandState = 
+SetupPhaseState &
+MainPhaseState &
+{SoftwareVersion:string} ;
 
 export function gameSetup(): SpiritIslandState {
     return {
         ...defaultMainPhaseState,
-        ...defaultSetupPhaseState
+        ...defaultSetupPhaseState,
+        SoftwareVersion:"0.1"
     };
 }
-
-
-export type SpiritIslandState = SetupPhaseState & MainPhaseState;
 
 export const SpiritIsland: Game<SpiritIslandState, Ctx> = {
     name: "SpiritIsland",

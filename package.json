@@ -8,6 +8,7 @@
   "author": "Martin Hoffmann <maddinpsycho@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bgio-postgres": "^1.0.13",
     "boardgame.io": "^0.44.0",
     "classnames": "^2.2.6",
     "esm": "^3.2.25",
