@@ -11,10 +11,13 @@ import { PowerCardPile } from "./PowerCardPile";
 import { Types } from "spirit-island-card-katalog/types";
 import { FilteredMetadata } from "boardgame.io";
 
+import invaderCards from "assets/Invader Deck.jpg"
+import { InvaderCard } from "./InvaderCard";
+
 export interface PhaseMainProps {
     G: SpiritIslandState
     moves: Record<string, (...args: any[]) => void>
-    playerNames:FilteredMetadata
+    playerNames: FilteredMetadata
 }
 
 export interface PhaseMainState {
@@ -63,6 +66,38 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     reclaimOne={this.props.moves.reclaimOne}
                 />
                 <BottomRow>
+                    <div  className={style.PhaseMain__image}>
+                        <InvaderCard
+                            card={this.props.G.invaderDeck.available[0]}
+                            flipped={false}
+                            onClick={() => this.props.moves.invadersExplore(0)}
+                        />
+                        <div>Deck</div>
+                    </div>
+                    <div  className={style.PhaseMain__image}>
+                        <InvaderCard
+                            card={this.props.G.invaderDeck.explore[0]}
+                            flipped={true}
+                            onClick={() => this.props.moves.invadersBuild(0)}
+                        />
+                        <div>Explore</div>
+                    </div>
+                    <div  className={style.PhaseMain__image}>
+                        <InvaderCard
+                            card={this.props.G.invaderDeck.build[0]}
+                            flipped={true}
+                            onClick={() => this.props.moves.invadersRage(0)}
+                        />
+                        <div>Build</div>
+                    </div>
+                    <div  className={style.PhaseMain__image}>
+                        <InvaderCard
+                            card={this.props.G.invaderDeck.rage[0]}
+                            flipped={true}
+                            onClick={() => this.props.moves.invadersDiscard(0)}
+                        />
+                        <div>Rage</div>
+                    </div>
                     <PowerCardPile
                         deckType={Types.PowerDeckType.Major}
                         availableCards={this.props.G.majorPowercards.available}

@@ -9,5 +9,12 @@
     grid-template-rows: 1fr 100px;
     overflow: auto;
   }
-
+  &__image{
+    height: 100px;
+    float:right;
+    display: flex;
+    flex-direction: column-reverse;
+    font-size: smaller;
+    text-align: center;
+  }
 }

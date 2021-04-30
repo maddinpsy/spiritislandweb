@@ -5,6 +5,8 @@ import { Types } from "../spirit-island-card-katalog/types";
 import { DB } from "../spirit-island-card-katalog/db";
 import { SpiritIslandState } from "./Game";
 import { SetupSpirit } from "./GamePhaseSetup";
+import { InvaderCardData, InvaderCardsStage1, InvaderCardsStage2, InvaderCardsStage3 } from "./InvaderCards";
+import { S3_PREFIX } from "serverConfig";
 
 export const TokenNames = [
     "Explorer",
@@ -91,6 +93,15 @@ export type MainPhaseState =
         //power cards
         minorPowercards: PowerCardPileData
         majorPowercards: PowerCardPileData
+
+        //Invader Deck
+        invaderDeck: {
+            available: InvaderCardData[]
+            explore: InvaderCardData[]
+            build: InvaderCardData[]
+            rage: InvaderCardData[]
+            discard: InvaderCardData[]
+        }
     }
 
 export const defaultMainPhaseState: MainPhaseState =
@@ -106,10 +117,17 @@ export const defaultMainPhaseState: MainPhaseState =
         available: [],
         discarded: [],
         flipSets: []
+    },
+    invaderDeck: {
+        available: [],
+        explore: [],
+        build: [],
+        rage: [],
+        discard: []
     }
 }
 
-export function mainPhaseSetup(G: SpiritIslandState) {
+export function mainPhaseSetup(G: SpiritIslandState, ctx: Ctx) {
     //init tokens
     G.boardTokens = G.usedBoards.map(b => { return { boardName: b.name, lands: b.startTokens } });
 
@@ -145,6 +163,32 @@ export function mainPhaseSetup(G: SpiritIslandState) {
         filter(c => c.type === Types.PowerDeckType.Major).
         filter(c => c.set === Types.ProductSet.Basegame).
         map(c => c.toPureData());
+
+    //init invader deck
+    if (!ctx.random) {
+        throw new Error("Cant setup Invader Deck, random is missing.");
+    }
+    //number of cards in each stage
+    const invaderDeckLayout = [3, 4, 5];
+    //Start with all cards
+    let s1 = InvaderCardsStage1;
+    //shuffle
+    s1 = ctx.random.Shuffle(s1);
+    //remove cards to match given number
+    s1.splice(0, s1.length - invaderDeckLayout[0]);
+    //Start with all cards
+    let s2 = InvaderCardsStage2;
+    //shuffle
+    s2 = ctx.random.Shuffle(s2);
+    //remove cards to match given number
+    s2.splice(0, s2.length - invaderDeckLayout[1]);
+    //Start with all cards
+    let s3 = InvaderCardsStage3;
+    //shuffle
+    s3 = ctx.random.Shuffle(s3);
+    //remove cards to match given number
+    s3.splice(0, s3.length - invaderDeckLayout[2]);
+    G.invaderDeck.available = [...s1, ...s2, ...s3];
 }
 
 
@@ -230,7 +274,7 @@ export const MainMoves = {
         if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
 
         const card = spirit.handCards.splice(handCardIdx, 1);
-        if(!card){
+        if (!card) {
             console.log("Move: playCard card is null");
             return INVALID_MOVE;
         }
@@ -242,7 +286,7 @@ export const MainMoves = {
         if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
 
         const card = spirit.handCards.splice(handCardIdx, 1);
-        if(!card){
+        if (!card) {
             console.log("Move: playCard card is null");
             return INVALID_MOVE;
         }
@@ -254,7 +298,7 @@ export const MainMoves = {
         if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
 
         const card = spirit.handCards.splice(handCardIdx, 1);
-        if(!card || card.length!==1){
+        if (!card || card.length !== 1) {
             console.log("Move: playCard card is null");
             return INVALID_MOVE;
         }
@@ -271,7 +315,7 @@ export const MainMoves = {
         if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
 
         const card = spirit.playedCards.splice(playCardIdx, 1);
-        if(!card){
+        if (!card) {
             console.log("Move: undoPlayCard: card is null");
             return INVALID_MOVE;
         }
@@ -283,7 +327,7 @@ export const MainMoves = {
         if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
 
         const card = spirit.playedCards.splice(playCardIdx, 1);
-        if(!card){
+        if (!card) {
             console.log("Move: discardPlayed: card is null");
             return INVALID_MOVE;
         }
@@ -304,7 +348,7 @@ export const MainMoves = {
         if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
 
         const card = spirit.playedCards.splice(playCardIdx, 1);
-        if(!card || card.length!==1){
+        if (!card || card.length !== 1) {
             console.log("Move: forgetFromPlayed: card is null");
             return INVALID_MOVE;
         }
@@ -330,7 +374,7 @@ export const MainMoves = {
         if (!spirit.discardedCards[discardedCardIdx]) return INVALID_MOVE;
 
         const card = spirit.discardedCards.splice(discardedCardIdx, 1);
-        if(!card || card.length!==1){
+        if (!card || card.length !== 1) {
             console.log("Move: reclaimOne: card is null");
             return INVALID_MOVE;
         }
@@ -342,7 +386,7 @@ export const MainMoves = {
         if (!spirit.discardedCards[discardedCardIdx]) return INVALID_MOVE;
 
         const card = spirit.discardedCards.splice(discardedCardIdx, 1);
-        if(!card || card.length!==1){
+        if (!card || card.length !== 1) {
             console.log("Move: forgetFromDiscarded: card is null");
             return INVALID_MOVE;
         }
@@ -365,7 +409,7 @@ export const MainMoves = {
         }
         let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
         //make sure we have enoght cards
-        if(deck.available.length+deck.discarded.length<1){
+        if (deck.available.length + deck.discarded.length < 1) {
             return INVALID_MOVE;
         }
         //refill if empty
@@ -374,10 +418,10 @@ export const MainMoves = {
             deck.discarded = [];
         }
         //flip a random card
-        const idx = ctx.random.Die(deck.available.length)-1;
+        const idx = ctx.random.Die(deck.available.length) - 1;
         //remove from available
         const card = deck.available.splice(idx, 1);
-        if(!card || card.length!==1){
+        if (!card || card.length !== 1) {
             console.log("Move: flipOne: card is null");
             return INVALID_MOVE;
         }
@@ -399,10 +443,10 @@ export const MainMoves = {
         }
         let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
         //make sure we have enoght cards
-        if(deck.available.length+deck.discarded.length<4){
+        if (deck.available.length + deck.discarded.length < 4) {
             return INVALID_MOVE;
         }
-        let flippedCards:Types.PowerCardData[] = [];
+        let flippedCards: Types.PowerCardData[] = [];
         for (let i = 0; i < 4; i++) {
             //refill if empty
             if (deck.available.length === 0) {
@@ -410,10 +454,10 @@ export const MainMoves = {
                 deck.discarded = [];
             }
             //flip a random card
-            const idx = ctx.random.Die(deck.available.length)-1;
+            const idx = ctx.random.Die(deck.available.length) - 1;
             //remove from available
             const card = deck.available.splice(idx, 1);
-            if(!card || card.length!==1){
+            if (!card || card.length !== 1) {
                 console.log("Move: flipFour: card is null");
                 return INVALID_MOVE;
             }
@@ -438,7 +482,7 @@ export const MainMoves = {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
         const card = deck.flipSets[flipSetIdx].cards.splice(cardIdx, 1);
-        if(!card || card.length!==1){
+        if (!card || card.length !== 1) {
             console.log("Move: takeFlipped: card is null");
             return INVALID_MOVE;
         }
@@ -451,7 +495,7 @@ export const MainMoves = {
     ) {
         let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
         const flipset = deck.flipSets.splice(flipSetIdx, 1);
-        if(!flipset || flipset.length!==1){
+        if (!flipset || flipset.length !== 1) {
             console.log("Move: discardFlipSet: flipset is null");
             return INVALID_MOVE;
         }
@@ -467,11 +511,45 @@ export const MainMoves = {
         const spirit = G.activeSpirits.find(s => s.name === spiritName);
         if (!spirit) return INVALID_MOVE;
         let card = deck.discarded.splice(discardedCardIdx, 1);
-        if(!card || card.length!==1){
+        if (!card || card.length !== 1) {
             console.log("Move: takeDiscarded: card is null");
             return INVALID_MOVE;
         }
         spirit.handCards.push(card[0]);
+    },
+
+    //Invader Deck
+    invadersExplore: function (G: SpiritIslandState, ctx: Ctx, idx: number) {
+        const card = G.invaderDeck.available.splice(idx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: invaderExplore: card is null");
+            return INVALID_MOVE;
+        }
+        G.invaderDeck.explore.push(card[0]);
+    },
+    invadersBuild: function (G: SpiritIslandState, ctx: Ctx, idx: number) {
+        const card = G.invaderDeck.explore.splice(idx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: invaderBuild: card is null");
+            return INVALID_MOVE;
+        }
+        G.invaderDeck.build.push(card[0]);
+    },
+    invadersRage: function (G: SpiritIslandState, ctx: Ctx, idx: number) {
+        const card = G.invaderDeck.build.splice(idx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: invaderRage: card is null");
+            return INVALID_MOVE;
+        }
+        G.invaderDeck.rage.push(card[0]);
+    },
+    invadersDiscard: function (G: SpiritIslandState, ctx: Ctx, idx: number) {
+        const card = G.invaderDeck.rage.splice(idx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: invaderDiscard: card is null");
+            return INVALID_MOVE;
+        }
+        G.invaderDeck.discard.push(card[0]);
     },
 
 }
