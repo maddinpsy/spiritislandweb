@@ -145,7 +145,7 @@ export const defaultMainPhaseState: MainPhaseState =
         earned: [],
         discarded: [],
     },
-    fearGenerated:0
+    fearGenerated: 0
 }
 
 export function mainPhaseSetup(G: SpiritIslandState, ctx: Ctx) {
@@ -214,12 +214,12 @@ export function mainPhaseSetup(G: SpiritIslandState, ctx: Ctx) {
     //init fear deck
     const fearDeckLayout = [3, 3, 3];
     let allFearCards = DB.FearCards
-    .filter(c=>c.set===Types.ProductSet.Basegame)
-    .map(c=>c.toPureData());
-    allFearCards= ctx.random.Shuffle(allFearCards);
-    G.fearDeck.deckLeve1=allFearCards.splice(0,fearDeckLayout[0])
-    G.fearDeck.deckLeve2=allFearCards.splice(0,fearDeckLayout[1])
-    G.fearDeck.deckLeve3=allFearCards.splice(0,fearDeckLayout[2])
+        .filter(c => c.set === Types.ProductSet.Basegame)
+        .map(c => c.toPureData());
+    allFearCards = ctx.random.Shuffle(allFearCards);
+    G.fearDeck.deckLeve1 = allFearCards.splice(0, fearDeckLayout[0])
+    G.fearDeck.deckLeve2 = allFearCards.splice(0, fearDeckLayout[1])
+    G.fearDeck.deckLeve3 = allFearCards.splice(0, fearDeckLayout[2])
 }
 
 
@@ -584,4 +584,64 @@ export const MainMoves = {
     },
 
     //fearCards
+    /**
+     * Shows on fear card face up, for the rest of the game.
+     * @param G 
+     * @param ctx 
+     * @param pileNumber 1: deckLeve1,..., 3: deckLeve3, 4:earnd, 5:discarded
+     * @param idx array index of the card in that pile
+     */
+    fearCardFlip: function (G: SpiritIslandState, ctx: Ctx, pileNumber: number, idx: number) {
+        let card: Types.FearCardData | undefined;
+        switch (pileNumber) {
+            case 1:
+                card = G.fearDeck.deckLeve1[idx];
+                break;
+            case 2:
+                card = G.fearDeck.deckLeve2[idx];
+                break;
+            case 3:
+                card = G.fearDeck.deckLeve3[idx];
+                break;
+            case 4:
+                card = G.fearDeck.earned[idx];
+                break;
+            case 5:
+                card = G.fearDeck.discarded[idx];
+                break;
+
+        }
+        if (!card) {
+            console.log("Move: fearCardFlip: card is null");
+            return INVALID_MOVE;
+        }
+        card.flipped = true;
+    },
+    fearCardEarn: function (G: SpiritIslandState, ctx: Ctx) {
+        let card: Types.FearCardData | undefined;
+        if(G.fearDeck.deckLeve1.length>0){
+            card = G.fearDeck.deckLeve1.splice(0,1)[0];
+        }else if(G.fearDeck.deckLeve2.length>0){
+            card = G.fearDeck.deckLeve2.splice(0,1)[0];
+        }else if(G.fearDeck.deckLeve3.length>0){
+            card = G.fearDeck.deckLeve3.splice(0,1)[0];
+        }
+       
+        if (!card) {
+            console.log("Move: fearCardEarn: card is null");
+            return INVALID_MOVE;
+        }
+        G.fearDeck.earned.push(card);
+    },
+    fearCardDiscard: function (G: SpiritIslandState, ctx: Ctx) {
+        let card: Types.FearCardData | undefined;
+        if(G.fearDeck.earned.length>0){
+            card = G.fearDeck.earned.splice(0,1)[0];
+        }
+        if (!card) {
+            console.log("Move: fearCardDiscard: card is null");
+            return INVALID_MOVE;
+        }
+        G.fearDeck.discarded.push(card);
+    }
 }

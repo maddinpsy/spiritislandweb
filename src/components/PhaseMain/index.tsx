@@ -164,11 +164,9 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                     />
                     <FearCardPile
                         fearCardPile={this.props.G.fearDeck}
-                        /*
-                        invadersExplore={this.props.moves.invadersExplore}
-                        invadersBuild={this.props.moves.invadersBuild}
-                        invadersRage={this.props.moves.invadersRage}
-                        invadersDiscard={this.props.moves.invadersDiscard}*/
+                        fearCardFlip={this.props.moves.fearCardFlip}
+                        fearCardEarn={this.props.moves.fearCardEarn}
+                        fearCardDiscard={this.props.moves.fearCardDiscard}
                     />
                 </BottomRow>
                 {this.state.dialogContent && popupDialog}
