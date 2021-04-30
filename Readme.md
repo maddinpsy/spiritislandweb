@@ -120,7 +120,7 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 - [x] show hand cards
 - [x] show discarded cards
 - [x] reclaim all and reclaim one button
-- [ ] option to delete a card (forget a power)
+- [x] option to delete a card (forget a power)
 - [x] option to choose cards, display chosen cards (for all players)
 - [ ] button to end round. All chosen cards will be discarded
 - [ ] choose innate powers, show beside of chosen cards, don't discard them
@@ -128,15 +128,15 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 
 ### Draw cards
 
-- [ ] random card pile with all power cards from the base game
-- [ ] option to draw a minor or major
-- [ ] dialog with four cards
-- [ ] player chooses one, which is added to his hand
-- [ ] other three are discarded to discard pile
-- [ ] option to show discard pile
-- [ ] reshuffle when empty
-- [ ] when player forgets a minor/major it is added to the discard pile
-- [ ] option to claim one card from the discard pile (for some special rules)
+- [x] random card pile with all power cards from the base game
+- [x] option to draw a minor or major
+- [x] dialog with four cards
+- [x] player chooses one, which is added to his hand
+- [x] other three are discarded to discard pile
+- [x] option to show discard pile
+- [x] reshuffle when empty
+- [x] when player forgets a minor/major it is added to the discard pile
+- [x] option to claim one card from the discard pile (for some special rules)
 
 ### Invader Cards
 
