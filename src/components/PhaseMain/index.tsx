@@ -14,6 +14,9 @@ import { FilteredMetadata } from "boardgame.io";
 import { InvaderCard } from "./InvaderCard";
 import { InvaderCardData } from "game/InvaderCards";
 import { FearCardPile } from "./FearCardPile";
+import { IncreaseDecreaseButton } from "./IncreaseDecreaseButton";
+
+import fearIconImage from "assets/fear.png"
 
 interface InvaderDeckAndSlotsProps {
     invaderDeck: {
@@ -64,6 +67,19 @@ function InvaderDeckAndSlots(props: InvaderDeckAndSlotsProps) {
             <div>Rage({props.invaderDeck.rage.length})</div>
         </div>
     </div>)
+}
+
+function FearIcon(props: { count: number, onSetFearCount: (count: number) => void }) {
+    return <div className={style.PhaseMain__FearIconContainer} >
+        <div>
+        <img src={fearIconImage} alt="Fear" className={style.PhaseMain__FearIconImage}/>
+        <div>{props.count}</div>
+        </div>
+        <IncreaseDecreaseButton
+            onIncrease={() => { props.onSetFearCount(props.count + 1) }}
+            onDecrease={() => { props.onSetFearCount(props.count - 1) }}
+        />
+    </div>
 }
 
 
@@ -168,6 +184,9 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                         fearCardEarn={this.props.moves.fearCardEarn}
                         fearCardDiscard={this.props.moves.fearCardDiscard}
                     />
+                    <FearIcon 
+                    count={this.props.G.fearGenerated} 
+                    onSetFearCount={(count: number) => this.props.moves.setGeneratedFear(count)} />
                 </BottomRow>
                 {this.state.dialogContent && popupDialog}
             </div>

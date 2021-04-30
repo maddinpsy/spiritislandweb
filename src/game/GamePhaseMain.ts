@@ -619,14 +619,14 @@ export const MainMoves = {
     },
     fearCardEarn: function (G: SpiritIslandState, ctx: Ctx) {
         let card: Types.FearCardData | undefined;
-        if(G.fearDeck.deckLeve1.length>0){
-            card = G.fearDeck.deckLeve1.splice(0,1)[0];
-        }else if(G.fearDeck.deckLeve2.length>0){
-            card = G.fearDeck.deckLeve2.splice(0,1)[0];
-        }else if(G.fearDeck.deckLeve3.length>0){
-            card = G.fearDeck.deckLeve3.splice(0,1)[0];
+        if (G.fearDeck.deckLeve1.length > 0) {
+            card = G.fearDeck.deckLeve1.splice(0, 1)[0];
+        } else if (G.fearDeck.deckLeve2.length > 0) {
+            card = G.fearDeck.deckLeve2.splice(0, 1)[0];
+        } else if (G.fearDeck.deckLeve3.length > 0) {
+            card = G.fearDeck.deckLeve3.splice(0, 1)[0];
         }
-       
+
         if (!card) {
             console.log("Move: fearCardEarn: card is null");
             return INVALID_MOVE;
@@ -635,13 +635,19 @@ export const MainMoves = {
     },
     fearCardDiscard: function (G: SpiritIslandState, ctx: Ctx) {
         let card: Types.FearCardData | undefined;
-        if(G.fearDeck.earned.length>0){
-            card = G.fearDeck.earned.splice(0,1)[0];
+        if (G.fearDeck.earned.length > 0) {
+            card = G.fearDeck.earned.splice(0, 1)[0];
         }
         if (!card) {
             console.log("Move: fearCardDiscard: card is null");
             return INVALID_MOVE;
         }
         G.fearDeck.discarded.push(card);
+    },
+    setGeneratedFear: function (G: SpiritIslandState, ctx: Ctx, count: number) {
+        count=count % (G.activeSpirits.length*4+1);
+        count+=G.activeSpirits.length*4+1;
+        count= count % (G.activeSpirits.length*4+1);
+        G.fearGenerated = count;
     }
 }
