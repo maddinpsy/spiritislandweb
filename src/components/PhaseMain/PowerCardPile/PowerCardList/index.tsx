@@ -5,10 +5,13 @@ import style from "./style.module.scss";
 import { Button } from "components/Button";
 import { Types } from "spirit-island-card-katalog/types";
 
+import classnames from "classnames"
 
 export interface PowerCardListProps {
     cards: Types.PowerCardData[]
     actions: { title: string, onSelect: (idx: number) => void }[]
+    classNameList?:string
+    classNameCard?:string
 }
 
 interface PowerCardListState {
@@ -34,7 +37,7 @@ export class PowerCardList extends React.Component<PowerCardListProps, PowerCard
 
     render() {
         const cardImages = this.props.cards.map((c, idx) =>
-            <div className={style.PowerCardList__cardContainer}>
+            <div className={classnames(style.PowerCardList__cardContainer,this.props.classNameCard)}>
                 <img
                     key={c.name}
                     alt={c.name}
@@ -61,7 +64,7 @@ export class PowerCardList extends React.Component<PowerCardListProps, PowerCard
             </div>
         );
 
-        return (<div className={style.PowerCardList__cardList}
+        return (<div className={classnames(style.PowerCardList__cardList,this.props.classNameList)}
             //unselect handcard when loosing focus
             onBlur={() => this.unselectedCard()}
             //but not if child has still the focus, onBlur is called first

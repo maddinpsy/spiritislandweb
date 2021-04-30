@@ -1,4 +1,6 @@
 import { Button } from "components/Button";
+import { PowerCardList } from "components/PhaseMain/PowerCardPile/PowerCardList";
+import { ActiveSpirit } from "game/GamePhaseMain";
 import { SetupSpirit } from "game/GamePhaseSetup";
 import * as React from "react";
 
@@ -7,7 +9,7 @@ import style from "./style.module.scss";
 
 
 export interface SpiritDetailsProps {
-    spirit: SetupSpirit
+    spirit: ActiveSpirit
 }
 
 interface SpiritDetailsState {
@@ -26,15 +28,27 @@ export class SpiritDetails extends React.Component<SpiritDetailsProps, SpiritDet
         }
         return (
             <div className={style.SpiritDetails__container}>
-                <img className={style.SpiritDetails__image}
-                    src={image}
-                    alt={this.props.spirit.name}
+                <div className={style.SpiritDetails__imageContainer}>
+                    <img className={style.SpiritDetails__image}
+                        src={image}
+                        alt={this.props.spirit.name}
+                    />
+                    <Button className={style.SpiritDetails__flipButton}
+                        onClick={() => this.setState({ backside: !this.state.backside })}>
+                        Flip
+                    </Button>
+                </div>
+                <div className={style.SpiritDetails__handcardTitle}>
+                    HandCards (scroll down)
+                    </div>
+                <PowerCardList 
+                cards={this.props.spirit.handCards} 
+                actions={[
+
+                ]}
+                classNameCard={style.SpiritDetails__handcardCard}
+                classNameList={style.SpiritDetails__handcardList}
                 />
-                <Button style={{position:"absolute"}}
-                    onClick={() => this.setState({ backside: !this.state.backside })}>
-                    Flip
-                </Button>
-                <div>HandCards</div>
             </div>
 
         );

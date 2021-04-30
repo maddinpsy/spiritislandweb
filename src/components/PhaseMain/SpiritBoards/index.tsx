@@ -13,6 +13,7 @@ import { PlayedCards } from "./PlayedCards";
 import { Point } from "../../../game/GamePhaseSetup";
 
 import { PresenceImage } from "../Tokens/PresenceImage";
+import { PowerCardList } from "../PowerCardPile/PowerCardList";
 
 interface SpiritPanelsHeaderProps {
     spiritName: string
@@ -171,6 +172,28 @@ export class SpiritPanels extends React.Component<SpiritPanelProps>
                         setSpiritElement={(type, count) => this.props.setSpiritElement(curSpirit.name, type, count)}
                     />
                 </div>
+                {/*HandCards
+                <PowerCardList
+                 cards={curSpirit.handCards}
+                 actions={[
+                    {title:"Play",onSelect:(idx) => this.props.playCard(curSpirit.name, idx)},
+                    {title:"Discard",onSelect:(idx) => this.props.discardFromHand(curSpirit.name, idx)},
+                    //{title:"Forget",onSelect:(idx) => this.props.forgetFromHand(curSpirit.name, idx)}
+                    {title:"Forget",onSelect:(idx) => alert("TODO2")}
+                 ]}
+                 />
+                 */}
+                {/*PlayedCards
+                 <PowerCardList
+                 cards={curSpirit.playedCards}
+                 actions={[
+                    {title:"Undo",onSelect:(idx) => this.props.undoPlayCard(curSpirit.name, idx)},
+                    {title:"Discard",onSelect:(idx) => this.props.discardPlayed(curSpirit.name, idx)},
+                    //{title:"Forget",onSelect:(idx) => this.props.forgetFromHand(curSpirit.name, idx)}
+                    {title:"Forget",onSelect:(idx) => alert("TODO2")}
+                 ]}
+                 />
+                 */}
                 <HandCards cards={curSpirit.handCards}
                     playCard={(idx) => this.props.playCard(curSpirit.name, idx)}
                     discardFromHand={(idx) => this.props.discardFromHand(curSpirit.name, idx)}
