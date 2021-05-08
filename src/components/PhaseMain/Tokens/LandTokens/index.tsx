@@ -182,7 +182,7 @@ export class LandTokens extends React.Component<LandTokensProps>{
             //get token position
             const polyAbs = LandOutline[bt.boardName][l.landNumber].map(point => {
                 const { x, y } = BoardDragDrop.rotateBy({ x: point[0], y: point[1] }, this.props.boardPos.rotation);
-                return [x + this.props.boardPos.position.x, y + this.props.boardPos.position.y];
+                return [x, y];
             });
             let tokenSizes = tokenContainerSizes[0];
             let tokensAndNew = Array.from(l.tokens);
@@ -238,7 +238,7 @@ export class LandTokens extends React.Component<LandTokensProps>{
                     />;
             }); //end for each token
             return (
-                <div id={"LandTokens_" + bt.boardName + l.landNumber} key={bt.boardName + l.landNumber}>
+                <>
                     {tokens}
                     <AddNewTokenButton
                         //use extra added tokenpos
@@ -249,7 +249,7 @@ export class LandTokens extends React.Component<LandTokensProps>{
                         availableTokens={TokenNames.filter(token => !l.tokens.some(usedtoken => usedtoken.tokenType === token))}
                         onIncreaseToken={(type) => this.props.onIncreaseToken(bt.boardName, l.landNumber, type)}
                     /> 
-                </div>
+                </>
             );
         }); //end for each lands
     }

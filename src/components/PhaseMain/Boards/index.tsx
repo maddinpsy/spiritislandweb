@@ -9,9 +9,7 @@ import alignCenterImg from "assets/router.svg"
 
 import createPanZoom, { PanZoom } from "panzoom";
 import { BoardToken, TokenType } from "game/GamePhaseMain";
-import { Tokens } from "../Tokens";
-import { BoardDragDrop } from "helper/BoardDragDrop";
-import { isProduction } from "config";
+import { BoardWithTokens } from "../BoardWithTokens";
 
 
 /** Defines the hardcoded sizes for the token containers. These are used to fit the tokens into the land polygons. */
@@ -19,7 +17,7 @@ import { isProduction } from "config";
 interface BoardsProps {
     usedBoards: (Board & BoardPlacement)[]
     boardTokens?: BoardToken[]
-    presenceColors:string[]
+    presenceColors: string[]
 
     onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
@@ -29,17 +27,12 @@ interface BoardsProps {
 export class Boards extends React.Component<BoardsProps>
 {
     boardAreaRef: React.RefObject<HTMLDivElement>
-    debugRef: React.RefObject<HTMLDivElement>
     panZoomObject: PanZoom | undefined
-    boardRefs: { [boardName: string]: React.RefObject<HTMLDivElement> };
 
     constructor(props: BoardsProps) {
         super(props);
         this.boardAreaRef = React.createRef();
-        this.debugRef = React.createRef();
-        this.boardRefs = {};
         this.state = {}
-        props.usedBoards.forEach((key) => { this.boardRefs[key.name] = React.createRef() });
     }
 
     componentDidMount() {
@@ -88,17 +81,10 @@ export class Boards extends React.Component<BoardsProps>
                 return minmax;
             }, { min: [Infinity, Infinity], max: [-Infinity, -Infinity] });
             //add custom padding
-            boardSize.min[0]-=padding;
-            boardSize.min[1]-=padding;
-            boardSize.max[0]+=padding;
-            boardSize.max[1]+=padding;
-            //show debug angle around boards
-            if (this.debugRef.current && !isProduction) {
-                this.debugRef.current.style.left = boardSize.min[0] + "px";
-                this.debugRef.current.style.top = boardSize.min[1] + "px";
-                this.debugRef.current.style.width = (boardSize.max[0] - boardSize.min[0]) + "px";
-                this.debugRef.current.style.height = (boardSize.max[1] - boardSize.min[1]) + "px";
-            }
+            boardSize.min[0] -= padding;
+            boardSize.min[1] -= padding;
+            boardSize.max[0] += padding;
+            boardSize.max[1] += padding;
             //create a rect object for panzoom
             let c = {
                 left: boardSize.min[0],
@@ -119,39 +105,22 @@ export class Boards extends React.Component<BoardsProps>
     }
 
     render() {
-        const usedBoards = this.props.usedBoards.map(b => {
-            let customStyle: React.CSSProperties = {};
-            customStyle.left = b.position.x;
-            customStyle.top = b.position.y;
-            customStyle.transform = "rotate(" + b.rotation + "deg)";
-            return (
-                <div
-                    key={b.name}
-                    id={"board" + b.name}
-                    ref={this.boardRefs[b.name]}
-                    className={style.Boards__usedBoard}
-                    style={customStyle}
-                >
-                    <img src={b.largeBoardUrl} alt={b.name} className={style.Boards__image} draggable="false" />
-                </div>
-            )
-        });
+        const usedBoards = this.props.usedBoards.map(b => (
+            <BoardWithTokens
+                board={b}
+                tokens={this.props.boardTokens?.find(t => t.boardName === b.name) || { boardName: b.name, lands: [] }}
+                presenceColors={this.props.presenceColors}
+                onIncreaseToken={this.props.onIncreaseToken}
+                onDecreaseToken={this.props.onDecreaseToken}
+                showDialog={this.props.showDialog}
+            />
+        ));
 
 
         return (
             <div className={style.Boards__container}>
                 <div ref={this.boardAreaRef} className={style.Boards__boardArea}>
                     {usedBoards}
-                    <Tokens
-                        boardTokens={this.props.boardTokens}
-                        usedBoards={this.props.usedBoards}
-                        onIncreaseToken={this.props.onIncreaseToken}
-                        onDecreaseToken={this.props.onDecreaseToken}
-                        showDialog={this.props.showDialog}
-                        presenceColors={this.props.presenceColors}
-                    />
-                    {!isProduction && <div ref={this.debugRef} className={style.Boards__debugDiv} />}
-
                 </div>
                 <img className={style.Boards__centerViewButton} src={alignCenterImg} alt="center" onClick={() => this.resetPanZoom()} />
             </div>
