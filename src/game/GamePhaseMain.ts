@@ -649,9 +649,9 @@ export const MainMoves = {
         G.fearDeck.discarded.push(card);
     },
     setGeneratedFear: function (G: SpiritIslandState, ctx: Ctx, count: number) {
-        count = count % (G.activeSpirits.length * 4 + 1);
-        count += G.activeSpirits.length * 4 + 1;
-        count = count % (G.activeSpirits.length * 4 + 1);
+        if(count <0 || count>=G.activeSpirits.length * 4){
+            count=0;
+        }
         G.fearGenerated = count;
     },
 

@@ -69,15 +69,27 @@ function InvaderDeckAndSlots(props: InvaderDeckAndSlotsProps) {
         </div>
     </div>)
 }
-
-function FearIcon(props: { count: number, onSetFearCount: (count: number) => void }) {
+interface FearIconProps {
+    count: number
+    onSetFearCount: (count: number) => void
+    maxFear: number
+    fearCardEarn: () => void
+}
+function FearIcon(props: FearIconProps) {
     return <div className={style.PhaseMain__FearIconContainer} >
         <div>
-        <img src={fearIconImage} alt="Fear" className={style.PhaseMain__FearIconImage}/>
-        <div>{props.count}</div>
+            <img src={fearIconImage} alt="Fear" className={style.PhaseMain__FearIconImage} />
+            <div>{props.count}</div>
         </div>
         <IncreaseDecreaseButton
-            onIncrease={() => { props.onSetFearCount(props.count + 1) }}
+            onIncrease={() => {
+                if (props.count + 1 >= props.maxFear) {
+                    props.fearCardEarn();
+                    props.onSetFearCount(0);
+                } else {
+                    props.onSetFearCount(props.count + 1)
+                }
+            }}
             onDecrease={() => { props.onSetFearCount(props.count - 1) }}
         />
     </div>
@@ -87,8 +99,8 @@ function FearIcon(props: { count: number, onSetFearCount: (count: number) => voi
 function BlightIcon(props: { count: number, onSetBlightCount: (count: number) => void }) {
     return <div className={style.PhaseMain__FearIconContainer} >
         <div>
-        <img src={blightIconImage} alt="Blight" className={style.PhaseMain__FearIconImage}/>
-        <div>{props.count}</div>
+            <img src={blightIconImage} alt="Blight" className={style.PhaseMain__FearIconImage} />
+            <div>{props.count}</div>
         </div>
         <IncreaseDecreaseButton
             onIncrease={() => { props.onSetBlightCount(props.count + 1) }}
@@ -202,13 +214,16 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                         fearCardEarn={this.props.moves.fearCardEarn}
                         fearCardDiscard={this.props.moves.fearCardDiscard}
                     />
-                    <FearIcon 
-                    count={this.props.G.fearGenerated} 
-                    onSetFearCount={(count: number) => this.props.moves.setGeneratedFear(count)} />
-                    <BlightIcon 
-                    count={this.props.G.blightOnCard} 
-                    onSetBlightCount={(count: number) => this.props.moves.setBlightOnCard(count)} />
-                    
+                    <FearIcon
+                        count={this.props.G.fearGenerated}
+                        onSetFearCount={(count: number) => this.props.moves.setGeneratedFear(count)}
+                        maxFear={this.props.G.activeSpirits.length * 4}
+                        fearCardEarn={this.props.moves.fearCardEarn}
+                    />
+                    <BlightIcon
+                        count={this.props.G.blightOnCard}
+                        onSetBlightCount={(count: number) => this.props.moves.setBlightOnCard(count)} />
+
                 </BottomRow>
                 {this.state.dialogContent && popupDialog}
             </div>
