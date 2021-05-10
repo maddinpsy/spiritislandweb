@@ -37,6 +37,6 @@ export const SpiritIsland: Game<SpiritIslandState, Ctx> = {
             moves: MainMoves,
         }
     },
-    deltaState:true
+    deltaState:false
 };
 
