@@ -211,7 +211,6 @@ export class LandTokens extends React.Component<LandTokensProps>{
                 customStyle.top = cTokenPos[idx].top;
 
                 return <TokenOnBoard token={t}
-                    id={bt.boardName + l.landNumber + t.tokenType}
                     key={bt.boardName + l.landNumber + t.tokenType}
                     //callbacks for increse and decrease
                     onIncrease={() => this.props.onIncreaseToken(bt.boardName, l.landNumber, t.tokenType)}

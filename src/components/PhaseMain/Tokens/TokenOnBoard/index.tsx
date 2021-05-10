@@ -17,21 +17,21 @@ export interface TokenOnBoardProps {
     token: PlacedToken
     buttonWidth: number
     presenceColors: string[]
+    className:string
+    style:React.CSSProperties
 
     onIncrease: () => void;
     onDecrease: () => void;
 }
 
-type TokenOnBoardUnionProps = React.HTMLAttributes<HTMLDivElement> & TokenOnBoardProps 
-
-class TokenOnBoard extends React.Component<TokenOnBoardUnionProps & SelectableProps> {
+class TokenOnBoard extends React.Component<TokenOnBoardProps & SelectableProps> {
     render() {
         const tokenImgae = this.props.token.count > 0 &&
             <TokenImage tokenType={this.props.token.tokenType} presenceColors={this.props.presenceColors} />
         const count = this.props.token.count > 0 && this.props.token.count;
 
         return (
-            <div ref={this.props.selRef}{...this.props}>
+            <div ref={this.props.selRef} style={this.props.style} className={this.props.className}>
                 {count}{tokenImgae}
                 {this.props.isSelected &&
                     <IncreaseDecreaseButton
@@ -45,4 +45,4 @@ class TokenOnBoard extends React.Component<TokenOnBoardUnionProps & SelectablePr
     }
 }
 
- export default SelectableDivHOC<TokenOnBoardUnionProps>(TokenOnBoard)
+ export default SelectableDivHOC<TokenOnBoardProps>(TokenOnBoard)
