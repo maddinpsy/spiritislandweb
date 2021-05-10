@@ -23,8 +23,12 @@ import { resolve } from "path";
 //multiplayer on Localhost with memory:
 //const timeBetweenCommands=0;
 //const timeBeforeCheck=1500;
+
+//multiplayer on Localhost with caching+db:
+//const timeBetweenCommands=0;
+//const timeBeforeCheck=2500;
 const timeBetweenCommands=0;
-const timeBeforeCheck=1500;
+const timeBeforeCheck=2500;
 
 function doBoardSetup(p: _ClientImpl<SpiritIslandState>) {
   p.moves.placeBoard("B", { position: { x: 0, y: 0 }, rotation: 0 });
@@ -165,30 +169,46 @@ it.skip('tests client ready', () => {
     });
   });
 })
-it('remote multiplayer test', () => {
+
+async function basicLoadTest(SERVER_URL: string) {
+  const value = await createMatchWithTwoPlayers(SERVER_URL);
+  const spec = {
+    game: SpiritIsland,
+    multiplayer: SocketIO({ server: SERVER_URL }),
+    matchID: value.matchID
+  };
+  const p0 = Client({ ...spec, playerID: '0', credentials: value.player0Credentials });
+  const p1 = Client({ ...spec, playerID: '1', credentials: value.player1Credentials });
+
+  p0.start();
+  p1.start();
+
+  await clientReady(p0, p1);
+
+  doBoardSetup(p0);
+  await sleep(timeBeforeCheck);
+  verifyBoardSetup(p0);
+  verifyBoardSetup(p1);
+
+  await changeAndCheckBoardTokens(p0, p1);
+}
+
+it.skip('remote multiplayer test', () => {
   //make an anonymous async function, to use the await snytax.
   return (async () => {
     const SERVER_URL = "http://127.0.0.1:8000";
 
-    const value = await createMatchWithTwoPlayers(SERVER_URL)
-    const spec = {
-      game: SpiritIsland,
-      multiplayer: SocketIO({ server: SERVER_URL }),
-      matchID: value.matchID
-    };
-    const p0 = Client({ ...spec, playerID: '0', credentials: value.player0Credentials });
-    const p1 = Client({ ...spec, playerID: '1', credentials: value.player1Credentials });
-
-    p0.start();
-    p1.start();
-
-    await clientReady(p0, p1);
-
-    doBoardSetup(p0);
-    await sleep(timeBeforeCheck);
-    verifyBoardSetup(p0);
-    verifyBoardSetup(p1);
-
-    await changeAndCheckBoardTokens(p0, p1);
+    await basicLoadTest(SERVER_URL);
   })();
 }, 15000);
+
+
+it('remote heroku multiplayer test', () => {
+  //make an anonymous async function, to use the await snytax.
+  return (async () => {
+    const SERVER_URL = "https://spiritislandweb.herokuapp.com";
+
+    await basicLoadTest(SERVER_URL);
+  })();
+}, 15000);
+
