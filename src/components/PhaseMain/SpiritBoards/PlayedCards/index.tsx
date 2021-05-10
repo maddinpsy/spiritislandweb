@@ -5,6 +5,7 @@ import style from "./style.module.scss";
 import { Types } from "spirit-island-card-katalog/types";
 
 import { Button } from "components/Button";
+import { SelectableDivHOC, SelectableProps } from "components/SelectableDivHOC";
 
 
 interface PlayedCardsProps {
@@ -14,67 +15,49 @@ interface PlayedCardsProps {
     undoPlayCard: (playCardIdx: number) => void
     forgetFromPlayed: (playCardIdx: number) => void
 }
-interface PlayedCardsState {
-    selectedCard?: number
+
+
+interface CardProps {
+    card: Types.PowerCardData
+    discardPlayed: () => void
+    undoPlayCard: () => void
+    forgetFromPlayed: () => void
+}
+function Card(props: CardProps & SelectableProps) {
+    return (
+        <div ref={props.selRef} className={style.PlayedCards__cardContainer}>
+            <img
+                key={props.card.name}
+                alt={props.card.name}
+                src={props.card.imageUrl}
+            />
+            {props.isSelected &&
+                <div className={style.PlayedCards__buttonOverlay}>
+                    <Button size="small" onClick={() => props.undoPlayCard()}>Undo</Button>
+                    <Button size="small" onClick={() => props.discardPlayed()}>Discard</Button>
+                    <Button size="small" onClick={() => props.forgetFromPlayed()}>Forget</Button>
+                </div>
+            }
+        </div>
+    )
 }
 
-export class PlayedCards extends React.Component<PlayedCardsProps, PlayedCardsState>
+const SelectableCard = SelectableDivHOC(Card)
+
+export class PlayedCards extends React.Component<PlayedCardsProps>
 {
-    timeOutId:number;
-    constructor(props: PlayedCardsProps) {
-        super(props);
-        this.state = {};
-        this.timeOutId = -1;
-
-        this.onClickHandler = this.onClickHandler.bind(this);
-        this.onBlurHandler = this.onBlurHandler.bind(this);
-        this.onFocusHandler = this.onFocusHandler.bind(this);
-    }
-
-
-    onBlurHandler() {
-        this.timeOutId = window.setTimeout(() => {
-            this.setState({ selectedCard: undefined })
-        });
-    }
-
-    onClickHandler() {
-        this.setState({ selectedCard: undefined })
-    }
-
-    onFocusHandler() {
-        if(this.timeOutId>=0)
-            window.clearTimeout(this.timeOutId);
-    }
-
-    // We close the popover on the next tick by using setTimeout.  // This is necessary because we need to first check if  // another child of the element has received focus as  // the blur event fires prior to the new focus event.  onBlurHandler() {    this.timeOutId = setTimeout(() => {      this.setState({        isOpen: false      });    });  }
-    // If a child receives focus, do not close the popover.  onFocusHandler() {    clearTimeout(this.timeOutId);  }
-
     render() {
         const cardImages = this.props.cards.map((c, idx) =>
-            <div className={style.PlayedCards__cardContainer}>
-                <img
-                    key={c.name}
-                    alt={c.name}
-                    src={c.imageUrl}
-                    onClick={(ev) => { this.setState({ selectedCard: idx }); ev.stopPropagation() }}
-                />
-                {this.state.selectedCard === idx &&
-                    <div className={style.PlayedCards__buttonOverlay}>
-                        <Button size="small" onClick={() => this.props.undoPlayCard(idx)}>Undo</Button>
-                        <Button size="small" onClick={() => this.props.discardPlayed(idx)}>Discard</Button>
-                        <Button size="small" onClick={() => this.props.forgetFromPlayed(idx)}>Forget</Button>
-                    </div>
-                }
-            </div>
+            <SelectableCard
+                card={c}
+                key={c.imageUrl}
+                undoPlayCard={() => this.props.undoPlayCard(idx)}
+                discardPlayed={() => this.props.discardPlayed(idx)}
+                forgetFromPlayed={() => this.props.forgetFromPlayed(idx)}
+            />
         );
 
-        return (<div className={style.PlayedCards__cards}
-            onClick={(ev) => {this.onClickHandler()}}
-            onBlur={(ev) => {this.onBlurHandler()}}
-            onFocus={()=>this.onFocusHandler()}
-            tabIndex={4}
-        >
+        return (<div className={style.PlayedCards__cards}>
             {cardImages}
         </div>)
     }
