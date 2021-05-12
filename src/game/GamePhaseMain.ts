@@ -22,7 +22,8 @@ export const TokenNames = [
     "Wild",
     "Beast",
     "Disease",
-    "Badlands"
+    "Badlands",
+    "Defend"
 ] as const;
 
 export type TokenType =
@@ -40,7 +41,8 @@ export type TokenType =
     "Wild" |
     "Beast" |
     "Disease" |
-    "Badlands";
+    "Badlands" |
+    "Defend";
 
 
 export type PlacedToken =

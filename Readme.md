@@ -95,7 +95,7 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
   - [x] City
   - [x] Dahan
   - [x] Blight
-  - [ ] Presence for each color
+  - [x] Presence for each color
   - [x] Wild
   - [x] Beast
   - [x] Disease
@@ -187,7 +187,7 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 ### Design board layout
 
 - [ ] thematic boards
-- [ ] boards from extension (E, F)
+- [x] boards from extension (E, F)
 
 ### Add Spirits
 
@@ -226,7 +226,7 @@ If you like it, [tell your friends](https://spiritislandweb.hosted.phplist.com/l
 ### Fear Cards and Tokens
 
 - [ ] possibility to change structure of deck, before game start
-- [ ] fear counter, auto reset and move card when count is <numPlayers>*4
+- [x] fear counter, auto reset and move card when count is <numPlayers>*4
 
 ### Blight
 
