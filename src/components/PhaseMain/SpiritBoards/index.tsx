@@ -70,7 +70,7 @@ function SpiritPresenceTrack(props: SpiritPresenceTrackProps) {
             <div
                 className={style.SpiritBoards__presence}
                 style={elStyle}
-                key={pos.x+""+pos.y}
+                key={String(pos)}
                 onClick={() => { props.onTogglePresence(idx); console.log("tk") }}
             >
                 <PresenceImage cssBackground={appearance.presenceBackground} />
