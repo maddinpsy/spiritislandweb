@@ -2157,11 +2157,6 @@
     "@types/koa-compose" "*"
     "@types/node" "*"
 
-"@types/lru-cache@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@types/lru-cache/-/lru-cache-5.1.0.tgz#57f228f2b80c046b4a1bd5cac031f81f207f4f03"
-  integrity sha512-RaE0B+14ToE4l6UqdarKPnXwVDuigfFv+5j9Dze/Nqr23yyuqdNvzcZi3xB+3Agvi5R4EOgAksfv3lXX4vBt9w==
-
 "@types/mime@^1":
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.2.tgz#93e25bf9ee75fe0fd80b594bc4feb0e862111b5a"
@@ -3341,14 +3336,6 @@ bgio-postgres@^1.0.13:
     pg "^8.2.1"
     pg-hstore "^2.3.3"
     sequelize "^6.3.5"
-
-bgio-storage-cache@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/bgio-storage-cache/-/bgio-storage-cache-0.3.1.tgz#029a6a0a7a57f3bd80904cef3bb3e1d54c3c21cc"
-  integrity sha512-LuHAgccMLWx+PTfmRkVaB8IPj2bYDLfnPY0jqSOHpIwVS3BMkbamMjP0zGvP76ynCjzf/OQ8xPgCccIrdDmhYw==
-  dependencies:
-    "@types/lru-cache" "^5.1.0"
-    lru-cache "^6.0.0"
 
 big.js@^5.2.2:
   version "5.2.2"
