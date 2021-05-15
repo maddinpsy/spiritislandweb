@@ -229,412 +229,328 @@ export function mainPhaseSetup(G: SpiritIslandState, ctx: Ctx) {
 
 export const MainMoves = {
     //change of board status
-    increaseToken: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, boardName: string, landNumber: number, tokenType: TokenType) {
-                const tokens = G.boardTokens?.find(b => b.boardName === boardName)?.lands.find(l => l.landNumber === landNumber)?.tokens;
-                if (!tokens) {
-                    return INVALID_MOVE;
-                }
-                const token = tokens.find(t => t.tokenType === tokenType);
-                if (token) {
-                    //increase existing token
-                    token.count++;
-                } else {
-                    //add new token
-                    tokens.push({
-                        tokenType: tokenType,
-                        count: 1
-                    })
-                }
-            }
+    increaseToken: function (G: SpiritIslandState, ctx: Ctx, boardName: string, landNumber: number, tokenType: TokenType) {
+        const tokens = G.boardTokens?.find(b => b.boardName === boardName)?.lands.find(l => l.landNumber === landNumber)?.tokens;
+        if (!tokens) {
+            return INVALID_MOVE;
+        }
+        const token = tokens.find(t => t.tokenType === tokenType);
+        if (token) {
+            //increase existing token
+            token.count++;
+        } else {
+            //add new token
+            tokens.push({
+                tokenType: tokenType,
+                count: 1
+            })
+        }
     },
-    decreaseToken: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, boardName: string, landNumber: number, tokenType: TokenType) {
-                const tokens = G.boardTokens?.find(b => b.boardName === boardName)?.lands.find(l => l.landNumber === landNumber)?.tokens;
-                if (!tokens) {
-                    return INVALID_MOVE;
-                }
-                const tokenIdx = tokens.findIndex(t => t.tokenType === tokenType);
-                if (tokenIdx === -1) {
-                    return INVALID_MOVE;
-                } else {
-                    //decrease existing token
-                    if (tokens[tokenIdx].count <= 1) {
-                        //delete token
-                        tokens.splice(tokenIdx, 1);
-                    } else {
-                        tokens[tokenIdx].count--;
-                    }
-                }
+    decreaseToken: function (G: SpiritIslandState, ctx: Ctx, boardName: string, landNumber: number, tokenType: TokenType) {
+        const tokens = G.boardTokens?.find(b => b.boardName === boardName)?.lands.find(l => l.landNumber === landNumber)?.tokens;
+        if (!tokens) {
+            return INVALID_MOVE;
+        }
+        const tokenIdx = tokens.findIndex(t => t.tokenType === tokenType);
+        if (tokenIdx === -1) {
+            return INVALID_MOVE;
+        } else {
+            //decrease existing token
+            if (tokens[tokenIdx].count <= 1) {
+                //delete token
+                tokens.splice(tokenIdx, 1);
+            } else {
+                tokens[tokenIdx].count--;
             }
+        }
     },
 
     //change of spirit status
-    setSpiritEnergy: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, energy: number) {
-                if (energy < 0) return INVALID_MOVE;
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                spirit.currentEnergy = energy;
-            }
-
+    setSpiritEnergy: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, energy: number) {
+        if (energy < 0) return INVALID_MOVE;
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        spirit.currentEnergy = energy;
     },
-    setSpiritDestroyedPresences: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, destroyedPresences: number) {
-                if (destroyedPresences < 0) return INVALID_MOVE;
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                spirit.destroyedPresences = destroyedPresences;
-            }
+    setSpiritDestroyedPresences: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, destroyedPresences: number) {
+        if (destroyedPresences < 0) return INVALID_MOVE;
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        spirit.destroyedPresences = destroyedPresences;
     },
-    setSpiritElement: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, elementType: Types.Elements, count: number) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                const elIdx = spirit.currentElements.findIndex(e => e.type === elementType);
-                if (elIdx === -1) {
-                    //add new element to the list
-                    spirit.currentElements.push({ type: elementType, count: count });
-                } else {
-                    //update list
-                    if (count === 0) {
-                        //remove
-                        spirit.currentElements.splice(elIdx, 1);
-                    } else {
-                        //adjust
-                        spirit.currentElements[elIdx].count = count;
-                    }
-                }
+    setSpiritElement: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, elementType: Types.Elements, count: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        const elIdx = spirit.currentElements.findIndex(e => e.type === elementType);
+        if (elIdx === -1) {
+            //add new element to the list
+            spirit.currentElements.push({ type: elementType, count: count });
+        } else {
+            //update list
+            if (count === 0) {
+                //remove
+                spirit.currentElements.splice(elIdx, 1);
+            } else {
+                //adjust
+                spirit.currentElements[elIdx].count = count;
             }
+        }
     },
-    toggleSpiritPanelPresence: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, presenceIndex: number) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                spirit.presenceTrackCovered[presenceIndex] = !spirit.presenceTrackCovered[presenceIndex];
-            }
+    toggleSpiritPanelPresence: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, presenceIndex: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        spirit.presenceTrackCovered[presenceIndex] = !spirit.presenceTrackCovered[presenceIndex];
     },
 
     //play cards
-    playCard: {
-        ignoreStaleStateID: true,
-        move: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
-            const spirit = G.activeSpirits.find(s => s.name === spiritName);
-            if (!spirit) return INVALID_MOVE;
-            if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
+    playCard: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
 
-            const card = spirit.handCards.splice(handCardIdx, 1);
-            if (!card) {
-                console.log("Move: playCard card is null");
-                return INVALID_MOVE;
-            }
-            spirit.playedCards.push(card[0]);
+        const card = spirit.handCards.splice(handCardIdx, 1);
+        if (!card) {
+            console.log("Move: playCard card is null");
+            return INVALID_MOVE;
+        }
+        spirit.playedCards.push(card[0]);
+    },
+    discardFromHand: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
+
+        const card = spirit.handCards.splice(handCardIdx, 1);
+        if (!card) {
+            console.log("Move: playCard card is null");
+            return INVALID_MOVE;
+        }
+        spirit.discardedCards.push(card[0]);
+    },
+    forgetFromHand: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
+
+        const card = spirit.handCards.splice(handCardIdx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: playCard card is null");
+            return INVALID_MOVE;
+        }
+        if (card[0].type === Types.PowerDeckType.Minor) {
+            G.minorPowercards.discarded.push(card[0]);
+        }
+        if (card[0].type === Types.PowerDeckType.Major) {
+            G.majorPowercards.discarded.push(card[0]);
         }
     },
-    discardFromHand: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
+    undoPlayCard: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, playCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
 
-                const card = spirit.handCards.splice(handCardIdx, 1);
-                if (!card) {
-                    console.log("Move: playCard card is null");
-                    return INVALID_MOVE;
-                }
-                spirit.discardedCards.push(card[0]);
-            }
+        const card = spirit.playedCards.splice(playCardIdx, 1);
+        if (!card) {
+            console.log("Move: undoPlayCard: card is null");
+            return INVALID_MOVE;
+        }
+        spirit.handCards.push(card[0]);
     },
-    forgetFromHand: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, handCardIdx: number) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                if (!spirit.handCards[handCardIdx]) return INVALID_MOVE;
+    discardPlayed: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, playCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
 
-                const card = spirit.handCards.splice(handCardIdx, 1);
-                if (!card || card.length !== 1) {
-                    console.log("Move: playCard card is null");
-                    return INVALID_MOVE;
-                }
-                if (card[0].type === Types.PowerDeckType.Minor) {
-                    G.minorPowercards.discarded.push(card[0]);
-                }
-                if (card[0].type === Types.PowerDeckType.Major) {
-                    G.majorPowercards.discarded.push(card[0]);
-                }
-            }
+        const card = spirit.playedCards.splice(playCardIdx, 1);
+        if (!card) {
+            console.log("Move: discardPlayed: card is null");
+            return INVALID_MOVE;
+        }
+        spirit.discardedCards.push(card[0]);
     },
-    undoPlayCard: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, playCardIdx: number) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
+    discardAllPlayed: function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
 
-                const card = spirit.playedCards.splice(playCardIdx, 1);
-                if (!card) {
-                    console.log("Move: undoPlayCard: card is null");
-                    return INVALID_MOVE;
-                }
-                spirit.handCards.push(card[0]);
-            }
+        spirit.playedCards.forEach(card =>
+            spirit.discardedCards.push(card)
+        );
+        spirit.playedCards = [];
     },
-    discardPlayed: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, playCardIdx: number) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
+    forgetFromPlayed: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, playCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
 
-                const card = spirit.playedCards.splice(playCardIdx, 1);
-                if (!card) {
-                    console.log("Move: discardPlayed: card is null");
-                    return INVALID_MOVE;
-                }
-                spirit.discardedCards.push(card[0]);
-            }
+        const card = spirit.playedCards.splice(playCardIdx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: forgetFromPlayed: card is null");
+            return INVALID_MOVE;
+        }
+        if (card[0].type === Types.PowerDeckType.Minor) {
+            G.minorPowercards.discarded.push(card[0]);
+        }
+        if (card[0].type === Types.PowerDeckType.Major) {
+            G.majorPowercards.discarded.push(card[0]);
+        }
     },
-    discardAllPlayed: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
+    reclaimCards: function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
 
-                spirit.playedCards.forEach(card =>
-                    spirit.discardedCards.push(card)
-                );
-                spirit.playedCards = [];
-            }
+        spirit.discardedCards.forEach(card =>
+            spirit.handCards.push(card)
+        );
+        spirit.discardedCards = [];
     },
-    forgetFromPlayed: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, playCardIdx: number) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                if (!spirit.playedCards[playCardIdx]) return INVALID_MOVE;
+    reclaimOne: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, discardedCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.discardedCards[discardedCardIdx]) return INVALID_MOVE;
 
-                const card = spirit.playedCards.splice(playCardIdx, 1);
-                if (!card || card.length !== 1) {
-                    console.log("Move: forgetFromPlayed: card is null");
-                    return INVALID_MOVE;
-                }
-                if (card[0].type === Types.PowerDeckType.Minor) {
-                    G.minorPowercards.discarded.push(card[0]);
-                }
-                if (card[0].type === Types.PowerDeckType.Major) {
-                    G.majorPowercards.discarded.push(card[0]);
-                }
-            }
+        const card = spirit.discardedCards.splice(discardedCardIdx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: reclaimOne: card is null");
+            return INVALID_MOVE;
+        }
+        spirit.handCards.push(card[0]);
     },
-    reclaimCards: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
+    forgetFromDiscarded: function (G: SpiritIslandState, ctx: Ctx, spiritName: string, discardedCardIdx: number) {
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        if (!spirit.discardedCards[discardedCardIdx]) return INVALID_MOVE;
 
-                spirit.discardedCards.forEach(card =>
-                    spirit.handCards.push(card)
-                );
-                spirit.discardedCards = [];
-            }
-    },
-    reclaimOne: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, discardedCardIdx: number) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                if (!spirit.discardedCards[discardedCardIdx]) return INVALID_MOVE;
-
-                const card = spirit.discardedCards.splice(discardedCardIdx, 1);
-                if (!card || card.length !== 1) {
-                    console.log("Move: reclaimOne: card is null");
-                    return INVALID_MOVE;
-                }
-                spirit.handCards.push(card[0]);
-            }
-    },
-    forgetFromDiscarded: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, spiritName: string, discardedCardIdx: number) {
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                if (!spirit.discardedCards[discardedCardIdx]) return INVALID_MOVE;
-
-                const card = spirit.discardedCards.splice(discardedCardIdx, 1);
-                if (!card || card.length !== 1) {
-                    console.log("Move: forgetFromDiscarded: card is null");
-                    return INVALID_MOVE;
-                }
-                if (card[0].type === Types.PowerDeckType.Minor) {
-                    G.minorPowercards.discarded.push(card[0]);
-                }
-                if (card[0].type === Types.PowerDeckType.Major) {
-                    G.majorPowercards.discarded.push(card[0]);
-                }
-            }
+        const card = spirit.discardedCards.splice(discardedCardIdx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: forgetFromDiscarded: card is null");
+            return INVALID_MOVE;
+        }
+        if (card[0].type === Types.PowerDeckType.Minor) {
+            G.minorPowercards.discarded.push(card[0]);
+        }
+        if (card[0].type === Types.PowerDeckType.Major) {
+            G.majorPowercards.discarded.push(card[0]);
+        }
     },
 
     //card decks
-    flipOne: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, deckType: Types.PowerDeckType) {
-                if (!ctx.playerID) {
-                    console.log("Move flipOne was made, but playerID is not set.")
-                    return INVALID_MOVE;
-                }
-                if (!ctx.random) {
-                    throw new Error("Can't flipOne without random")
-                }
-                let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
-                //make sure we have enoght cards
-                if (deck.available.length + deck.discarded.length < 1) {
-                    return INVALID_MOVE;
-                }
-                //refill if empty
-                if (deck.available.length === 0) {
-                    deck.available = deck.discarded;
-                    deck.discarded = [];
-                }
-                //flip a random card
-                const idx = ctx.random.Die(deck.available.length) - 1;
-                //remove from available
-                const card = deck.available.splice(idx, 1);
-                if (!card || card.length !== 1) {
-                    console.log("Move: flipOne: card is null");
-                    return INVALID_MOVE;
-                }
-                //add as flipset
-                deck.flipSets.push(
-                    {
-                        flippedBy: ctx.playerID,
-                        cards: [card[0]]
-                    }
-                )
+    flipOne: function (G: SpiritIslandState, ctx: Ctx, deckType: Types.PowerDeckType) {
+        if (!ctx.playerID) {
+            console.log("Move flipOne was made, but playerID is not set.")
+            return INVALID_MOVE;
+        }
+        if (!ctx.random) {
+            throw new Error("Can't flipOne without random")
+        }
+        let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
+        //make sure we have enoght cards
+        if (deck.available.length + deck.discarded.length < 1) {
+            return INVALID_MOVE;
+        }
+        //refill if empty
+        if (deck.available.length === 0) {
+            deck.available = deck.discarded;
+            deck.discarded = [];
+        }
+        //flip a random card
+        const idx = ctx.random.Die(deck.available.length) - 1;
+        //remove from available
+        const card = deck.available.splice(idx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: flipOne: card is null");
+            return INVALID_MOVE;
+        }
+        //add as flipset
+        deck.flipSets.push(
+            {
+                flippedBy: ctx.playerID,
+                cards: [card[0]]
             }
+        )
     },
-    flipFour: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState, ctx: Ctx, deckType: Types.PowerDeckType) {
-                if (!ctx.playerID) {
-                    console.log("Move flipOne was made, but playerID is not set.")
-                    return INVALID_MOVE;
-                }
-                if (!ctx.random) {
-                    throw new Error("Can't flipOne without random")
-                }
-                let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
-                //make sure we have enoght cards
-                if (deck.available.length + deck.discarded.length < 4) {
-                    return INVALID_MOVE;
-                }
-                let flippedCards: Types.PowerCardData[] = [];
-                for (let i = 0; i < 4; i++) {
-                    //refill if empty
-                    if (deck.available.length === 0) {
-                        deck.available = deck.discarded;
-                        deck.discarded = [];
-                    }
-                    //flip a random card
-                    const idx = ctx.random.Die(deck.available.length) - 1;
-                    //remove from available
-                    const card = deck.available.splice(idx, 1);
-                    if (!card || card.length !== 1) {
-                        console.log("Move: flipFour: card is null");
-                        return INVALID_MOVE;
-                    }
-                    flippedCards.push(card[0]);
-                }
-                //add as flipset
-                deck.flipSets.push(
-                    {
-                        flippedBy: ctx.playerID,
-                        cards: flippedCards
-                    }
-                )
+    flipFour: function (G: SpiritIslandState, ctx: Ctx, deckType: Types.PowerDeckType) {
+        if (!ctx.playerID) {
+            console.log("Move flipOne was made, but playerID is not set.")
+            return INVALID_MOVE;
+        }
+        if (!ctx.random) {
+            throw new Error("Can't flipOne without random")
+        }
+        let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
+        //make sure we have enoght cards
+        if (deck.available.length + deck.discarded.length < 4) {
+            return INVALID_MOVE;
+        }
+        let flippedCards: Types.PowerCardData[] = [];
+        for (let i = 0; i < 4; i++) {
+            //refill if empty
+            if (deck.available.length === 0) {
+                deck.available = deck.discarded;
+                deck.discarded = [];
             }
+            //flip a random card
+            const idx = ctx.random.Die(deck.available.length) - 1;
+            //remove from available
+            const card = deck.available.splice(idx, 1);
+            if (!card || card.length !== 1) {
+                console.log("Move: flipFour: card is null");
+                return INVALID_MOVE;
+            }
+            flippedCards.push(card[0]);
+        }
+        //add as flipset
+        deck.flipSets.push(
+            {
+                flippedBy: ctx.playerID,
+                cards: flippedCards
+            }
+        )
     },
-    takeFlipped: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState,
-                ctx: Ctx,
-                deckType: Types.PowerDeckType,
-                flipSetIdx: number,
-                cardIdx: number,
-                spiritName: string
-            ) {
-                let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                const card = deck.flipSets[flipSetIdx].cards.splice(cardIdx, 1);
-                if (!card || card.length !== 1) {
-                    console.log("Move: takeFlipped: card is null");
-                    return INVALID_MOVE;
-                }
-                spirit.handCards.push(card[0]);
-            }
+    takeFlipped: function (G: SpiritIslandState,
+        ctx: Ctx,
+        deckType: Types.PowerDeckType,
+        flipSetIdx: number,
+        cardIdx: number,
+        spiritName: string
+    ) {
+        let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        const card = deck.flipSets[flipSetIdx].cards.splice(cardIdx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: takeFlipped: card is null");
+            return INVALID_MOVE;
+        }
+        spirit.handCards.push(card[0]);
     },
-    discardFlipSet: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState,
-                ctx: Ctx,
-                deckType: Types.PowerDeckType,
-                flipSetIdx: number,
-            ) {
-                let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
-                const flipset = deck.flipSets.splice(flipSetIdx, 1);
-                if (!flipset || flipset.length !== 1) {
-                    console.log("Move: discardFlipSet: flipset is null");
-                    return INVALID_MOVE;
-                }
-                flipset[0].cards.forEach(card => deck.discarded.push(card));
-            }
+    discardFlipSet(G: SpiritIslandState,
+        ctx: Ctx,
+        deckType: Types.PowerDeckType,
+        flipSetIdx: number,
+    ) {
+        let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
+        const flipset = deck.flipSets.splice(flipSetIdx, 1);
+        if (!flipset || flipset.length !== 1) {
+            console.log("Move: discardFlipSet: flipset is null");
+            return INVALID_MOVE;
+        }
+        flipset[0].cards.forEach(card => deck.discarded.push(card));
     },
-    takeDiscarded: {
-        ignoreStaleStateID: true,
-        move:
-            function (G: SpiritIslandState,
-                ctx: Ctx,
-                deckType: Types.PowerDeckType,
-                discardedCardIdx: number,
-                spiritName: string
-            ) {
-                let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
-                const spirit = G.activeSpirits.find(s => s.name === spiritName);
-                if (!spirit) return INVALID_MOVE;
-                let card = deck.discarded.splice(discardedCardIdx, 1);
-                if (!card || card.length !== 1) {
-                    console.log("Move: takeDiscarded: card is null");
-                    return INVALID_MOVE;
-                }
-                spirit.handCards.push(card[0]);
-            }
+    takeDiscarded: function (G: SpiritIslandState,
+        ctx: Ctx,
+        deckType: Types.PowerDeckType,
+        discardedCardIdx: number,
+        spiritName: string
+    ) {
+        let deck = deckType === Types.PowerDeckType.Major ? G.majorPowercards : G.minorPowercards;
+        const spirit = G.activeSpirits.find(s => s.name === spiritName);
+        if (!spirit) return INVALID_MOVE;
+        let card = deck.discarded.splice(discardedCardIdx, 1);
+        if (!card || card.length !== 1) {
+            console.log("Move: takeDiscarded: card is null");
+            return INVALID_MOVE;
+        }
+        spirit.handCards.push(card[0]);
     },
 
     //Invader Deck
@@ -733,8 +649,8 @@ export const MainMoves = {
         G.fearDeck.discarded.push(card);
     },
     setGeneratedFear: function (G: SpiritIslandState, ctx: Ctx, count: number) {
-        if (count < 0 || count >= G.activeSpirits.length * 4) {
-            count = 0;
+        if(count <0 || count>=G.activeSpirits.length * 4){
+            count=0;
         }
         G.fearGenerated = count;
     },
