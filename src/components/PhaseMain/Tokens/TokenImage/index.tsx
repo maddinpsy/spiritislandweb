@@ -12,7 +12,6 @@ import Dahan from "assets/tokens/Dahanicon.png"
 import Wild from "assets/tokens/Wildicon.png"
 import Blight from "assets/tokens/Blighticon.png"
 import Disease from "assets/tokens/Diseaseicon.png"
-import Defend from "assets/tokens/Shield.png"
 
 import { TokenType } from "game/GamePhaseMain";
 import { PresenceImage } from "../PresenceImage";
@@ -49,9 +48,6 @@ export function TokenImage(props: { tokenType: TokenType, presenceColors: string
             break;
         case "Badlands":
             image = Badlands;
-            break;
-        case "Defend":
-            image = Defend;
             break;
         case "Presence1":
             return <PresenceImage cssBackground={props.presenceColors[0]} />
