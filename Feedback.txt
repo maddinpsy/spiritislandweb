@@ -1,7 +1,0 @@
-Chris 08.05.2021:
-Logbuch übersicht über Aktionen der Spieler
-VerteidungungsWert (Schildsymbol im Land)
-Erinnerungs Marker (Auf Geist/Land)
-Possible Bug: discard when not earned
-Zeitlgleich Aktionen ausführen / Zeitverzögerung
-Gespilte Karten der Anderen
