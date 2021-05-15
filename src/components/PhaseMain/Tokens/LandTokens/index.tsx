@@ -10,7 +10,7 @@ import { LandOutline } from "../../Boards/LandOutline";
 import { BoardDragDrop } from "helper/BoardDragDrop";
 import classnames from "classnames"
 import { Board, BoardPlacement } from "game/GamePhaseSetup";
-import TokenOnBoard from "../TokenOnBoard";
+import { TokenOnBoard } from "../TokenOnBoard";
 import { AddNewTokenButton } from "../AddNewTokenButton";
 
 
@@ -56,8 +56,10 @@ interface SelectedToken {
 interface LandTokensProps {
     boardTokens: BoardToken
     boardPos: Board & BoardPlacement
+    selectedToken?: SelectedToken
     presenceColors: string[]
 
+    onSelectToken: (s: SelectedToken | undefined) => void
     onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     showDialog: (data?: { title: string, content: JSX.Element }) => void;
@@ -209,8 +211,10 @@ export class LandTokens extends React.Component<LandTokensProps>{
                 let customStyle: React.CSSProperties = {};
                 customStyle.left = cTokenPos[idx].left;
                 customStyle.top = cTokenPos[idx].top;
-
-                return <TokenOnBoard token={t}
+                const isSelected = this.props.selectedToken?.board === bt.boardName &&
+                    this.props.selectedToken?.land === l.landNumber &&
+                    this.props.selectedToken?.token === t.tokenType;
+                return <TokenOnBoard token={t} selected={isSelected}
                     id={bt.boardName + l.landNumber + t.tokenType}
                     key={bt.boardName + l.landNumber + t.tokenType}
                     //callbacks for increse and decrease
@@ -223,8 +227,15 @@ export class LandTokens extends React.Component<LandTokensProps>{
                     //absolut position from calculated positions
                     style={customStyle}
                     //toggle increase/decrease buttons
+                    onClick={() => {
+                        if (isSelected) {
+                            this.props.onSelectToken(undefined);
+                        } else {
+                            this.props.onSelectToken({ board: bt.boardName, land: l.landNumber, token: t.tokenType });
+                        }
+                    }}
                     presenceColors={this.props.presenceColors}
-                />
+                    />;
             }); //end for each token
             return (
                 <>
@@ -237,7 +248,7 @@ export class LandTokens extends React.Component<LandTokensProps>{
                         showDialog={this.props.showDialog}
                         availableTokens={TokenNames.filter(token => !l.tokens.some(usedtoken => usedtoken.tokenType === token))}
                         onIncreaseToken={(type) => this.props.onIncreaseToken(bt.boardName, l.landNumber, type)}
-                    />
+                    /> 
                 </>
             );
         }); //end for each lands

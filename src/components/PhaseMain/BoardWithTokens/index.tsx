@@ -42,7 +42,9 @@ export class BoardWithTokens extends React.Component<BoardWithTokensProps>
                     className={style.BoardWithTokens__image}
                     draggable="false" />
                 <LandTokens boardTokens={this.props.tokens} boardPos={this.props.board}
+                    selectedToken={{ board: "", land: 0, token: "City" }}
                     presenceColors={this.props.presenceColors}
+                    onSelectToken={() => { }}
                     onIncreaseToken={this.props.onIncreaseToken}
                     onDecreaseToken={this.props.onDecreaseToken}
                     showDialog={this.props.showDialog}
