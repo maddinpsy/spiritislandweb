@@ -108,7 +108,6 @@ export class Boards extends React.Component<BoardsProps>
         const usedBoards = this.props.usedBoards.map(b => (
             <BoardWithTokens
                 board={b}
-                key={b.name}
                 tokens={this.props.boardTokens?.find(t => t.boardName === b.name) || { boardName: b.name, lands: [] }}
                 presenceColors={this.props.presenceColors}
                 onIncreaseToken={this.props.onIncreaseToken}

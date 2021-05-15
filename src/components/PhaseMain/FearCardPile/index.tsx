@@ -97,47 +97,27 @@ export class FearCardPile extends React.Component<FearCardPileProps, FearCardPil
                     <div className={style.FearCardPile__ColumnTitle}>Deck</div>
                     {this.props.fearCardPile.deckLeve1.length > 0 && (<div>Level 1</div>)}
                     {this.props.fearCardPile.deckLeve1.map((c, idx) =>
-                        <FearCard
-                            card={c}
-                            key={c.name}
-                            onFlip={() => this.props.fearCardFlip(1, idx)}
-                        />)
+                        <FearCard card={c} onFlip={() => this.props.fearCardFlip(1, idx)} />)
                     }
                     {this.props.fearCardPile.deckLeve2.length > 0 && (<div>Level 2</div>)}
                     {this.props.fearCardPile.deckLeve2.map((c, idx) =>
-                        <FearCard
-                            card={c}
-                            key={c.name}
-                            onFlip={() => this.props.fearCardFlip(2, idx)}
-                        />)
+                        <FearCard card={c} onFlip={() => this.props.fearCardFlip(2, idx)} />)
                     }
                     {this.props.fearCardPile.deckLeve3.length > 0 && (<div>Level 3</div>)}
                     {this.props.fearCardPile.deckLeve3.map((c, idx) =>
-                        <FearCard
-                            card={c}
-                            key={c.name}
-                            onFlip={() => this.props.fearCardFlip(3, idx)}
-                        />)
+                        <FearCard card={c} onFlip={() => this.props.fearCardFlip(3, idx)} />)
                     }
                 </div>
                 <div className={style.FearCardPile__fearCardColumn} >
                     <div className={style.FearCardPile__ColumnTitle}>Earned</div>
                     {this.props.fearCardPile.earned.map((c, idx) =>
-                        <FearCard
-                            card={c}
-                            key={c.name}
-                            onFlip={() => this.props.fearCardFlip(4, idx)}
-                        />)
+                        <FearCard card={c} onFlip={() => this.props.fearCardFlip(4, idx)} />)
                     }
                 </div>
                 <div className={style.FearCardPile__fearCardColumn} >
                     <div className={style.FearCardPile__ColumnTitle}>Discarded</div>
                     {this.props.fearCardPile.discarded.map((c, idx) =>
-                        <FearCard
-                            card={c}
-                            key={c.name}
-                            onFlip={() => this.props.fearCardFlip(5, idx)}
-                        />)
+                        <FearCard card={c} onFlip={() => this.props.fearCardFlip(5, idx)} />)
                     }
                 </div>
             </div>
