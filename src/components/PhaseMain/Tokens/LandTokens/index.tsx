@@ -227,7 +227,7 @@ export class LandTokens extends React.Component<LandTokensProps>{
                 />
             }); //end for each token
             return (
-                <div key={bt.boardName + l.landNumber}>
+                <>
                     {tokens}
                     <AddNewTokenButton
                         //use extra added tokenpos
@@ -238,7 +238,7 @@ export class LandTokens extends React.Component<LandTokensProps>{
                         availableTokens={TokenNames.filter(token => !l.tokens.some(usedtoken => usedtoken.tokenType === token))}
                         onIncreaseToken={(type) => this.props.onIncreaseToken(bt.boardName, l.landNumber, type)}
                     />
-                </div>
+                </>
             );
         }); //end for each lands
     }
