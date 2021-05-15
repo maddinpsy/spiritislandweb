@@ -11,9 +11,9 @@ import { SpiritIsland } from "./game/Game";
 const PORT = Number(process.env.PORT || 8000);
 
 let db:PostgresStore|undefined = undefined;
-/*if(process.env.DATABASE_URL){
+if(process.env.DATABASE_URL){
   db = new PostgresStore(process.env.DATABASE_URL);
-}*/
+}
 
 const server = Server({
   games: [SpiritIsland],
