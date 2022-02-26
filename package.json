@@ -8,8 +8,6 @@
   "author": "Martin Hoffmann <maddinpsycho@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "bgio-postgres": "^1.0.13",
-    "boardgame.io": "^0.49.10",
     "classnames": "^2.2.6",
     "esm": "^3.2.25",
     "i18next": "^21.6.11",
@@ -25,10 +23,8 @@
     "react-transition-group": "^4.4.1"
   },
   "scripts": {
-    "build": "react-scripts build && tsc --project tsconfig-server.json",
-    "start": "node -r esm build/server.js",
-    "start-dev": "yarn react-scripts start & yarn serve-watch",
-    "serve-watch": "tsc-watch --project tsconfig-server.json --watch --onSuccess 'node -r esm build/server.js'",
+    "build": "react-scripts build",
+    "start": "react-scripts start",
     "testui": "react-scripts test",
     "eject": "react-scripts eject"
   },

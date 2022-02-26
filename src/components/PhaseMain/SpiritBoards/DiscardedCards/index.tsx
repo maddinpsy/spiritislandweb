@@ -12,7 +12,7 @@ interface DiscardedCardsProps {
     //moves
     reclaimOne: (cardIdx: number) => void
     reclaimCards: () => void
-    forgetFromDiscarded:(idx:number)=>void
+    forgetFromDiscarded: (idx: number) => void
 }
 
 
@@ -37,16 +37,17 @@ export class DiscardedCards extends React.Component<DiscardedCardsProps, { selec
     render() {
         const cardImages = this.props.cards.map((c, idx) =>
             <div
-                className={style.SpiritBoards__discardedCardContainer}>
+                className={style.SpiritBoards__discardedCardContainer}
+                key={c.name}
+            >
                 <img
-                    key={c.name}
                     alt={c.name}
                     src={c.imageUrl}
                     onClick={(ev) => { this.selectCard(ev, idx) }}
                 />
                 {this.state.selectedCard === idx &&
                     <div className={style.SpiritBoards__discardedCardButtonOverlay}>
-                        <Button size="small" onClick={(ev) =>{ev.stopPropagation(); this.props.reclaimOne(idx)}}>Reclaim</Button>
+                        <Button size="small" onClick={(ev) => { ev.stopPropagation(); this.props.reclaimOne(idx) }}>Reclaim</Button>
                         <Button size="small" onClick={() => this.props.forgetFromDiscarded(idx)} >Forget</Button>
                     </div>
                 }

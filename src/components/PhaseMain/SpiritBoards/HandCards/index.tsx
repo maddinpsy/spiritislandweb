@@ -40,9 +40,9 @@ export class HandCards extends React.Component<HandCardProps, HandCardState>
 
     render() {
         const cardImages = this.props.cards.map((c, idx) =>
-            <div className={style.SpiritBoards__handCardContainer}>
+            <div className={style.SpiritBoards__handCardContainer} 
+            key={c.name}>
                 <img
-                    key={c.name}
                     alt={c.name}
                     src={c.imageUrl}
                     onClick={(ev) => { this.selectCard(ev, idx) }}

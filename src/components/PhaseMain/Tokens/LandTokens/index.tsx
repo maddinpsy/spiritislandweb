@@ -4,7 +4,7 @@ import * as React from "react";
 import style from "./style.module.scss";
 
 
-import { BoardToken, PlacedToken as PlacedToken, TokenNames, TokenType } from "game/GamePhaseMain";
+import { BoardToken, PlacedToken, TokenNames, TokenType } from "game/GamePhaseMain";
 import inside from "point-in-polygon";
 import { LandOutline } from "../../Boards/LandOutline";
 import { BoardDragDrop } from "helper/BoardDragDrop";
@@ -12,6 +12,7 @@ import classnames from "classnames"
 import { Board, BoardPlacement } from "game/GamePhaseSetup";
 import { TokenOnBoard } from "../TokenOnBoard";
 import { AddNewTokenButton } from "../AddNewTokenButton";
+import { SelectedTokenType } from "components/PhaseMain/BoardWithTokens";
 
 
 /** Defines the hardcoded sizes for the token containers. These are used to fit the tokens into the land polygons. */
@@ -47,19 +48,14 @@ const tokenContainerSizes: TokenSize[] = [
     }
 ]
 
-interface SelectedToken {
-    board: string,
-    land: number,
-    token: TokenType
-}
 
 interface LandTokensProps {
     boardTokens: BoardToken
     boardPos: Board & BoardPlacement
-    selectedToken?: SelectedToken
+    selectedToken?: SelectedTokenType
     presenceColors: string[]
 
-    onSelectToken: (s: SelectedToken | undefined) => void
+    onSelectToken: (s: SelectedTokenType | undefined) => void
     onIncreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     onDecreaseToken: (boardName: string, landNumber: number, tokenType: TokenType) => void;
     showDialog: (data?: { title: string, content: JSX.Element }) => void;
@@ -118,7 +114,6 @@ export class LandTokens extends React.Component<LandTokensProps>{
 
         const padding = 15;//px;
 
-        let sizeIdx = 0;
         let currentToken = 0;
         let claculatedPositions = tokens.map(_ => { return { left: 0, top: 0 } });
         //find top of polygon (0)
@@ -238,7 +233,7 @@ export class LandTokens extends React.Component<LandTokensProps>{
                     />;
             }); //end for each token
             return (
-                <>
+                <div key={bt.boardName + l.landNumber}>
                     {tokens}
                     <AddNewTokenButton
                         //use extra added tokenpos
@@ -249,7 +244,7 @@ export class LandTokens extends React.Component<LandTokensProps>{
                         availableTokens={TokenNames.filter(token => !l.tokens.some(usedtoken => usedtoken.tokenType === token))}
                         onIncreaseToken={(type) => this.props.onIncreaseToken(bt.boardName, l.landNumber, type)}
                     /> 
-                </>
+                </div>
             );
         }); //end for each lands
     }

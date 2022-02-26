@@ -1,42 +1,17 @@
 import * as React from "react";
 
-import { BoardProps } from "boardgame.io/react";
-import { SpiritIslandState } from "game/Game";
-import { Loading } from "components/Loading";
-import style from "./style.module.scss";
+import { gameSetup, rootReducer } from "game/Game";
 import { PhaseSetup } from "components/PhaseSetup";
 import { PhaseMain } from "components/PhaseMain";
 
-export class SpiritIslandBoard extends React.Component<BoardProps<SpiritIslandState>, { loading: boolean }> {
-    constructor(props: any) {
-        super(props)
-        this.state = { loading: true }
+export function SpiritIslandBoard(props:{}) {
+    //const playerNames = props.matchData || [];
+    const [state,dispatch] = React.useReducer(rootReducer,gameSetup());
+    if (state.phase === "setup") {
+        return (<PhaseSetup G={state} dispatch={dispatch} />);
     }
-    componentDidMount() {
-        //avoid startup flicker, for one second
-        window.setTimeout(() => this.setState({ loading: false }), 1000);
+    if (state.phase === "main") {
+        return (<PhaseMain G={state} dispatch={dispatch} playerNames={[/*TODO*/]} />);
     }
-    render() {
-        const playerNames=this.props.matchData || [];
-        if (this.state.loading) {
-            //show loading compontne to avoid startup flicker
-            return (
-                <div>
-                    {/* LoadingScreen overleays everything */}
-                    <Loading />
-                    {/* show board images in the background, so they get loaded */}
-                    <div className={style.SpiritIslandBoard__hidden}>
-                        <PhaseSetup G={this.props.G} moves={this.props.moves}/>
-                    </div>
-                </div>
-            )
-        }
-        if (this.props.ctx.phase === "setup") {
-            return (<PhaseSetup G={this.props.G} moves={this.props.moves}/>);
-        }
-        if (this.props.ctx.phase === "main") {
-            return (<PhaseMain G={this.props.G} moves={this.props.moves} playerNames={playerNames}/>);
-        }
-        return (<div>Error ctx.phase={this.props.ctx.phase}</div>)
-    }
+    return <div>Error</div>
 }

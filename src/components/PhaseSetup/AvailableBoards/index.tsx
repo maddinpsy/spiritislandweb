@@ -43,7 +43,7 @@ export class AvailableBoards extends React.Component<AvailableBoardsProps>
                         ev.dataTransfer.setData("text", JSON.stringify(data))
                     }}
                 >
-                    <img src={b.smallBoardUrl} className={style.AvailableBoards__image} draggable="false" />
+                    <img src={b.smallBoardUrl} alt={"Board " + b.name} className={style.AvailableBoards__image} draggable="false" />
                 </div>)
         });
         return (

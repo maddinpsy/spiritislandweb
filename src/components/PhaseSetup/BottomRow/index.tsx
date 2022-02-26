@@ -59,10 +59,6 @@ export interface BottomRowProps {
 }
 
 export class BottomRow extends React.Component<BottomRowProps> {
-    constructor(props: BottomRowProps) {
-        super(props);
-    }
-
     render() {
         return (
             <div className={style.BottomRow__container}>

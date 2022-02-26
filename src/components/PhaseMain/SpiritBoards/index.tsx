@@ -13,7 +13,6 @@ import { PlayedCards } from "./PlayedCards";
 import { Point } from "../../../game/GamePhaseSetup";
 
 import { PresenceImage } from "../Tokens/PresenceImage";
-import { PowerCardList } from "../PowerCardPile/PowerCardList";
 
 interface SpiritPanelsHeaderProps {
     spiritName: string
@@ -68,9 +67,10 @@ function SpiritPresenceTrack(props: SpiritPresenceTrackProps) {
         }
         return (
             <div
+                key={idx}
                 className={style.SpiritBoards__presence}
                 style={elStyle}
-                onClick={() => { props.onTogglePresence(idx); console.log("tk") }}
+                onClick={() => props.onTogglePresence(idx)}
             >
                 <PresenceImage cssBackground={appearance.presenceBackground} />
             </div>
@@ -157,7 +157,7 @@ export class SpiritPanels extends React.Component<SpiritPanelProps>
                     <SpiritPresenceTrack
                         presenceApearance={curSpirit.presenceAppearance}
                         presenceCovered={curSpirit.presenceTrackCovered}
-                        onTogglePresence={(idx) => { this.props.toggleSpiritPresence(curSpirit.name, idx); console.log("aok") }} />
+                        onTogglePresence={(idx) => this.props.toggleSpiritPresence(curSpirit.name, idx) } />
                 </div>
                 <div className={style.SpiritBoards__activeSpiritInfo}>
                     <EnergyIcon energy={curSpirit.currentEnergy}

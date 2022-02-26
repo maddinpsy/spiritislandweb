@@ -1,10 +1,8 @@
-import { Ctx } from "boardgame.io";
-import { INVALID_MOVE } from 'boardgame.io/core';
 //relative path, because we use esm to start
 import { Types } from "../spirit-island-card-katalog/types";
 import { BoardInfo } from "./BoardInfo";
 import { SpiritIslandState } from "./Game";
-import { LandTokens } from "./GamePhaseMain";
+import { LandTokens, mainPhaseSetup } from "./GamePhaseMain";
 import { SpiritInfo } from "./SpiritInfo";
 
 export type Point = { x: number, y: number }
@@ -54,6 +52,24 @@ export const defaultSetupPhaseState: SetupPhaseState =
     setupSpirits: SpiritInfo,
 }
 
+export type SetupActions =
+    | { type: 'placeBoard', boardName: string, place: BoardPlacement }
+    | { type: 'removeBoard', boardName: string }
+    | { type: 'placeSpirit', spiritIdx: number, boardName: string }
+    | { type: 'removeSpirit', spiritIdx: number }
+    | { type: 'startGame' }
+    ;
+
+export function setupReducer(G: SpiritIslandState, action: SetupActions) {
+    switch (action.type) {
+        case 'placeBoard': SetupMoves.placeBoard(G, action.boardName, action.place); break;
+        case 'removeBoard': SetupMoves.removeBoard(G, action.boardName); break;
+        case 'placeSpirit': SetupMoves.placeSpirit(G, action.spiritIdx, action.boardName); break;
+        case 'removeSpirit': SetupMoves.removeSpirit(G, action.spiritIdx); break;
+        case 'startGame': SetupMoves.startGame(G); break;
+    }
+}
+
 function checkBoardPlacement(usedBoards: (Board & BoardPlacement)[], newBoard: (Board & BoardPlacement)): boolean {
     const noOverlap = usedBoards
         .filter(b => b.name !== newBoard.name)
@@ -66,16 +82,17 @@ function checkBoardPlacement(usedBoards: (Board & BoardPlacement)[], newBoard: (
     return noOverlap;
 }
 
-export const SetupMoves = {
-    placeBoard: function (G: SpiritIslandState, ctx: Ctx, boardName: string, place: BoardPlacement) {
-        if (!place) return INVALID_MOVE;
+const SetupMoves = {
+    placeBoard: function (G: SpiritIslandState, boardName: string, place: BoardPlacement) {
+        if (!place) throw new Error("Board Placement is not defined");
         //add new board
         const availBoardIdx = G.availBoards.findIndex(b => b.name === boardName);
         const usedBoardIdx = G.usedBoards.findIndex(b => b.name === boardName);
         if (availBoardIdx === -1 && usedBoardIdx === -1) {
-            return INVALID_MOVE
+            throw new Error(`Board not found. boardName=${boardName}`);
         } else if (availBoardIdx !== -1 && usedBoardIdx !== -1) {
-            throw new Error("Internal error: Same Board cant be in used and avail!");
+            //TODO this can never happen => data structure is not optimal. Use flag instead of two arrays!
+            throw new Error("Internal error: Same Board can't be in used and avail!");
         }
         else if (availBoardIdx !== -1 && usedBoardIdx === -1) {
             const newBoardWithPlace = { ...G.availBoards[availBoardIdx], ...place };
@@ -86,7 +103,7 @@ export const SetupMoves = {
                 //remove from avail boards
                 G.availBoards.splice(availBoardIdx, 1);
             } else {
-                return INVALID_MOVE
+                throw new Error(`Place is not valid. boardName=${boardName}`);
             }
         } else {
             //move existing board
@@ -98,13 +115,13 @@ export const SetupMoves = {
                 //add new board
                 G.usedBoards.push(newBoardWithPlace);
             } else {
-                return INVALID_MOVE
+                throw new Error(`Place is not valid. boardName=${boardName}`);
             }
         }
     },
-    removeBoard: function (G: SpiritIslandState, ctx: Ctx, boardName: string) {
+    removeBoard: function (G: SpiritIslandState, boardName: string) {
         const boardIdx = G.usedBoards.findIndex(b => b.name === boardName);
-        if (boardIdx === -1) return INVALID_MOVE
+        if (boardIdx === -1) throw new Error(`Board not found. boardName=${boardName}`);
         //add to available board
         G.availBoards.push(G.usedBoards[boardIdx]);
         //remove from used boards
@@ -117,9 +134,9 @@ export const SetupMoves = {
             })
         }
     },
-    placeSpirit: function (G: SpiritIslandState, ctx: Ctx, spiritIdx: number, boardName: string) {
+    placeSpirit: function (G: SpiritIslandState, spiritIdx: number, boardName: string) {
         const board = G.usedBoards.find(b => b.name === boardName);
-        if (!board) return INVALID_MOVE
+        if (!board) throw new Error(`Board not found. boardName=${boardName}`);
         const newSpirit = G.setupSpirits[spiritIdx];
         //if another spirit is on the board, remove it first
         const oldSpirit = G.setupSpirits.find(s => s.curretBoard === board.name);
@@ -130,22 +147,25 @@ export const SetupMoves = {
         //place the new spirit on the board
         newSpirit.curretBoard = board.name;
     },
-    removeSpirit: function (G: SpiritIslandState, ctx: Ctx, spiritIdx: number) {
+    removeSpirit: function (G: SpiritIslandState, spiritIdx: number) {
         G.setupSpirits[spiritIdx].curretBoard = undefined;
     },
 
-    startGame: function (G: SpiritIslandState, ctx: Ctx) {
+    startGame: function (G: SpiritIslandState) {
         //we need at least one board
         if (G.usedBoards.length === 0) {
-            return INVALID_MOVE;
+            throw new Error(`we need at least one board`);
         }
         //each board needs a spirit
         if (G.usedBoards.some(b => G.setupSpirits.every(s => s.curretBoard !== b.name))) {
-            return INVALID_MOVE;
+            throw new Error(`each board needs a spirit`);
         }
         //Boards may not overlap
+        //TODO
         //no gaps beetween boards alowed
-        if (ctx.events && ctx.events.endPhase)
-            ctx.events?.endPhase();
+        //TODO
+
+        G.phase = "main";
+        mainPhaseSetup(G)
     }
 }

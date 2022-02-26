@@ -1,7 +1,6 @@
 import { Button } from "components/Button";
 import { ModalWindow } from "components/ModalWindow";
 import * as React from "react";
-import { Redirect } from "react-router-dom";
 
 import style from "./style.module.scss";
 
@@ -35,7 +34,7 @@ export class SubscribeForm extends React.Component<{}, SubscribeFormState> {
 
         const subscribeaddress = 'https://spiritislandweb.hosted.phplist.com/lists/?p=subscribe&id=1'
         const ajaxaddress = subscribeaddress.replace(/subscribe/, 'asubscribe');
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        var emailReg = /^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         if (emailReg.test(emailaddress)) {
             fetch(ajaxaddress, {
                 method: 'post',
@@ -103,10 +102,6 @@ export interface SubscribeWindowProps {
 }
 
 export class SubscribeWindow extends React.Component<SubscribeWindowProps> {
-    constructor(props: SubscribeWindowProps) {
-        super(props);
-    }
-
     render() {
         //show subscribe window
         return (

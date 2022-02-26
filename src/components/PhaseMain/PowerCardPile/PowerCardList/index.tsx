@@ -10,8 +10,8 @@ import classnames from "classnames"
 export interface PowerCardListProps {
     cards: Types.PowerCardData[]
     actions: { title: string, onSelect: (idx: number) => void }[]
-    classNameList?:string
-    classNameCard?:string
+    classNameList?: string
+    classNameCard?: string
 }
 
 interface PowerCardListState {
@@ -37,9 +37,8 @@ export class PowerCardList extends React.Component<PowerCardListProps, PowerCard
 
     render() {
         const cardImages = this.props.cards.map((c, idx) =>
-            <div className={classnames(style.PowerCardList__cardContainer,this.props.classNameCard)}>
+            <div className={classnames(style.PowerCardList__cardContainer, this.props.classNameCard)} key={c.name}>
                 <img
-                    key={c.name}
                     alt={c.name}
                     src={c.imageUrl}
                     onClick={() => this.selectCard(idx)}
@@ -64,7 +63,7 @@ export class PowerCardList extends React.Component<PowerCardListProps, PowerCard
             </div>
         );
 
-        return (<div className={classnames(style.PowerCardList__cardList,this.props.classNameList)}
+        return (<div className={classnames(style.PowerCardList__cardList, this.props.classNameList)}
             //unselect handcard when loosing focus
             onBlur={() => this.unselectedCard()}
             //but not if child has still the focus, onBlur is called first

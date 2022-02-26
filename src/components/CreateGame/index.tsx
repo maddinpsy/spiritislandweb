@@ -1,10 +1,9 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
 import "./style.scss";
 import { Trans } from "react-i18next";
 import { ButtonLang } from "components/ButtonLang";
-import { Button, ButtonProps } from "components/Button";
 import { LobbyPage, SmallLogo } from "components/LobbyPage";
+import { Navigate } from "react-router-dom";
 
 interface CreateGameProps {
   onCreateGameRoom: () => void
@@ -27,7 +26,7 @@ export class CreateGame extends React.Component<CreateGameProps> {
   render() {
 
     let roomID = this.props.roomID;
-    if (roomID) return <Redirect to={`/rooms/${roomID}`} />;
+    if (roomID) return <Navigate to={`/rooms/${roomID}`} />;
 
     return (
       <LobbyPage>

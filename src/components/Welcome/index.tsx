@@ -14,7 +14,7 @@ export const Welcome = () => {
         Spirit Island is a cooperative, settler-destruction strategy game for 1 to 4 players designed by R. Eric Reuss and set in an alternate-history world around A.D. 1700. 
         </Trans>
       </p>
-      <ButtonLink to="/create" theme="orange">
+      <ButtonLink to="/rooms/as" theme="orange">
         <Trans>Go!</Trans>
       </ButtonLink>
     </LobbyPage>

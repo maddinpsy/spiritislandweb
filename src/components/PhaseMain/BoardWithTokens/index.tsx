@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Board, BoardPlacement, Point } from "game/GamePhaseSetup";
+import { Board, BoardPlacement } from "game/GamePhaseSetup";
 
 import style from "./style.module.scss";
 
@@ -8,6 +8,11 @@ import style from "./style.module.scss";
 import { BoardToken, TokenType } from "game/GamePhaseMain";
 import { LandTokens } from "../Tokens/LandTokens";
 
+export type SelectedTokenType = {
+    board: string,
+    land: number,
+    token: TokenType
+}
 
 /** Defines the hardcoded sizes for the token containers. These are used to fit the tokens into the land polygons. */
 
@@ -21,37 +26,35 @@ interface BoardWithTokensProps {
     showDialog: (data?: { title: string, content: JSX.Element }) => void;
 }
 
-export class BoardWithTokens extends React.Component<BoardWithTokensProps>
+export const BoardWithTokens = (props:BoardWithTokensProps) => 
 {
-    render() {
-        let customStyle: React.CSSProperties = {};
-        customStyle.left = this.props.board.position.x;
-        customStyle.top = this.props.board.position.y;
-        customStyle.transform = "rotate(" + this.props.board.rotation + "deg)";
-
-        return (
-            <div
-                key={this.props.board.name}
-                id={"board" + this.props.board.name}
-                className={style.BoardWithTokens__usedBoard}
-                style={customStyle}
-            >
-                <img
-                    src={this.props.board.largeBoardUrl}
-                    alt={this.props.board.name}
-                    className={style.BoardWithTokens__image}
-                    draggable="false" />
-                <LandTokens boardTokens={this.props.tokens} boardPos={this.props.board}
-                    selectedToken={{ board: "", land: 0, token: "City" }}
-                    presenceColors={this.props.presenceColors}
-                    onSelectToken={() => { }}
-                    onIncreaseToken={this.props.onIncreaseToken}
-                    onDecreaseToken={this.props.onDecreaseToken}
-                    showDialog={this.props.showDialog}
-                />
-            </div>
-        )
-    }
+    let customStyle: React.CSSProperties = {};
+    customStyle.left = props.board.position.x;
+    customStyle.top = props.board.position.y;
+    customStyle.transform = "rotate(" + props.board.rotation + "deg)";
+    const [selectedToken,setSelectedToken] = React.useState<SelectedTokenType|undefined>({ board: "", land: 0, token: "City" });
+    return (
+        <div
+            key={props.board.name}
+            id={"board" + props.board.name}
+            className={style.BoardWithTokens__usedBoard}
+            style={customStyle}
+        >
+            <img
+                src={props.board.largeBoardUrl}
+                alt={props.board.name}
+                className={style.BoardWithTokens__image}
+                draggable="false" />
+            <LandTokens boardTokens={props.tokens} boardPos={props.board}
+                selectedToken={selectedToken}
+                presenceColors={props.presenceColors}
+                onSelectToken={setSelectedToken}
+                onIncreaseToken={props.onIncreaseToken}
+                onDecreaseToken={props.onDecreaseToken}
+                showDialog={props.showDialog}
+            />
+        </div>
+    )
 }
 
 

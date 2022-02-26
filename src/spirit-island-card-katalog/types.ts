@@ -21,7 +21,7 @@ export namespace Types {
             .concat(Object.getOwnPropertyNames(dummyTerrorLevelEvent))
             .concat(Object.getOwnPropertyNames(dummyHealthyBlightedLandEvent))
             .concat(Object.getOwnPropertyNames(dummyAdversaryEvent))
-            .filter((name) => name.toLowerCase() == name);
+            .filter((name) => name.toLowerCase() === name);
         props = [...new Set(props)];
         return props;
     }
@@ -191,42 +191,6 @@ export namespace Types {
     export enum HealthyBlightedLand {
         Healthy,
         Blighted,
-    }
-
-    function toColor(type: string) {
-        switch (type) {
-            case PowerDeckType.Minor:
-                return "rgba(50, 50, 50, 0.3)";
-            case PowerDeckType.Major:
-                return "rgba(255, 255, 0, 0.25)";
-            case Unique.ASpreadOfRampantGreen:
-            case Unique.BringerOfDreamsAndNightmares:
-            case Unique.LightngingsSwiftStrike:
-            case Unique.OceansHungryGrasp:
-            case Unique.RiverSurgesInSunlight:
-            case Unique.ShadowsFlickerLikeFlame:
-            case Unique.Thunderspeaker:
-            case Unique.VitalStrengthOfTheEarth:
-            case Unique.SharpFangsBehindTheLeaves:
-            case Unique.KeeperOfTheForbiddenWilds:
-            case Unique.HeartOfTheWildfire:
-            case Unique.SerpentSlumberingBeneathTheIsland:
-            case Unique.FinderOfPathsUnseen:
-            case Unique.FracturedDaysSplitTheSky:
-            case Unique.GrinningTricksterStirsUpTrouble:
-            case Unique.LureOfTheDeepWilderness:
-            case Unique.ManyMindsMoveAsOne:
-            case Unique.ShiftingMemoryOfAges:
-            case Unique.ShroudOfSilentMist:
-            case Unique.StarlightSeeksItsForm:
-            case Unique.StonesUnyieldingDefiance:
-            case Unique.VengeanceAsABurningPlague:
-            case Unique.VolcanoLoomingHigh:
-            case Unique.DownpourDrenchesTheWorld:
-                return "rgba(0, 128, 0, 0.25)";
-            default:
-                throw new Error();
-        }
     }
 
     export interface PowerCardData {
@@ -445,13 +409,13 @@ export namespace Types {
 
         constructor(set: ProductSet, name: string, adversary: Adversary, event: EventCard) {
             let names = Array.isArray(event.name) ? [name].concat(event.name) : [name, event.name];
-            super(set, [EventType.AdversaryEvent, <EventType>event.type], names, event.tokenevent, event.dahanevent);
+            super(set, [EventType.AdversaryEvent, event.type as EventType], names, event.tokenevent, event.dahanevent);
             this.Inner = event;
             this.adversary = adversary;
             let self = (this as any);
             let old = Object.getOwnPropertyNames(new (EventCard as any)());
             let neu = Object.getOwnPropertyNames(event)
-                .filter(prop => old.indexOf(prop) == -1);
+                .filter(prop => old.indexOf(prop) === -1);
             for (const prop of neu) {
                 self[prop] = (event as any)[prop];
             }

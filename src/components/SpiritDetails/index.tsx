@@ -1,7 +1,6 @@
 import { Button } from "components/Button";
 import { PowerCardList } from "components/PhaseMain/PowerCardPile/PowerCardList";
 import { ActiveSpirit } from "game/GamePhaseMain";
-import { SetupSpirit } from "game/GamePhaseSetup";
 import * as React from "react";
 
 import style from "./style.module.scss";
@@ -22,15 +21,17 @@ export class SpiritDetails extends React.Component<SpiritDetailsProps, SpiritDet
         this.state = { backside: false }
     }
     render() {
-        let image = this.props.spirit.frontSideUrl;
-        if (this.state.backside) {
-            image = this.props.spirit.backSideUrl;
-        }
         return (
             <div className={style.SpiritDetails__container}>
                 <div className={style.SpiritDetails__imageContainer}>
                     <img className={style.SpiritDetails__image}
-                        src={image}
+                        style={{display:this.state.backside?"none":"block"}}
+                        src={this.props.spirit.frontSideUrl}
+                        alt={this.props.spirit.name}
+                    />
+                    <img className={style.SpiritDetails__image}
+                        style={{display:this.state.backside?"block":"none"}}
+                        src={this.props.spirit.backSideUrl}
                         alt={this.props.spirit.name}
                     />
                     <Button className={style.SpiritDetails__flipButton}
@@ -40,14 +41,14 @@ export class SpiritDetails extends React.Component<SpiritDetailsProps, SpiritDet
                 </div>
                 <div className={style.SpiritDetails__handcardTitle}>
                     HandCards (scroll down)
-                    </div>
-                <PowerCardList 
-                cards={this.props.spirit.handCards} 
-                actions={[
+                </div>
+                <PowerCardList
+                    cards={this.props.spirit.handCards}
+                    actions={[
 
-                ]}
-                classNameCard={style.SpiritDetails__handcardCard}
-                classNameList={style.SpiritDetails__handcardList}
+                    ]}
+                    classNameCard={style.SpiritDetails__handcardCard}
+                    classNameList={style.SpiritDetails__handcardList}
                 />
             </div>
 

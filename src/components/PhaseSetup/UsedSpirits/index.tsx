@@ -55,7 +55,7 @@ export class UsedSpirits extends React.Component<UsedSpiritsProps>
     render() {
         const usedSpirits = this.props.setupSpirits.map((s, idx) => {
             let customStyle: React.CSSProperties = {};
-            const board = this.props.usedBoards.find(b => b.name == s.curretBoard);
+            const board = this.props.usedBoards.find(b => b.name === s.curretBoard);
             if (!board) {
                 //spirit not on a board, move to the right
                 //this is a hack, to make the remove and add spirit animation

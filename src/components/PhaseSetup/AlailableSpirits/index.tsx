@@ -35,7 +35,7 @@ export class AvailableSpirits extends React.Component<AvailableSpiritsProps>
         const boards = this.props.availSpirits.map((spirit, idx) => {
             //spirits with board, are not available
             if (spirit.curretBoard) {
-                return;
+                return <></>;
             }
             return (
                 <div key={spirit.name}
@@ -50,7 +50,7 @@ export class AvailableSpirits extends React.Component<AvailableSpiritsProps>
                         ev.dataTransfer.setData("text", JSON.stringify(data))
                     }}
                 >
-                    <img src={spirit.logoUrl} className={style.AvailableSpirits__image} draggable="false" />
+                    <img src={spirit.logoUrl} alt={spirit.name} className={style.AvailableSpirits__image} draggable="false" />
                     <div className={style.AvailableSpirits__name} >{spirit.name}</div>
                 </div>)
         });

@@ -1,9 +1,5 @@
 import * as React from "react";
 
-
-import style from "./style.module.scss";
-
-
 import { IncreaseDecreaseButton } from "../../IncreaseDecreaseButton";
 import { TokenImage } from "../TokenImage";
 import { PlacedToken } from "game/GamePhaseMain";
@@ -29,7 +25,7 @@ export function TokenOnBoard(props: React.HTMLAttributes<HTMLDivElement> & Token
     const count = props.token.count > 0 && props.token.count;
 
     return (
-        <div {...props}>
+        <div className={props.className} style={props.style} onClick={props.onClick}>
             {count}{tokenImgae}
             {props.selected && <IncreaseDecreaseButton onIncrease={props.onIncrease} onDecrease={props.onDecrease} style={{ width: props.buttonWidth }} />}
         </div>

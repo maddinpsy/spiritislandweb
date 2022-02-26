@@ -52,9 +52,8 @@ export class PlayedCards extends React.Component<PlayedCardsProps, PlayedCardsSt
 
     render() {
         const cardImages = this.props.cards.map((c, idx) =>
-            <div className={style.PlayedCards__cardContainer}>
+            <div className={style.PlayedCards__cardContainer} key={c.name}>
                 <img
-                    key={c.name}
                     alt={c.name}
                     src={c.imageUrl}
                     onClick={(ev) => { this.setState({ selectedCard: idx }); ev.stopPropagation() }}

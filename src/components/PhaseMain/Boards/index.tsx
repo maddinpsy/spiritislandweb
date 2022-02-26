@@ -86,16 +86,12 @@ export class Boards extends React.Component<BoardsProps>
             boardSize.max[0] += padding;
             boardSize.max[1] += padding;
             //create a rect object for panzoom
-            let c = {
-                left: boardSize.min[0],
-                top: boardSize.min[1],
-                width: boardSize.max[0] - boardSize.min[0],
-                height: boardSize.max[1] - boardSize.min[1],
-                right: 0,
-                bottom: 0
-            }
-            c.right = c.left + c.width;
-            c.bottom = c.top + c.height;
+            let c = new DOMRect(
+                /*x:*/ boardSize.min[0],
+                /*y:*/ boardSize.min[1],
+                /*width:*/ boardSize.max[0] - boardSize.min[0],
+                /*height:*/ boardSize.max[1] - boardSize.min[1],
+            );
             //set panzoom to the rect
             this.panZoomObject.showRectangle(c)
             //update panzoom, to make the changes visible
@@ -107,6 +103,7 @@ export class Boards extends React.Component<BoardsProps>
     render() {
         const usedBoards = this.props.usedBoards.map(b => (
             <BoardWithTokens
+                key={b.name}
                 board={b}
                 tokens={this.props.boardTokens?.find(t => t.boardName === b.name) || { boardName: b.name, lands: [] }}
                 presenceColors={this.props.presenceColors}
