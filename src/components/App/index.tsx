@@ -1,9 +1,8 @@
 import React from 'react';
 import {
   BrowserRouter,
-  Redirect,
   Route,
-  Switch
+  Routes
 } from "react-router-dom";
 
 import { LobbyClient } from 'boardgame.io/client';
@@ -115,23 +114,21 @@ export class App extends React.Component<NicknameProps, AppState>
     return (
       <div className="App" >
         <BrowserRouter>
-          <Switch>
-            <Route exact path="/">
-              <Welcome />
-            </Route>
+          <Routes>
+            <Route path="/" element={Welcome}/>
 
-            <Route exact path="/create">
+            <Route path="/create">
               <CreateGame {...this.props} onCreateGameRoom={this.newGame} roomID={matchID} />
             </Route>
 
-            <Route exact path="/rooms/:id">
+            <Route path="/rooms/:id">
               {roomPage}
             </Route>
 
             <Route>
               <Redirect to="/" />
             </Route>
-          </Switch>
+          </Routes>
         </BrowserRouter>
       </div>
     );
