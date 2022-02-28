@@ -36,11 +36,12 @@ export namespace BoardDragDrop {
 
     export function rotateBoard(usedBoards: (Board & BoardPlacement)[], boardName: string, clockwise: boolean): BoardPlacement | undefined {
         const otherBoards = usedBoards.filter(b => b.name !== boardName);
-        const draggedBoard = usedBoards.find(b => b.name === boardName);
-        if (!draggedBoard) {
+        const constBoard = usedBoards.find(b => b.name === boardName);
+        if (!constBoard) {
             console.log("Internal Error: DragBoard not found in availBoards");
             return;
         }
+        let draggedBoard = {...constBoard};
         const uniqePoints = draggedBoard.anchors
             .reduce((uniqePoints: Point[], line) => {
                 uniqePoints.push(line.start);

@@ -8,7 +8,6 @@ import { Button } from "components/Button";
 import { Types } from "spirit-island-card-katalog/types";
 import { ModalWindow } from "components/ModalWindow";
 import { PowerCardList } from "./PowerCardList";
-import { FilteredMetadata } from "boardgame.io";
 
 
 interface ActionSelectMenuProps {
@@ -40,7 +39,7 @@ function ActionSelectMenu(props: ActionSelectMenuProps) {
 
 interface FlipSetProps {
     flipSet: { flippedBy: string, cards: Types.PowerCardData[] }
-    playerNames: FilteredMetadata
+    playerNames: {name:string, id:number}[]
     //moves
     takeFlipped: (cardIdx: number) => void
     discardFlipSet: () => void
@@ -68,7 +67,7 @@ export interface PowerCardPileProps {
     availableCards: Types.PowerCardData[]
     discardedCards: Types.PowerCardData[]
     flippedCards: { flippedBy: string, cards: Types.PowerCardData[] }[]
-    playerNames: FilteredMetadata
+    playerNames:  {name:string, id:number}[]
     //moves
     flipOne: () => void
     flipFour: () => void

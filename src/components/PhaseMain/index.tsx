@@ -9,7 +9,6 @@ import { BottomRow } from "components/PhaseSetup/BottomRow";
 
 import { PowerCardPile } from "./PowerCardPile";
 import { Types } from "spirit-island-card-katalog/types";
-import { FilteredMetadata } from "boardgame.io";
 
 import { InvaderCard } from "./InvaderCard";
 import { InvaderCardData } from "game/InvaderCards";
@@ -114,7 +113,7 @@ function BlightIcon(props: { count: number, onSetBlightCount: (count: number) =>
 export interface PhaseMainProps {
     G: SpiritIslandState
     dispatch: (action: MainActions) => void
-    playerNames: FilteredMetadata
+    playerNames: {name:string, id:number}[]
 }
 
 export interface PhaseMainState {

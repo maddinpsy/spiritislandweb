@@ -32,11 +32,7 @@ export class AvailableSpirits extends React.Component<AvailableSpiritsProps>
     }
 
     render() {
-        const boards = this.props.availSpirits.map((spirit, idx) => {
-            //spirits with board, are not available
-            if (spirit.curretBoard) {
-                return <></>;
-            }
+        const boards = this.props.availSpirits.filter(s=>s.curretBoard === undefined).map((spirit, idx) => {
             return (
                 <div key={spirit.name}
                     className={style.AvailableSpirits__imageWrap}
