@@ -594,6 +594,7 @@ const MainMoves = {
         if (!card || card.length !== 1) {
             throw new Error("Move: invaderExplore: card is null");
         }
+        card[0].flipped = true;
         G.invaderDeck.explore.push(card[0]);
     },
     invadersBuild: function (G: SpiritIslandState, idx: number) {

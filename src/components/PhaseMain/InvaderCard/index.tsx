@@ -8,8 +8,7 @@ import invaderCardsBack from "assets/Invader Back.jpg"
 
 export interface InvaderCardProps {
     card: InvaderCardData,
-    flipped: boolean,
-    divWidth_percent: number
+    divWidth_percent?: number
 }
 
 
@@ -21,6 +20,7 @@ export class InvaderCard extends React.Component<InvaderCardProps> {
     render() {
         const imgHeight = 2440;
         const imgWidth = 1580;
+        const divWidth_percent = this.props.divWidth_percent || 1;
 
         let spriteX = 0;
         let spriteY = 0;
@@ -99,14 +99,14 @@ export class InvaderCard extends React.Component<InvaderCardProps> {
                 break;
         }
         //move image to the right when multiple tiles are shown
-        spriteX += imgWidth / 4 * (1 - this.props.divWidth_percent) / 2
+        spriteX += imgWidth / 4 * (1 - divWidth_percent) / 2
         //set image based on flipped
-        const imageUrl = this.props.flipped ? invaderCards : invaderCardsBack;
+        const imageUrl = this.props.card.flipped ? invaderCards : invaderCardsBack;
         return (
             <div
                 className={style.InvaderCard__container}
             >
-                <svg width="100%" height="100%" viewBox={"0 0 " + imgWidth / 4 * this.props.divWidth_percent + " " + imgHeight / 4}>
+                <svg width="100%" height="100%" viewBox={"0 0 " + imgWidth / 4 * divWidth_percent + " " + imgHeight / 4}>
                     <image
                         height={imgHeight} width={imgWidth} y="0" x="0"
                         xlinkHref={imageUrl}

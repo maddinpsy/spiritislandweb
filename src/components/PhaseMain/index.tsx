@@ -17,6 +17,8 @@ import fearIconImage from "assets/fear.png"
 import blightIconImage from "assets/tokens/Blighticon.png"
 import { MainActions, TokenType } from "game/GamePhaseMain";
 import { InvaderDeckAndSlots } from "./InvaderDeckAndSlots";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface FearIconProps {
     count: number
@@ -62,7 +64,7 @@ function BlightIcon(props: { count: number, onSetBlightCount: (count: number) =>
 export interface PhaseMainProps {
     G: SpiritIslandState
     dispatch: (action: MainActions) => void
-    playerNames: {name:string, id:number}[]
+    playerNames: { name: string, id: number }[]
 }
 
 export interface PhaseMainState {
@@ -191,9 +193,9 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
         this.props.dispatch({ type: "fearCardEarn" });
     }
     dispatch_fearCardDiscard() {
-        try{
+        try {
             this.props.dispatch({ type: "fearCardDiscard" });
-        }catch(e){
+        } catch (e) {
             alert(e);
         }
     }
@@ -211,99 +213,101 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
         );
         const curSpiritName = this.props.G.activeSpirits[this.state.currentSpiritsIdx].name;
         return (
-            <div className={style.PhaseMain__container}>
-                <Boards
-                    usedBoards={this.props.G.usedBoards}
-                    boardTokens={this.props.G.boardTokens}
-                    onIncreaseToken={this.dispatch_increaseToken}
-                    onDecreaseToken={this.dispatch_decreaseToken}
-                    showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
-                    presenceColors={this.props.G.activeSpirits.map(s => s.presenceAppearance.presenceBackground)}
-                />
-                <SpiritPanels
-                    spirits={this.props.G.activeSpirits}
-                    showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
-                    currentSpiritsIdx={this.state.currentSpiritsIdx}
-                    setCurrentSpiritIdx={(idx) => this.setState({ currentSpiritsIdx: idx })}
-                    //moves
-                    setSpiritEnergy={this.dispatch_setSpiritEnergy}
-                    setSpiritDestroyedPresences={this.dispatch_setSpiritDestroyedPresences}
-                    setSpiritElement={this.dispatch_setSpiritElement}
-                    toggleSpiritPresence={this.dispatch_toggleSpiritPanelPresence}
-                    playCard={this.dispatch_playCard}
-                    discardFromHand={this.dispatch_discardFromHand}
-                    discardPlayed={this.dispatch_discardPlayed}
-                    undoPlayCard={this.dispatch_undoPlayCard}
-                    reclaimCards={this.dispatch_reclaimCards}
-                    reclaimOne={this.dispatch_reclaimOne}
-                    forgetFromHand={this.dispatch_forgetFromHand}
-                    forgetFromPlayed={this.dispatch_forgetFromPlayed}
-                    forgetFromDiscarded={this.dispatch_forgetFromDiscarded}
-                />
-                <BottomRow>
-                    <InvaderDeckAndSlots
-                        invaderDeck={this.props.G.invaderDeck}
-                        invadersExplore={this.dispatch_invadersExplore}
-                        invadersBuild={this.dispatch_invadersBuild}
-                        invadersRage={this.dispatch_invadersRage}
-                        invadersDiscard={this.dispatch_invadersDiscard}
-                        divHeight_px={150}
+            <DndProvider backend={HTML5Backend}>
+                <div className={style.PhaseMain__container}>
+                    <Boards
+                        usedBoards={this.props.G.usedBoards}
+                        boardTokens={this.props.G.boardTokens}
+                        onIncreaseToken={this.dispatch_increaseToken}
+                        onDecreaseToken={this.dispatch_decreaseToken}
+                        showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
+                        presenceColors={this.props.G.activeSpirits.map(s => s.presenceAppearance.presenceBackground)}
                     />
-                    <PowerCardPile
-                        deckType={Types.PowerDeckType.Major}
-                        availableCards={this.props.G.majorPowercards.available}
-                        discardedCards={this.props.G.majorPowercards.discarded}
-                        flippedCards={this.props.G.majorPowercards.flipSets}
-                        playerNames={this.props.playerNames}
+                    <SpiritPanels
+                        spirits={this.props.G.activeSpirits}
+                        showDialog={(data) => this.setState({ dialogContent: data?.content, dialogTitle: data?.title })}
+                        currentSpiritsIdx={this.state.currentSpiritsIdx}
+                        setCurrentSpiritIdx={(idx) => this.setState({ currentSpiritsIdx: idx })}
                         //moves
-                        flipOne={() =>
-                            this.dispatch_flipOne(Types.PowerDeckType.Major)}
-                        flipFour={() =>
-                            this.dispatch_flipFour(Types.PowerDeckType.Major)}
-                        takeFlipped={(flipSetIdx, cardIdx) =>
-                            this.dispatch_takeFlipped(Types.PowerDeckType.Major, flipSetIdx, cardIdx, curSpiritName)}
-                        discardFlipSet={(flipSetIdx) =>
-                            this.dispatch_discardFlipSet(Types.PowerDeckType.Major, flipSetIdx)}
-                        takeDiscarded={(discardedCardIdx) =>
-                            this.dispatch_takeDiscarded(Types.PowerDeckType.Major, discardedCardIdx, curSpiritName)}
+                        setSpiritEnergy={this.dispatch_setSpiritEnergy}
+                        setSpiritDestroyedPresences={this.dispatch_setSpiritDestroyedPresences}
+                        setSpiritElement={this.dispatch_setSpiritElement}
+                        toggleSpiritPresence={this.dispatch_toggleSpiritPanelPresence}
+                        playCard={this.dispatch_playCard}
+                        discardFromHand={this.dispatch_discardFromHand}
+                        discardPlayed={this.dispatch_discardPlayed}
+                        undoPlayCard={this.dispatch_undoPlayCard}
+                        reclaimCards={this.dispatch_reclaimCards}
+                        reclaimOne={this.dispatch_reclaimOne}
+                        forgetFromHand={this.dispatch_forgetFromHand}
+                        forgetFromPlayed={this.dispatch_forgetFromPlayed}
+                        forgetFromDiscarded={this.dispatch_forgetFromDiscarded}
                     />
-                    <PowerCardPile
-                        deckType={Types.PowerDeckType.Minor}
-                        availableCards={this.props.G.minorPowercards.available}
-                        discardedCards={this.props.G.minorPowercards.discarded}
-                        flippedCards={this.props.G.minorPowercards.flipSets}
-                        playerNames={this.props.playerNames}
-                        //moves
-                        flipOne={() =>
-                            this.dispatch_flipOne(Types.PowerDeckType.Minor)}
-                        flipFour={() =>
-                            this.dispatch_flipFour(Types.PowerDeckType.Minor)}
-                        takeFlipped={(flipSetIdx, cardIdx) =>
-                            this.dispatch_takeFlipped(Types.PowerDeckType.Minor, flipSetIdx, cardIdx, curSpiritName)}
-                        discardFlipSet={(flipSetIdx) =>
-                            this.dispatch_discardFlipSet(Types.PowerDeckType.Minor, flipSetIdx)}
-                        takeDiscarded={(discardedCardIdx) =>
-                            this.dispatch_takeDiscarded(Types.PowerDeckType.Minor, discardedCardIdx, curSpiritName)}
-                    />
-                    <FearCardPile
-                        fearCardPile={this.props.G.fearDeck}
-                        fearCardFlip={this.dispatch_fearCardFlip}
-                        fearCardEarn={this.dispatch_fearCardEarn}
-                        fearCardDiscard={this.dispatch_fearCardDiscard}
-                    />
-                    <FearIcon
-                        count={this.props.G.fearGenerated}
-                        onSetFearCount={(count: number) => this.dispatch_setGeneratedFear(count)}
-                        maxFear={this.props.G.activeSpirits.length * 4}
-                        fearCardEarn={this.dispatch_fearCardEarn}
-                    />
-                    <BlightIcon
-                        count={this.props.G.blightOnCard}
-                        onSetBlightCount={(count: number) => this.dispatch_setBlightOnCard(count)} />
+                    <BottomRow>
+                        <InvaderDeckAndSlots
+                            invaderDeck={this.props.G.invaderDeck}
+                            invadersExplore={this.dispatch_invadersExplore}
+                            invadersBuild={this.dispatch_invadersBuild}
+                            invadersRage={this.dispatch_invadersRage}
+                            invadersDiscard={this.dispatch_invadersDiscard}
+                            divHeight_px={150}
+                        />
+                        <PowerCardPile
+                            deckType={Types.PowerDeckType.Major}
+                            availableCards={this.props.G.majorPowercards.available}
+                            discardedCards={this.props.G.majorPowercards.discarded}
+                            flippedCards={this.props.G.majorPowercards.flipSets}
+                            playerNames={this.props.playerNames}
+                            //moves
+                            flipOne={() =>
+                                this.dispatch_flipOne(Types.PowerDeckType.Major)}
+                            flipFour={() =>
+                                this.dispatch_flipFour(Types.PowerDeckType.Major)}
+                            takeFlipped={(flipSetIdx, cardIdx) =>
+                                this.dispatch_takeFlipped(Types.PowerDeckType.Major, flipSetIdx, cardIdx, curSpiritName)}
+                            discardFlipSet={(flipSetIdx) =>
+                                this.dispatch_discardFlipSet(Types.PowerDeckType.Major, flipSetIdx)}
+                            takeDiscarded={(discardedCardIdx) =>
+                                this.dispatch_takeDiscarded(Types.PowerDeckType.Major, discardedCardIdx, curSpiritName)}
+                        />
+                        <PowerCardPile
+                            deckType={Types.PowerDeckType.Minor}
+                            availableCards={this.props.G.minorPowercards.available}
+                            discardedCards={this.props.G.minorPowercards.discarded}
+                            flippedCards={this.props.G.minorPowercards.flipSets}
+                            playerNames={this.props.playerNames}
+                            //moves
+                            flipOne={() =>
+                                this.dispatch_flipOne(Types.PowerDeckType.Minor)}
+                            flipFour={() =>
+                                this.dispatch_flipFour(Types.PowerDeckType.Minor)}
+                            takeFlipped={(flipSetIdx, cardIdx) =>
+                                this.dispatch_takeFlipped(Types.PowerDeckType.Minor, flipSetIdx, cardIdx, curSpiritName)}
+                            discardFlipSet={(flipSetIdx) =>
+                                this.dispatch_discardFlipSet(Types.PowerDeckType.Minor, flipSetIdx)}
+                            takeDiscarded={(discardedCardIdx) =>
+                                this.dispatch_takeDiscarded(Types.PowerDeckType.Minor, discardedCardIdx, curSpiritName)}
+                        />
+                        <FearCardPile
+                            fearCardPile={this.props.G.fearDeck}
+                            fearCardFlip={this.dispatch_fearCardFlip}
+                            fearCardEarn={this.dispatch_fearCardEarn}
+                            fearCardDiscard={this.dispatch_fearCardDiscard}
+                        />
+                        <FearIcon
+                            count={this.props.G.fearGenerated}
+                            onSetFearCount={(count: number) => this.dispatch_setGeneratedFear(count)}
+                            maxFear={this.props.G.activeSpirits.length * 4}
+                            fearCardEarn={this.dispatch_fearCardEarn}
+                        />
+                        <BlightIcon
+                            count={this.props.G.blightOnCard}
+                            onSetBlightCount={(count: number) => this.dispatch_setBlightOnCard(count)} />
 
-                </BottomRow>
-                {this.state.dialogContent && popupDialog}
-            </div>
+                    </BottomRow>
+                    {this.state.dialogContent && popupDialog}
+                </div>
+            </DndProvider>
         );
     }
 }
