@@ -1,0 +1,20 @@
+@import "~styles/shared";
+
+.InvaderDeckAndSlots {
+  &__invaderSlotList{
+    height: 100%;
+    float:right;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  &__invaderSlot{
+    display: flex;
+    flex-direction: row;
+    font-size: small;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  
+}

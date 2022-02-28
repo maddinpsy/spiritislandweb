@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import classnames from "classnames"
-
 import style from "./style.module.scss";
 import { InvaderCardData } from "game/InvaderCards"
 
@@ -9,10 +7,9 @@ import invaderCards from "assets/Invader Deck.jpg"
 import invaderCardsBack from "assets/Invader Back.jpg"
 
 export interface InvaderCardProps {
-    card?: InvaderCardData,
+    card: InvaderCardData,
     flipped: boolean,
-    className?: string
-    onClick?: (ev: React.MouseEvent) => void
+    divWidth_percent: number
 }
 
 
@@ -22,22 +19,8 @@ export class InvaderCard extends React.Component<InvaderCardProps> {
         this.state = { currentSpiritsIdx: 0 }
     }
     render() {
-        const imgHeigth = 2440;
+        const imgHeight = 2440;
         const imgWidth = 1580;
-
-        //Return empty image if no card is given
-        //also remove click function
-        if (!this.props.card) {
-            return (
-                <div
-                    className={classnames(style.InvaderCard__container, this.props.className)}
-                >
-                    <svg width="100%" height="100%" viewBox={"0 0 " + imgWidth / 4 + " " + imgHeigth / 4}>
-                    </svg>
-                </div>
-            );
-        }
-
 
         let spriteX = 0;
         let spriteY = 0;
@@ -66,23 +49,23 @@ export class InvaderCard extends React.Component<InvaderCardProps> {
                 switch (this.props.card.id) {
                     case 0:
                         spriteX = 0;
-                        spriteY = imgHeigth / 4;
+                        spriteY = imgHeight / 4;
                         break;
                     case 1:
                         spriteX = imgWidth / 4;
-                        spriteY = imgHeigth / 4;
+                        spriteY = imgHeight / 4;
                         break;
                     case 2:
                         spriteX = imgWidth / 2;
-                        spriteY = imgHeigth / 4;
+                        spriteY = imgHeight / 4;
                         break;
                     case 3:
                         spriteX = imgWidth / 4 * 3;
-                        spriteY = imgHeigth / 4;
+                        spriteY = imgHeight / 4;
                         break;
                     case 4:
                         spriteX = 0;
-                        spriteY = imgHeigth / 2;
+                        spriteY = imgHeight / 2;
                         break;
                 }
                 break;
@@ -90,41 +73,42 @@ export class InvaderCard extends React.Component<InvaderCardProps> {
                 switch (this.props.card.id) {
                     case 0:
                         spriteX = imgWidth / 4;
-                        spriteY = imgHeigth / 2;
+                        spriteY = imgHeight / 2;
                         break;
                     case 1:
                         spriteX = imgWidth / 2;
-                        spriteY = imgHeigth / 2;
+                        spriteY = imgHeight / 2;
                         break;
                     case 2:
                         spriteX = imgWidth / 4 * 3;
-                        spriteY = imgHeigth / 2;
+                        spriteY = imgHeight / 2;
                         break;
                     case 3:
                         spriteX = 0;
-                        spriteY = imgHeigth / 4 * 3;
+                        spriteY = imgHeight / 4 * 3;
                         break;
                     case 4:
                         spriteX = imgWidth / 4;
-                        spriteY = imgHeigth / 4 * 3;
+                        spriteY = imgHeight / 4 * 3;
                         break;
                     case 5:
                         spriteX = imgWidth / 2;
-                        spriteY = imgHeigth / 4 * 3;
+                        spriteY = imgHeight / 4 * 3;
                         break;
                 }
                 break;
         }
+        //move image to the right when multiple tiles are shown
+        spriteX += imgWidth / 4 * (1 - this.props.divWidth_percent) / 2
         //set image based on flipped
         const imageUrl = this.props.flipped ? invaderCards : invaderCardsBack;
         return (
             <div
-                className={classnames(style.InvaderCard__container, this.props.className)}
-                onClick={this.props.onClick}
+                className={style.InvaderCard__container}
             >
-                <svg width="100%" height="100%" viewBox={"0 0 " + imgWidth / 4 + " " + imgHeigth / 4}>
+                <svg width="100%" height="100%" viewBox={"0 0 " + imgWidth / 4 * this.props.divWidth_percent + " " + imgHeight / 4}>
                     <image
-                        height={imgHeigth} width={imgWidth} y="0" x="0"
+                        height={imgHeight} width={imgWidth} y="0" x="0"
                         xlinkHref={imageUrl}
                         transform={"translate(" + (-spriteX) + "," + (-spriteY) + ")"}
                     />

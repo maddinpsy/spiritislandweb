@@ -10,65 +10,14 @@ import { BottomRow } from "components/PhaseSetup/BottomRow";
 import { PowerCardPile } from "./PowerCardPile";
 import { Types } from "spirit-island-card-katalog/types";
 
-import { InvaderCard } from "./InvaderCard";
-import { InvaderCardData } from "game/InvaderCards";
 import { FearCardPile } from "./FearCardPile";
 import { IncreaseDecreaseButton } from "./IncreaseDecreaseButton";
 
 import fearIconImage from "assets/fear.png"
 import blightIconImage from "assets/tokens/Blighticon.png"
 import { MainActions, TokenType } from "game/GamePhaseMain";
+import { InvaderDeckAndSlots } from "./InvaderDeckAndSlots";
 
-interface InvaderDeckAndSlotsProps {
-    invaderDeck: {
-        available: InvaderCardData[]
-        explore: InvaderCardData[]
-        build: InvaderCardData[]
-        rage: InvaderCardData[]
-        discard: InvaderCardData[]
-    },
-    //moves
-    invadersExplore: (idx: number) => void
-    invadersBuild: (idx: number) => void
-    invadersRage: (idx: number) => void
-    invadersDiscard: (idx: number) => void
-}
-function InvaderDeckAndSlots(props: InvaderDeckAndSlotsProps) {
-    return (<div className={style.PhaseMain__invaderSlotList}>
-        <div className={style.PhaseMain__invaderSlot}>
-            <InvaderCard
-                card={props.invaderDeck.available[0]}
-                flipped={false}
-                onClick={() => props.invadersExplore(0)}
-            />
-            <div>Deck({props.invaderDeck.available.length})</div>
-        </div>
-        <div className={style.PhaseMain__invaderSlot}>
-            <InvaderCard
-                card={props.invaderDeck.explore[0]}
-                flipped={true}
-                onClick={() => props.invadersBuild(0)}
-            />
-            <div>Explore({props.invaderDeck.explore.length})</div>
-        </div>
-        <div className={style.PhaseMain__invaderSlot}>
-            <InvaderCard
-                card={props.invaderDeck.build[0]}
-                flipped={true}
-                onClick={() => props.invadersRage(0)}
-            />
-            <div>Build({props.invaderDeck.build.length})</div>
-        </div>
-        <div className={style.PhaseMain__invaderSlot}>
-            <InvaderCard
-                card={props.invaderDeck.rage[0]}
-                flipped={true}
-                onClick={() => props.invadersDiscard(0)}
-            />
-            <div>Rage({props.invaderDeck.rage.length})</div>
-        </div>
-    </div>)
-}
 interface FearIconProps {
     count: number
     onSetFearCount: (count: number) => void
@@ -298,6 +247,7 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
                         invadersBuild={this.dispatch_invadersBuild}
                         invadersRage={this.dispatch_invadersRage}
                         invadersDiscard={this.dispatch_invadersDiscard}
+                        divHeight_px={150}
                     />
                     <PowerCardPile
                         deckType={Types.PowerDeckType.Major}

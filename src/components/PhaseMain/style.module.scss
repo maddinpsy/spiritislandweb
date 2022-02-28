@@ -9,21 +9,7 @@
     grid-template-rows: 1fr 150px;
     overflow: auto;
   }
-  &__invaderSlotList{
-    height: 100%;
-    float:right;
-    display: flex;
-    flex-direction: row-reverse;
-  }
-  &__invaderSlot{
-    display: flex;
-    flex-direction: column-reverse;
-    font-size: small;
-    text-align: center;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-
+ 
   &__FearIconContainer{
     text-align: center;
     font-size: x-large;
