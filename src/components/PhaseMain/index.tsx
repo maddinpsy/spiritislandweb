@@ -19,6 +19,8 @@ import { MainActions, TokenType } from "game/GamePhaseMain";
 import { InvaderDeckAndSlots } from "./InvaderDeckAndSlots";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { InvaderDeckActions } from "game/GameInvaderDeck";
+import { InvaderCardData } from "game/InvaderCards";
 
 interface FearIconProps {
     count: number
@@ -63,7 +65,7 @@ function BlightIcon(props: { count: number, onSetBlightCount: (count: number) =>
 
 export interface PhaseMainProps {
     G: SpiritIslandState
-    dispatch: (action: MainActions) => void
+    dispatch: (action: MainActions | InvaderDeckActions) => void
     playerNames: { name: string, id: number }[]
 }
 
@@ -174,17 +176,17 @@ export class PhaseMain extends React.Component<PhaseMainProps, PhaseMainState> {
     dispatch_takeDiscarded(deckType: Types.PowerDeckType, discardedCardIdx: number, spiritName: string) {
         this.props.dispatch({ type: "takeDiscarded", deckType, discardedCardIdx, spiritName });
     }
-    dispatch_invadersExplore(idx: number) {
-        this.props.dispatch({ type: "invadersExplore", idx });
+    dispatch_invadersExplore(id: number, stage: InvaderCardData["stage"]) {
+        this.props.dispatch({ type: "invadersExplore", id, stage });
     }
-    dispatch_invadersBuild(idx: number) {
-        this.props.dispatch({ type: "invadersBuild", idx });
+    dispatch_invadersBuild(id: number, stage: InvaderCardData["stage"]) {
+        this.props.dispatch({ type: "invadersBuild", id, stage });
     }
-    dispatch_invadersRage(idx: number) {
-        this.props.dispatch({ type: "invadersRage", idx });
+    dispatch_invadersRage(id: number, stage: InvaderCardData["stage"]) {
+        this.props.dispatch({ type: "invadersRage", id, stage });
     }
-    dispatch_invadersDiscard(idx: number) {
-        this.props.dispatch({ type: "invadersDiscard", idx });
+    dispatch_invadersDiscard(id: number, stage: InvaderCardData["stage"]) {
+        this.props.dispatch({ type: "invadersDiscard", id, stage });
     }
     dispatch_fearCardFlip(pileNumber: number, idx: number) {
         this.props.dispatch({ type: "fearCardFlip", pileNumber, idx });

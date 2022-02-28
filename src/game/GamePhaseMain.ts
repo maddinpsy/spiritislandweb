@@ -3,8 +3,8 @@ import { Types } from "../spirit-island-card-katalog/types";
 import { DB } from "../spirit-island-card-katalog/db";
 import { SpiritIslandState } from "./Game";
 import { SetupSpirit } from "./GamePhaseSetup";
-import { InvaderCardData, InvaderCardsStage1, InvaderCardsStage2, InvaderCardsStage3 } from "./InvaderCards";
 import { shuffleArray } from "../helper/random"
+import { invaderDeckSetup } from "./GameInvaderDeck";
 
 export const TokenNames = [
     "Explorer",
@@ -100,14 +100,6 @@ export type MainPhaseState =
         minorPowercards: PowerCardPileData
         majorPowercards: PowerCardPileData
 
-        //Invader Deck
-        invaderDeck: {
-            available: InvaderCardData[]
-            explore: InvaderCardData[]
-            build: InvaderCardData[]
-            rage: InvaderCardData[]
-            discard: InvaderCardData[]
-        }
         //Fear
         fearDeck: FearCardPileData,
         fearGenerated: number,
@@ -129,13 +121,6 @@ export const defaultMainPhaseState: MainPhaseState =
         available: [],
         discarded: [],
         flipSets: []
-    },
-    invaderDeck: {
-        available: [],
-        explore: [],
-        build: [],
-        rage: [],
-        discard: []
     },
     fearDeck: {
         deckLeve1: [],
@@ -170,10 +155,6 @@ export type MainActions =
     | { type: "takeFlipped", deckType: Types.PowerDeckType, flipSetIdx: number, cardIdx: number, spiritName: string }
     | { type: "discardFlipSet", deckType: Types.PowerDeckType, flipSetIdx: number }
     | { type: "takeDiscarded", deckType: Types.PowerDeckType, discardedCardIdx: number, spiritName: string }
-    | { type: "invadersExplore", idx: number }
-    | { type: "invadersBuild", idx: number }
-    | { type: "invadersRage", idx: number }
-    | { type: "invadersDiscard", idx: number }
     | { type: "fearCardFlip", pileNumber: number, idx: number }
     | { type: "fearCardEarn" }
     | { type: "fearCardDiscard" }
@@ -204,10 +185,6 @@ export function mainReducer(G: SpiritIslandState, action: MainActions) {
         case "takeFlipped": MainMoves.takeFlipped(G, action.deckType, action.flipSetIdx, action.cardIdx, action.spiritName); break;
         case "discardFlipSet": MainMoves.discardFlipSet(G, action.deckType, action.flipSetIdx); break;
         case "takeDiscarded": MainMoves.takeDiscarded(G, action.deckType, action.discardedCardIdx, action.spiritName); break;
-        case "invadersExplore": MainMoves.invadersExplore(G, action.idx); break;
-        case "invadersBuild": MainMoves.invadersBuild(G, action.idx); break;
-        case "invadersRage": MainMoves.invadersRage(G, action.idx); break;
-        case "invadersDiscard": MainMoves.invadersDiscard(G, action.idx); break;
         case "fearCardFlip": MainMoves.fearCardFlip(G, action.pileNumber, action.idx); break;
         case "fearCardEarn": MainMoves.fearCardEarn(G,); break;
         case "fearCardDiscard": MainMoves.fearCardDiscard(G,); break;
@@ -257,28 +234,6 @@ export function mainPhaseSetup(G: SpiritIslandState, seed: string = "") {
         .map(c => c.toPureData());
     shuffleArray(G.majorPowercards.available)
 
-    //number of cards in each stage
-    const invaderDeckLayout = [3, 4, 5];
-    //Start with all cards
-    let s1 = InvaderCardsStage1;
-    //shuffle
-    shuffleArray(s1, seed);
-    //remove cards to match given number
-    s1.splice(0, s1.length - invaderDeckLayout[0]);
-    //Start with all cards
-    let s2 = InvaderCardsStage2;
-    //shuffle
-    shuffleArray(s2, seed);
-    //remove cards to match given number
-    s2.splice(0, s2.length - invaderDeckLayout[1]);
-    //Start with all cards
-    let s3 = InvaderCardsStage3;
-    //shuffle
-    shuffleArray(s3, seed);
-    //remove cards to match given number
-    s3.splice(0, s3.length - invaderDeckLayout[2]);
-    G.invaderDeck.available = [...s1, ...s2, ...s3];
-
     //init fear deck
     const fearDeckLayout = [3, 3, 3];
     let allFearCards = DB.FearCards
@@ -291,6 +246,8 @@ export function mainPhaseSetup(G: SpiritIslandState, seed: string = "") {
 
     //blight 
     G.blightOnCard = G.activeSpirits.length * 2;
+
+    invaderDeckSetup(G);
 }
 
 
@@ -586,37 +543,6 @@ const MainMoves = {
             throw new Error("Move: takeDiscarded: card is null");
         }
         spirit.handCards.push(card[0]);
-    },
-
-    //Invader Deck
-    invadersExplore: function (G: SpiritIslandState, idx: number) {
-        const card = G.invaderDeck.available.splice(idx, 1);
-        if (!card || card.length !== 1) {
-            throw new Error("Move: invaderExplore: card is null");
-        }
-        card[0].flipped = true;
-        G.invaderDeck.explore.push(card[0]);
-    },
-    invadersBuild: function (G: SpiritIslandState, idx: number) {
-        const card = G.invaderDeck.explore.splice(idx, 1);
-        if (!card || card.length !== 1) {
-            throw new Error("Move: invaderBuild: card is null");
-        }
-        G.invaderDeck.build.push(card[0]);
-    },
-    invadersRage: function (G: SpiritIslandState, idx: number) {
-        const card = G.invaderDeck.build.splice(idx, 1);
-        if (!card || card.length !== 1) {
-            throw new Error("Move: invaderRage: card is null");
-        }
-        G.invaderDeck.rage.push(card[0]);
-    },
-    invadersDiscard: function (G: SpiritIslandState, idx: number) {
-        const card = G.invaderDeck.rage.splice(idx, 1);
-        if (!card || card.length !== 1) {
-            throw new Error("Move: invaderDiscard: card is null");
-        }
-        G.invaderDeck.discard.push(card[0]);
     },
 
     //fearCards

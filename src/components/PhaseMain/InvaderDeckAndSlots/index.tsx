@@ -7,26 +7,21 @@ import { useDrag, useDrop } from 'react-dnd'
 import style from "./style.module.scss";
 
 interface InvaderDeckAndSlotsProps {
-    invaderDeck: {
-        available: InvaderCardData[]
-        explore: InvaderCardData[]
-        build: InvaderCardData[]
-        rage: InvaderCardData[]
-        discard: InvaderCardData[]
-    },
+    invaderDeck: InvaderCardData[],
     divHeight_px: number,
     //moves
-    invadersExplore: (idx: number) => void
-    invadersBuild: (idx: number) => void
-    invadersRage: (idx: number) => void
-    invadersDiscard: (idx: number) => void
+    invadersExplore: (id: number, stage: InvaderCardData["stage"]) => void
+    invadersBuild: (id: number, stage: InvaderCardData["stage"]) => void
+    invadersRage: (id: number, stage: InvaderCardData["stage"]) => void
+    invadersDiscard: (id: number, stage: InvaderCardData["stage"]) => void
 }
 type DragItemInfo = {
+    id: number
+    stage: InvaderCardData["stage"]
     curCol: string
-    curIdx: number
 }
 
-function TableCell(props: { card: InvaderCardData, curCol: string, curIdx: number }) {
+function TableCell(props: { card: InvaderCardData, curCol: string }) {
     const [{ isDragging }, drag] = useDrag<DragItemInfo, void, { isDragging: boolean }>(() => ({
         // "type" is required. It is used by the "accept" specification of drop targets.
         type: 'InvaderCard',
@@ -35,7 +30,7 @@ function TableCell(props: { card: InvaderCardData, curCol: string, curIdx: numbe
         collect: (monitor) => ({
             isDragging: monitor.isDragging()
         }),
-        item: { curCol: props.curCol, curIdx: props.curIdx }
+        item: { id: props.card.id, stage: props.card.stage, curCol: props.curCol }
     }))
     return (
         <div
@@ -48,7 +43,7 @@ function TableCell(props: { card: InvaderCardData, curCol: string, curIdx: numbe
     )
 }
 
-function TableColumn(props: { title: string, cards: InvaderCardData[], onDrop?: (idx: number) => void }) {
+function TableColumn(props: { title: string, cards: InvaderCardData[], onDrop?: (id: number, stage: InvaderCardData["stage"]) => void }) {
     const [{ isOver, canDrop }, drop] = useDrop<DragItemInfo, void, { isOver: boolean, canDrop: boolean }>(() => ({
         // The type (or types) to accept - strings or symbols
         accept: 'InvaderCard',
@@ -58,7 +53,6 @@ function TableColumn(props: { title: string, cards: InvaderCardData[], onDrop?: 
             canDrop: monitor.canDrop()
         }),
         canDrop: (item) => {
-            if (!props.onDrop) return false;
             if (props.title === "Discarded" && item.curCol === "Rage") return true;
             if (props.title === "Rage" && item.curCol === "Build") return true;
             if (props.title === "Build" && item.curCol === "Explore") return true;
@@ -66,7 +60,7 @@ function TableColumn(props: { title: string, cards: InvaderCardData[], onDrop?: 
             return false;
         },
         drop: (item) => {
-            if (props.onDrop) props.onDrop(item.curIdx);
+            if (props.onDrop) props.onDrop(item.id, item.stage);
         }
     }))
     return (
@@ -77,20 +71,21 @@ function TableColumn(props: { title: string, cards: InvaderCardData[], onDrop?: 
         >
             <div className={style.InvaderDeckAndSlots__ColumnTitle}>{props.title}</div>
             {props.cards.map((c, idx) =>
-                <TableCell card={c} key={c.id + c.stage * 10} curCol={props.title} curIdx={idx} />
+                <TableCell card={c} key={c.id + c.stage * 10} curCol={props.title} />
             )}
         </div>
     )
 }
 
 function InvaderDeckDialog(props: InvaderDeckAndSlotsProps & { hideDialog: () => void }) {
+    const avlCards = props.invaderDeck.filter(c => c.stack === "available");
     return (<ModalWindow title="Invader Cards" onClose={props.hideDialog}>
         <div className={style.InvaderDeckAndSlots__CardTable} >
-            <TableColumn title="Discarded" cards={props.invaderDeck.discard} onDrop={props.invadersDiscard} />
-            <TableColumn title="Rage" cards={props.invaderDeck.rage} onDrop={props.invadersRage} />
-            <TableColumn title="Build" cards={props.invaderDeck.build} onDrop={props.invadersBuild} />
-            <TableColumn title="Explore" cards={props.invaderDeck.explore} onDrop={props.invadersExplore} />
-            <TableColumn title={"Available (" + props.invaderDeck.available.length + ")"} cards={props.invaderDeck.available} />
+            <TableColumn title="Discarded" cards={props.invaderDeck.filter(c => c.stack === "discard")} onDrop={props.invadersDiscard} />
+            <TableColumn title="Rage" cards={props.invaderDeck.filter(c => c.stack === "rage")} onDrop={props.invadersRage} />
+            <TableColumn title="Build" cards={props.invaderDeck.filter(c => c.stack === "build")} onDrop={props.invadersBuild} />
+            <TableColumn title="Explore" cards={props.invaderDeck.filter(c => c.stack === "explore")} onDrop={props.invadersExplore} />
+            <TableColumn title={"Available (" + avlCards.length + ")"} cards={avlCards} />
         </div>
     </ModalWindow>
     );
@@ -102,16 +97,19 @@ export function InvaderDeckAndSlots(props: InvaderDeckAndSlotsProps) {
     const aspectRation = imgWidth / imgHeight;
 
     const [isDialogShown, setDialogShown] = React.useState(false)
-
+    const availableCards = props.invaderDeck.filter(c => c.stack === "available");
+    const exploreCards = props.invaderDeck.filter(c => c.stack === "explore");
+    const buildCards = props.invaderDeck.filter(c => c.stack === "build");
+    const rageCards = props.invaderDeck.filter(c => c.stack === "rage");
     return (
         <div className={style.InvaderDeckAndSlots__invaderSlotList}>
             <div className={style.InvaderDeckAndSlots__invaderSlot}
                 style={{ height: props.divHeight_px, width: props.divHeight_px * aspectRation }}
                 onClick={() => setDialogShown(true)}
             >
-                {props.invaderDeck.available.length > 0 &&
+                {availableCards.length > 0 &&
                     (<InvaderCard
-                        card={props.invaderDeck.available[0]}
+                        card={availableCards[0]}
                         divWidth_percent={1}
                     />)
                 }
@@ -120,11 +118,11 @@ export function InvaderDeckAndSlots(props: InvaderDeckAndSlotsProps) {
                 style={{ height: props.divHeight_px, width: props.divHeight_px * aspectRation }}
                 onClick={() => setDialogShown(true)}
             >
-                {props.invaderDeck.explore.map((c, idx) =>
+                {exploreCards.map((c, idx) =>
                 (<InvaderCard
                     key={c.id + 10 * c.stage}
                     card={c}
-                    divWidth_percent={1 / props.invaderDeck.explore.length}
+                    divWidth_percent={1 / exploreCards.length}
                 />)
                 )}
             </div>
@@ -132,11 +130,11 @@ export function InvaderDeckAndSlots(props: InvaderDeckAndSlotsProps) {
                 style={{ height: props.divHeight_px, width: props.divHeight_px * aspectRation }}
                 onClick={() => setDialogShown(true)}
             >
-                {props.invaderDeck.build.map((c, idx) =>
+                {buildCards.map((c, idx) =>
                 (<InvaderCard
                     key={c.id + 10 * c.stage}
                     card={c}
-                    divWidth_percent={1 / props.invaderDeck.build.length}
+                    divWidth_percent={1 / buildCards.length}
                 />)
                 )}
             </div>
@@ -144,11 +142,11 @@ export function InvaderDeckAndSlots(props: InvaderDeckAndSlotsProps) {
                 style={{ height: props.divHeight_px, width: props.divHeight_px * aspectRation }}
                 onClick={() => setDialogShown(true)}
             >
-                {props.invaderDeck.rage.map((c, idx) =>
+                {rageCards.map((c, idx) =>
                 (<InvaderCard
                     key={c.id + 10 * c.stage}
                     card={c}
-                    divWidth_percent={1 / props.invaderDeck.rage.length}
+                    divWidth_percent={1 / rageCards.length}
                 />)
                 )}
             </div>

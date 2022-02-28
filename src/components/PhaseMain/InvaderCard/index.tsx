@@ -105,14 +105,14 @@ export class InvaderCard extends React.Component<InvaderCardProps> {
         return (
             <div
                 className={style.InvaderCard__container}
+                style={{
+                    backgroundImage: `url("${imageUrl}")`,
+                    backgroundPositionX: -spriteX/4,
+                    backgroundPositionY: -spriteY/4,
+                    backgroundSize: `${imgWidth/4}px ${imgHeight/4}px`,
+                    backgroundRepeat: "no-repeat"
+                }}
             >
-                <svg width="100%" height="100%" viewBox={"0 0 " + imgWidth / 4 * divWidth_percent + " " + imgHeight / 4}>
-                    <image
-                        height={imgHeight} width={imgWidth} y="0" x="0"
-                        xlinkHref={imageUrl}
-                        transform={"translate(" + (-spriteX) + "," + (-spriteY) + ")"}
-                    />
-                </svg>
             </div>
         );
     }
